@@ -24,7 +24,8 @@
             </Grid>
             <Grid Margin="0,50,0,0" Height="30">
                 <Button HorizontalAlignment="Left" Content="Авторизация" Width="130"/>
-                <Button HorizontalAlignment="Right" Content="Регистрация" Width="130"/>
+                <Button x:Name="Button_Register" 
+                    HorizontalAlignment="Right" Content="Регистрация" Width="130"/>
             </Grid>
         </StackPanel>
     </Grid>

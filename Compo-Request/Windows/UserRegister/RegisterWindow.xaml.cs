@@ -17,9 +17,42 @@ namespace Compo_Request.Windows.UserRegister
     /// </summary>
     public partial class RegisterWindow : Window
     {
-        public RegisterWindow()
+        private MainWindow mainWindow;
+
+        public RegisterWindow(MainWindow mainWindow)
         {
             InitializeComponent();
+            LoadWindowParent(mainWindow);
+            EventsInitialize();
+        }
+
+        public void LoadWindowParent(MainWindow mainWindow)
+        {
+            this.mainWindow = mainWindow;
+        }
+
+        /// <summary>
+        /// Иницализация событий элементов.
+        /// </summary>
+        private void EventsInitialize()
+        {
+            // Регистрация события при закрытии главного окна регистрации
+            this.Closing += RegisterWindow_Closed;
+            this.Button_BackToMainWindow.Click += Button_BackToMainWindow_Click;
+        }
+
+        private void Button_BackToMainWindow_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void RegisterWindow_Closed(object sender, EventArgs e)
+        {
+            if (!IsVisible)
+                return;
+
+            mainWindow.LoadWindowParent();
+            mainWindow.Show();
         }
     }
 }

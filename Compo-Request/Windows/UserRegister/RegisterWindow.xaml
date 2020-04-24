@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterScreen"
         Title="Регистрация пользователя" Height="450" Width="300">
     <Grid>
-        <StackPanel Margin="10, 50, 10, 20">
+        <StackPanel Margin="10, 30, 10, 20">
             <Grid Height="70">
                 <StackPanel>
                     <TextBlock FontSize="16" TextAlignment="Center" Text="Почта"/>
@@ -34,9 +34,10 @@
                     <PasswordBox Height="25" BorderBrush="Black"/>
                 </StackPanel>
             </Grid>
-            <Grid Margin="0,50,0,0" Height="30">
+            <Grid Margin="0,30,0,0" Height="30">
                 <Button HorizontalAlignment="Left" Content="Регистрация" Width="130"/>
-                <Button HorizontalAlignment="Right" Content="Назад" Width="130"/>
+                <Button x:Name="Button_BackToMainWindow" 
+                        HorizontalAlignment="Right" Content="Назад" Width="130"/>
             </Grid>
         </StackPanel>
     </Grid>
