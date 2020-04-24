@@ -5,8 +5,26 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Compo_Request"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        ResizeMode="NoResize"
+        Title="MainWindow" Height="450" Width="300">
     <Grid>
-
+        <StackPanel Margin="10, 130, 10, 20">
+            <Grid Height="70">
+                <StackPanel>
+                    <TextBlock FontSize="16" TextAlignment="Center" Text="Логин / Почта"/>
+                    <TextBox Height="25" BorderBrush="Black"/>
+                </StackPanel>
+            </Grid>
+            <Grid Height="70">
+                <StackPanel>
+                    <TextBlock FontSize="16" TextAlignment="Center" Text="Пароль"/>
+                    <PasswordBox Height="25" BorderBrush="Black"/>
+                </StackPanel>
+            </Grid>
+            <Grid Margin="0,50,0,0" Height="30">
+                <Button HorizontalAlignment="Left" Content="Авторизация" Width="130"/>
+                <Button HorizontalAlignment="Right" Content="Регистрация" Width="130"/>
+            </Grid>
+        </StackPanel>
     </Grid>
 </Window>
