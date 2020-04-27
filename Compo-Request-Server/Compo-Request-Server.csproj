@@ -6,4 +6,10 @@
     <RootNamespace>Compo_Request_Server</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Reference Include="Compo-Shared-Data">
+      <HintPath>..\Compo-Shared-Data\bin\Debug\netcoreapp3.1\Compo-Shared-Data.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
