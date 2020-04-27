@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using Compo_Request_Server.Network.Models;
 using Compo_Request_Server.Network.Server;
 using Compo_Shared_Data.Network;
@@ -30,9 +31,10 @@ namespace Compo_Request_Server.Network.Client
                     {
                         byte[] Data = GetRequest();
 
-                        Console.WriteLine(Package.Unpacking<string>(Data));
+                        Console.WriteLine("Новое сообщение: " + Package.Unpacking<string>(Data));
 
-                        UserNetwork.ClientNetwork.Send(Data);
+                        byte[] answer = Package.Packaging("Ответ очка");
+                        UserNetwork.ClientNetwork.Send(answer);
                     }
                     catch
                     {

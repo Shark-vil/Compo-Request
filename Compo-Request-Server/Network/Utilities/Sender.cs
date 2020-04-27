@@ -28,7 +28,7 @@ namespace Compo_Request_Server.Network.Utilities
 
                 byte[] WriteDataBytes = Package.Packaging(Receiver);
 
-                UserNetwork.Stream.Write(WriteDataBytes, 0, WriteDataBytes.Length);
+                UserNetwork.ClientNetwork.Send(WriteDataBytes);
             } 
             catch (SocketException ex)
             {

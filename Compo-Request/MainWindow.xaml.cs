@@ -35,7 +35,7 @@ namespace Compo_Request
 
             NetworkBase.Setup("127.0.0.1", 8888);
 
-            ClientBase Client = new ClientBase(TextBox_LoginOrEmail);
+            ClientBase Client = new ClientBase(TextBox_LoginOrEmail, Dispatcher);
 
             Thread receiveThread = new Thread(new ThreadStart(Client.Process));
             receiveThread.IsBackground = true;

@@ -46,6 +46,8 @@ namespace Compo_Request_Server.Network.Server
                 {
                     Socket ClientNetwork = NetworkBase.Listener.Accept();
 
+                    Console.WriteLine("Получение клиента!");
+
                     ClientBase Client = new ClientBase(new UserNetwork(ClientNetwork), this);
 
                     Thread ClientThread = new Thread(new ThreadStart(Client.Process));

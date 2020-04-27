@@ -2,17 +2,21 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace Compo_Request.Network.Client
 {
     public class ClientBase : NetworkBase
     {
         public TextBox mainWindow;
+        public Dispatcher dispatcher;
 
-        public ClientBase(TextBox mainWindow)
+        public ClientBase(TextBox mainWindow, Dispatcher dispatcher)
         {
             this.mainWindow = mainWindow;
+            this.dispatcher = dispatcher;
         }
 
         public void Process()
@@ -25,9 +29,12 @@ namespace Compo_Request.Network.Client
 
                     string get = Package.Unpacking<string>(Data);
 
-                    Console.WriteLine(get);
-
-                    mainWindow.Text = get;
+                    dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                        (ThreadStart)delegate ()
+                        {
+                            mainWindow.Text = get;
+                        }
+                    );
                 }
                 catch (Exception e)
                 {
