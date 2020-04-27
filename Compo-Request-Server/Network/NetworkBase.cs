@@ -14,10 +14,10 @@ namespace Compo_Request_Server.Network
 
         public static List<Models.UserNetwork> UsersNetwork = new List<Models.UserNetwork>();
 
-        public static void Setup(string ServerIp, int ServerPort)
+        public static void Setup(int ServerPort)
         {
             Port = ServerPort;
-            NetPoint = new IPEndPoint(IPAddress.Parse(ServerIp), ServerPort);
+            NetPoint = new IPEndPoint(IPAddress.Any, ServerPort);
             Listener = new TcpListener(NetPoint);
         }
     }

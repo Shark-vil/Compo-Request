@@ -1,4 +1,10 @@
 ﻿using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
+using Compo_Request_Server.Network;
+using Compo_Request_Server.Network.Models;
+using Compo_Request_Server.Network.Server;
 
 namespace Compo_Request_Server
 {
@@ -6,7 +12,18 @@ namespace Compo_Request_Server
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var Server = new ServerBase();
+
+            try
+            {
+                var ServerThread = new Thread(new ThreadStart(Server.Listen));
+                ServerThread.Start();
+            }
+            catch (Exception ex)
+            {
+                Server.Disconnect();
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }
