@@ -6,4 +6,8 @@
     <RootNamespace>Compo_Request_Server</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Network\" />
+  </ItemGroup>
+
 </Project>
