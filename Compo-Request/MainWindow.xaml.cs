@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,7 +13,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Compo_Request.Network;
+using Compo_Request.Network.Client;
 using Compo_Request.Windows.UserRegister;
+using Compo_Shared_Data.Network;
 
 namespace Compo_Request
 {
@@ -28,6 +32,14 @@ namespace Compo_Request
             InitializeComponent();
             LoadWindowParent();
             EventsInitialize();
+
+            NetworkBase.Setup("127.0.0.1", 8888);
+
+            ClientBase Client = new ClientBase(TextBox_LoginOrEmail);
+
+            Thread receiveThread = new Thread(new ThreadStart(Client.Process));
+            receiveThread.IsBackground = true;
+            receiveThread.Start();
         }
 
         public void LoadWindowParent()
@@ -42,7 +54,14 @@ namespace Compo_Request
         {
             // Регистрация события нажатия на кнопку регистрации
             Button_Register.Click += Button_Register_Click;
+            Button_Login.Click += Button_Login_Click;
             this.Closed += MainWindow_Closed;
+        }
+
+        private void Button_Login_Click(object sender, RoutedEventArgs e)
+        {
+            byte[] Data = Package.Packaging(TextBox_LoginOrEmail.Text);
+            NetworkBase.ClientNetwork.Send(Data);
         }
 
         /// <summary>

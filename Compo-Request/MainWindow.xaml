@@ -13,7 +13,8 @@
             <Grid Height="70">
                 <StackPanel>
                     <TextBlock FontSize="16" TextAlignment="Center" Text="Логин / Почта"/>
-                    <TextBox Height="25" BorderBrush="Black"/>
+                    <TextBox x:Name="TextBox_LoginOrEmail"
+                        Height="25" BorderBrush="Black"/>
                 </StackPanel>
             </Grid>
             <Grid Height="70">
@@ -23,7 +24,8 @@
                 </StackPanel>
             </Grid>
             <Grid Margin="0,50,0,0" Height="30">
-                <Button HorizontalAlignment="Left" Content="Авторизация" Width="130"/>
+                <Button x:Name="Button_Login"
+                    HorizontalAlignment="Left" Content="Авторизация" Width="130"/>
                 <Button x:Name="Button_Register" 
                     HorizontalAlignment="Right" Content="Регистрация" Width="130"/>
             </Grid>

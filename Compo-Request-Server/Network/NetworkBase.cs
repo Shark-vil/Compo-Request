@@ -10,7 +10,7 @@ namespace Compo_Request_Server.Network
     {
         public static int Port;
         public static IPEndPoint NetPoint;
-        public static TcpListener Listener;
+        public static Socket Listener;
 
         public static List<Models.UserNetwork> UsersNetwork = new List<Models.UserNetwork>();
 
@@ -18,7 +18,8 @@ namespace Compo_Request_Server.Network
         {
             Port = ServerPort;
             NetPoint = new IPEndPoint(IPAddress.Any, ServerPort);
-            Listener = new TcpListener(NetPoint);
+            Listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            Listener.Bind(NetPoint);
         }
     }
 }

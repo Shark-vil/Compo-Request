@@ -12,17 +12,15 @@ namespace Compo_Request_Server.Network.Models
         public string Id { get; private set; }
         public string Ip { get; private set; }
         public int Port { get; private set; }
-        public NetworkStream Stream { get; private set; }
-        public TcpClient ClientNetwork { get; private set; }
+        public Socket ClientNetwork { get; private set; }
         public IPEndPoint NetPoint { get; private set; }
 
-        public UserNetwork(TcpClient ClientNetwork)
+        public UserNetwork(Socket ClientNetwork)
         {
             Id = Guid.NewGuid().ToString();
-            NetPoint = (IPEndPoint)ClientNetwork.Client.RemoteEndPoint;
+            NetPoint = (IPEndPoint)ClientNetwork.RemoteEndPoint;
             Ip = NetPoint.Address.ToString();
             Port = NetPoint.Port;
-            Stream = ClientNetwork.GetStream();
             this.ClientNetwork = ClientNetwork;
         }
     }

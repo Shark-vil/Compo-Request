@@ -24,9 +24,22 @@ namespace Compo_Request_Server.Network.Client
         {
             try
             {
-                byte[] Data = GetRequest();
+                while (true)
+                {
+                    try
+                    {
+                        byte[] Data = GetRequest();
 
-                Console.WriteLine(Package.Unpacking<string>(Data));
+                        Console.WriteLine(Package.Unpacking<string>(Data));
+
+                        UserNetwork.ClientNetwork.Send(Data);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Пользователь отключился.");
+                        break;
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -39,25 +52,23 @@ namespace Compo_Request_Server.Network.Client
             }
         }
 
-        private  byte[] GetRequest()
+        private byte[] GetRequest()
         {
-            byte[] bytes;
+            int ByteCount;
+            byte[] Bytes;
 
             do
             {
-                bytes = new byte[UserNetwork.ClientNetwork.ReceiveBufferSize];
-                UserNetwork.Stream.Read(bytes, 0, (int)UserNetwork.ClientNetwork.ReceiveBufferSize);
+                Bytes = new byte[UserNetwork.ClientNetwork.ReceiveBufferSize];
+                ByteCount = UserNetwork.ClientNetwork.Receive(Bytes);
             }
-            while (UserNetwork.Stream.DataAvailable);
+            while (UserNetwork.ClientNetwork.Available > 0);
 
-            return bytes;
+            return Bytes;
         }
 
         protected internal void Close()
         {
-            if (UserNetwork.Stream != null)
-                UserNetwork.Stream.Close();
-
             if (UserNetwork.ClientNetwork != null)
                 UserNetwork.ClientNetwork.Close();
         }

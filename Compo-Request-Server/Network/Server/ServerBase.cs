@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using Compo_Request_Server.Network.Client;
 using Compo_Request_Server.Network.Models;
 using Compo_Request_Server.Network.Utilities;
+using Compo_Shared_Data.Network;
 
 namespace Compo_Request_Server.Network.Server
 {
@@ -29,18 +31,20 @@ namespace Compo_Request_Server.Network.Server
 
             if (UserNetwork != null)
                 NetworkBase.UsersNetwork.Remove(UserNetwork);
+
+            Console.WriteLine("Клиент отключился!");
         }
 
         protected internal void Listen()
         {
             try
             {
-                NetworkBase.Listener.Start();
+                NetworkBase.Listener.Listen(10);
                 Console.WriteLine("Сервер запущен. Ожидание подключений...");
 
                 while (true)
                 {
-                    TcpClient ClientNetwork = NetworkBase.Listener.AcceptTcpClient();
+                    Socket ClientNetwork = NetworkBase.Listener.Accept();
 
                     ClientBase Client = new ClientBase(new UserNetwork(ClientNetwork), this);
 
@@ -58,7 +62,7 @@ namespace Compo_Request_Server.Network.Server
 
         protected internal void Disconnect()
         {
-            NetworkBase.Listener.Stop();
+            NetworkBase.Listener.Close();
 
             for (int i = 0; i < NetworkBase.UsersNetwork.Count; i++)
             {
