@@ -4,14 +4,15 @@ using System.Text;
 
 namespace Compo_Shared_Data.Models
 {
+    [Serializable]
     public class User
     {
-        int Id;
-        string Name;
-        string Surname;
-        string Patronymic;
-        string Email;
-        string Login;
-        string Password;
+        public int Id;
+        public string Name;
+        public string Surname;
+        public string Patronymic;
+        public string Email;
+        public string Login;
+        public string Password;
     }
 }
