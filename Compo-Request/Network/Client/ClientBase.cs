@@ -12,52 +12,87 @@ namespace Compo_Request.Network.Client
 {
     public class ClientBase : NetworkBase
     {
-        public void Process()
+        public static Thread SelfThread;
+
+        public static void Process()
         {
             while (true)
             {
                 try
                 {
                     byte[] Data = GetRequest();
-                    Receiver receiver = Package.Unpacking<Receiver>(Data);
+                    Receiver ServerResponse = Package.Unpacking<Receiver>(Data);
 
-                    bool isBreak = false;
+                    Console.WriteLine("Сообщение с сервера");
 
-                    foreach (var VData in NetworkDelegates.VisualDataList)
+                    foreach (var DataDelegate in NetworkDelegates.VisualDataList)
                     {
-                        if (VData.Dispatcher != null && VData.WindowUid != -1)
+                        if (DataDelegate.Dispatcher != null && DataDelegate.WindowUid != -1)
                         {
-                            VData.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                            (ThreadStart)delegate ()
+                            if (DataDelegate.WindowUid == ServerResponse.WindowUid)
                             {
-                                if (VData.WindowUid == receiver.WindowUid)
+                                if (CheckKeyNetwork(DataDelegate, ServerResponse))
                                 {
-                                    VData.DataDelegate(receiver);
-                                    isBreak = true;
+                                    DispatcherExec(DataDelegate, ServerResponse);
+                                    break;
                                 }
-                            });
+                            }
                         }
                         else
                         {
-                            VData.DataDelegate(receiver);
-                            isBreak = true;
+                            if (CheckKeyNetwork(DataDelegate, ServerResponse))
+                            {
+                                DataDelegate.DataDelegate(ServerResponse);
+                                break;
+                            }
                         }
-
-                        if (isBreak)
-                            break;
                     }
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine("Подключение прервано!");
-                    Console.ReadLine();
+
+                    foreach (var DataDelegate in NetworkDelegates.VisualDataList)
+                        if (DataDelegate.KeyNetwork == "Server.Disconnect")
+                            DispatcherExec(DataDelegate);
 
                     Disconnect();
+
+                    break;
                 }
             }
         }
 
-        private byte[] GetRequest()
+        private static bool DispatcherExec(VisualData DataDelegate, Receiver ServerResponse = null)
+        {
+            if (DataDelegate.Dispatcher != null)
+            {
+                DataDelegate.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                (ThreadStart)delegate ()
+                {
+                    DataDelegate.DataDelegate(ServerResponse);
+                });
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool CheckKeyNetwork(VisualData DataDelegate, Receiver ServerResponse)
+        {
+            if (DataDelegate.KeyNetwork != null)
+            {
+                if (DataDelegate.KeyNetwork == ServerResponse.KeyNetwork)
+                    return true;
+            }
+            else
+                return true;
+
+            return false;
+        }
+
+        private static byte[] GetRequest()
         {
             int ByteCount;
             byte[] Bytes;
@@ -72,10 +107,10 @@ namespace Compo_Request.Network.Client
             return Bytes;
         }
 
-        static void Disconnect()
+        public static void Disconnect()
         {
             if (ClientNetwork != null)
-                ClientNetwork.Close(); //отключение клиента
+                ClientNetwork.Close();
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Threading;
 using Compo_Request_Server.Network.Models;
 using Compo_Request_Server.Network.Server;
 using Compo_Request_Server.Network.Utilities;
+using Compo_Shared_Data.Debugging;
 using Compo_Shared_Data.Network;
 using Compo_Shared_Data.Network.Models;
 
@@ -32,24 +33,33 @@ namespace Compo_Request_Server.Network.Client
                     try
                     {
                         byte[] Data = GetRequest();
-                        Receiver receiver = Package.Unpacking<Receiver>(Data);
+                        Receiver ServerResponse = Package.Unpacking<Receiver>(Data);
 
                         bool isBreak = false;
 
-                        foreach (var VData in NetworkDelegates.VisualDataList)
+                        Console.WriteLine("Новое сообщение от клиента");
+
+                        foreach (var DataDelegate in NetworkDelegates.VisualDataList)
                         {
-                            if (VData.WindowUid != -1)
+                            if (DataDelegate.WindowUid != -1)
                             {
-                                if (VData.WindowUid == receiver.WindowUid)
+                                if (DataDelegate.WindowUid == ServerResponse.WindowUid)
                                 {
-                                    VData.DataDelegate(receiver);
-                                    isBreak = true;
+                                    if (CheckKeyNetwork(DataDelegate, ServerResponse))
+                                    {
+                                        // ВТОРОЙ АРГУМЕНТ - ПОЛЬЗОВАТЕЛЬ
+                                        DataDelegate.DataDelegate(ServerResponse);
+                                        isBreak = true;
+                                    }
                                 }
                             }
                             else
                             {
-                                VData.DataDelegate(receiver);
-                                isBreak = true;
+                                if (CheckKeyNetwork(DataDelegate, ServerResponse))
+                                {
+                                    DataDelegate.DataDelegate(ServerResponse);
+                                    isBreak = true;
+                                }
                             }
 
                             if (isBreak)
@@ -58,20 +68,38 @@ namespace Compo_Request_Server.Network.Client
                     }
                     catch
                     {
-                        Console.WriteLine("Пользователь отключился.");
+                        Debug.Log($"The user has completed the local process.\n" +
+                            $"User info: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}\n");
                         break;
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e.Message);
+                Debug.LogError("The local user process was aborted with an error:\n" + ex + "\n" +
+                    $"User info: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}\n");
             }
             finally
             {
                 Server.RemoveConnection(UserNetwork.Id);
                 Close();
+
+                Debug.Log($"Final completion of the user process.\n" +
+                    $"User info: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}\n");
             }
+        }
+
+        private static bool CheckKeyNetwork(ServerVisualData DataDelegate, Receiver ServerResponse)
+        {
+            if (DataDelegate.KeyNetwork != null)
+            {
+                if (DataDelegate.KeyNetwork == ServerResponse.KeyNetwork)
+                    return true;
+            }
+            else
+                return true;
+
+            return false;
         }
 
         private byte[] GetRequest()

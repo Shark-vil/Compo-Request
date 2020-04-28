@@ -10,11 +10,13 @@ namespace Compo_Shared_Data.Models
     public class VisualData
     {
         public int WindowUid;
+        public int ClientCode;
         public VisualDataDelegate DataDelegate;
 
-        public VisualData(int WindowUid, VisualDataDelegate DataDelegate)
+        public VisualData(VisualDataDelegate DataDelegate, int WindowUid = -1, int ClientCode = -1)
         {
             this.WindowUid = WindowUid;
+            this.ClientCode = ClientCode;
             this.DataDelegate = DataDelegate;
         }
     }

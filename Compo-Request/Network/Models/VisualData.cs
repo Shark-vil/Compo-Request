@@ -11,12 +11,14 @@ namespace Compo_Request.Network.Models
     public class VisualData
     {
         public int WindowUid;
+        public string KeyNetwork;
         public VisualDataDelegate DataDelegate;
         public Dispatcher Dispatcher;
 
-        public VisualData(int WindowUid, VisualDataDelegate DataDelegate, Dispatcher Dispatcher = null)
+        public VisualData(int WindowUid, VisualDataDelegate DataDelegate, Dispatcher Dispatcher = null, string KeyNetwork = null)
         {
             this.WindowUid = WindowUid;
+            this.KeyNetwork = KeyNetwork;
             this.DataDelegate = DataDelegate;
             this.Dispatcher = Dispatcher;
         }

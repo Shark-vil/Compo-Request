@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,26 +30,38 @@ namespace Compo_Request
     {
         private RegisterWindow registerWindow;
 
+        [DllImport("Kernel32")]
+        public static extern void AllocConsole();
+
         public MainWindow()
         {
+#if DEBUG
+            AllocConsole();
+#endif
+
             InitializeComponent();
             LoadWindowParent();
             EventsInitialize();
 
             NetworkBase.Setup("127.0.0.1", 8888);
 
-            ClientBase Client = new ClientBase();
+            NetworkDelegates.Add(ServerShutdown, default, Dispatcher, "Server.Disconnect");
 
-            NetworkDelegates.Add(NewText, 1, Dispatcher);
+            if (NetworkBase.ClientNetwork.Connected)
+            {
+                Thread ThreadClient = new Thread(new ThreadStart(ClientBase.Process));
+                ThreadClient.IsBackground = true;
+                ThreadClient.Start();
 
-            Thread receiveThread = new Thread(new ThreadStart(Client.Process));
-            receiveThread.IsBackground = true;
-            receiveThread.Start();
+                Console.WriteLine("Запуск");
+
+                ClientBase.SelfThread = ThreadClient;
+            }
         }
 
-        private void NewText(Receiver receiver)
+        private void ServerShutdown(Receiver receiver)
         {
-            TextBox_LoginOrEmail.Text = Package.Unpacking<string>(receiver.DataBytes);
+            TextBox_LoginOrEmail.Text = "Сервер завершил работу!";
         }
 
         public void LoadWindowParent()
@@ -69,7 +82,7 @@ namespace Compo_Request
 
         private void Button_Login_Click(object sender, RoutedEventArgs e)
         {
-            Sender.SendToServer("GetNewText", TextBox_LoginOrEmail.Text, 1);
+            Sender.SendToServer("OnClient", TextBox_LoginOrEmail.Text, 1);
         }
 
         /// <summary>

@@ -11,10 +11,18 @@ namespace Compo_Request_Server.Network.Utilities
 {
     public class Sender : NetworkBase
     {
-        public static void Send(UserNetwork UserNetwork, string KeyNetwork, object DataObject = null, int WindowUid = -1)
+        public static void Send(UserNetwork UserNetwork, string KeyNetwork, object DataObject = null, int WindowUid = -1, string UserUid = "server")
         {
             try
             {
+                if (!UserNetwork.ClientNetwork.Connected)
+                {
+                    Debug.LogWarning("Failed to send message to client!\n" +
+                        $"[{KeyNetwork}] WindowUid - {WindowUid}, UserUid - {UserUid}\n" +
+                        $"User info: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}\n");
+                    return;
+                }
+
                 byte[] DataBytes;
 
                 if (DataObject.GetType().Name == "Byte[]")
@@ -23,6 +31,7 @@ namespace Compo_Request_Server.Network.Utilities
                     DataBytes = Package.Packaging(DataObject);
 
                 var Receiver = new Receiver();
+                Receiver.UserUid = UserUid;
                 Receiver.WindowUid = WindowUid;
                 Receiver.KeyNetwork = KeyNetwork;
                 Receiver.DataBytes = DataBytes;
@@ -34,6 +43,14 @@ namespace Compo_Request_Server.Network.Utilities
             catch (SocketException ex)
             {
                 Debug.LogError("[Sender.Send] Socket exception:\n" + ex);
+            }
+        }
+
+        public static void Broadcast(string KeyNetwork, object DataObject = null, int WindowUid = -1, string UserUid =  "server")
+        {
+            foreach(var UserNetwork in UsersNetwork)
+            {
+                Send(UserNetwork, KeyNetwork, DataObject, WindowUid, UserUid);
             }
         }
     }

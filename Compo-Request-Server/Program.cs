@@ -21,7 +21,7 @@ namespace Compo_Request_Server
             }
             catch (Exception ex)
             {
-                Server.Disconnect();
+                ServerBase.Disconnect();
                 Console.WriteLine(ex.Message);
             }
         }

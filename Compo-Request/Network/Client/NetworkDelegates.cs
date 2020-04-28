@@ -10,9 +10,9 @@ namespace Compo_Request.Network.Client
     {
         public static List<VisualData> VisualDataList = new List<VisualData>();
 
-        public static void Add(VisualDataDelegate Delegate , int WindowUid = -1, Dispatcher Dispatcher = null)
+        public static void Add(VisualDataDelegate Delegate , int WindowUid = -1, Dispatcher Dispatcher = null, string KeyNetwork = null)
         {
-            VisualDataList.Add(new VisualData(WindowUid, Delegate, Dispatcher));
+            VisualDataList.Add(new VisualData(WindowUid, Delegate, Dispatcher, KeyNetwork));
         }
     }
 }

@@ -27,8 +27,15 @@ namespace Compo_Request.Network
 
             NetPoint = new IPEndPoint(NetAddress, ServerPort);
 
-            ClientNetwork = new Socket(NetAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            ClientNetwork.Connect(Host, Port);
+            try
+            {
+                ClientNetwork = new Socket(NetAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                ClientNetwork.Connect(Host, Port);
+            }
+            catch(Exception ex)
+            {
+
+            }
         }
     }
 }
