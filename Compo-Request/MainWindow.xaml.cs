@@ -15,8 +15,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Compo_Request.Network;
 using Compo_Request.Network.Client;
+using Compo_Request.Network.Utilities;
 using Compo_Request.Windows.UserRegister;
 using Compo_Shared_Data.Network;
+using Compo_Shared_Data.Network.Models;
 
 namespace Compo_Request
 {
@@ -35,11 +37,18 @@ namespace Compo_Request
 
             NetworkBase.Setup("127.0.0.1", 8888);
 
-            ClientBase Client = new ClientBase(TextBox_LoginOrEmail, Dispatcher);
+            ClientBase Client = new ClientBase();
+
+            NetworkDelegates.Add(NewText, 1, Dispatcher);
 
             Thread receiveThread = new Thread(new ThreadStart(Client.Process));
             receiveThread.IsBackground = true;
             receiveThread.Start();
+        }
+
+        private void NewText(Receiver receiver)
+        {
+            TextBox_LoginOrEmail.Text = Package.Unpacking<string>(receiver.DataBytes);
         }
 
         public void LoadWindowParent()
@@ -60,8 +69,7 @@ namespace Compo_Request
 
         private void Button_Login_Click(object sender, RoutedEventArgs e)
         {
-            byte[] Data = Package.Packaging(TextBox_LoginOrEmail.Text);
-            NetworkBase.ClientNetwork.Send(Data);
+            Sender.SendToServer("GetNewText", TextBox_LoginOrEmail.Text, 1);
         }
 
         /// <summary>

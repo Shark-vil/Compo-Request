@@ -4,7 +4,9 @@ using System.Text;
 using System.Threading;
 using Compo_Request_Server.Network.Models;
 using Compo_Request_Server.Network.Server;
+using Compo_Request_Server.Network.Utilities;
 using Compo_Shared_Data.Network;
+using Compo_Shared_Data.Network.Models;
 
 namespace Compo_Request_Server.Network.Client
 {
@@ -30,11 +32,29 @@ namespace Compo_Request_Server.Network.Client
                     try
                     {
                         byte[] Data = GetRequest();
+                        Receiver receiver = Package.Unpacking<Receiver>(Data);
 
-                        Console.WriteLine("Новое сообщение: " + Package.Unpacking<string>(Data));
+                        bool isBreak = false;
 
-                        byte[] answer = Package.Packaging("Ответ очка");
-                        UserNetwork.ClientNetwork.Send(answer);
+                        foreach (var VData in NetworkDelegates.VisualDataList)
+                        {
+                            if (VData.WindowUid != -1)
+                            {
+                                if (VData.WindowUid == receiver.WindowUid)
+                                {
+                                    VData.DataDelegate(receiver);
+                                    isBreak = true;
+                                }
+                            }
+                            else
+                            {
+                                VData.DataDelegate(receiver);
+                                isBreak = true;
+                            }
+
+                            if (isBreak)
+                                break;
+                        }
                     }
                     catch
                     {

@@ -1,4 +1,6 @@
-﻿using Compo_Shared_Data.Network;
+﻿using Compo_Request.Network.Models;
+using Compo_Shared_Data.Network;
+using Compo_Shared_Data.Network.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,15 +12,6 @@ namespace Compo_Request.Network.Client
 {
     public class ClientBase : NetworkBase
     {
-        public TextBox mainWindow;
-        public Dispatcher dispatcher;
-
-        public ClientBase(TextBox mainWindow, Dispatcher dispatcher)
-        {
-            this.mainWindow = mainWindow;
-            this.dispatcher = dispatcher;
-        }
-
         public void Process()
         {
             while (true)
@@ -26,15 +19,33 @@ namespace Compo_Request.Network.Client
                 try
                 {
                     byte[] Data = GetRequest();
+                    Receiver receiver = Package.Unpacking<Receiver>(Data);
 
-                    string get = Package.Unpacking<string>(Data);
+                    bool isBreak = false;
 
-                    dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                        (ThreadStart)delegate ()
+                    foreach (var VData in NetworkDelegates.VisualDataList)
+                    {
+                        if (VData.Dispatcher != null && VData.WindowUid != -1)
                         {
-                            mainWindow.Text = get;
+                            VData.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                            (ThreadStart)delegate ()
+                            {
+                                if (VData.WindowUid == receiver.WindowUid)
+                                {
+                                    VData.DataDelegate(receiver);
+                                    isBreak = true;
+                                }
+                            });
                         }
-                    );
+                        else
+                        {
+                            VData.DataDelegate(receiver);
+                            isBreak = true;
+                        }
+
+                        if (isBreak)
+                            break;
+                    }
                 }
                 catch (Exception e)
                 {

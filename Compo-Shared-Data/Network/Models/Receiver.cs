@@ -8,6 +8,7 @@ namespace Compo_Shared_Data.Network.Models
     public class Receiver
     {
         public string KeyNetwork;
+        public int WindowUid = -1;
         public byte[] DataBytes;
     }
 }

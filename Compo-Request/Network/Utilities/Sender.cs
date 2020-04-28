@@ -1,17 +1,16 @@
-﻿using System;
+﻿using Compo_Shared_Data.Network;
+using System;
 using System.Collections.Generic;
-using System.Net.Sockets;
 using System.Text;
-using Compo_Request_Server.Network.Models;
-using Compo_Shared_Data.Debugging;
-using Compo_Shared_Data.Network;
 using Compo_Shared_Data.Network.Models;
+using System.Net.Sockets;
+using Compo_Shared_Data.Debugging;
 
-namespace Compo_Request_Server.Network.Utilities
+namespace Compo_Request.Network.Utilities
 {
     public class Sender : NetworkBase
     {
-        public static void Send(UserNetwork UserNetwork, string KeyNetwork, object DataObject = null, int WindowUid = -1)
+        public static void SendToServer(string KeyNetwork, object DataObject = null, int WindowUid = -1)
         {
             try
             {
@@ -29,8 +28,8 @@ namespace Compo_Request_Server.Network.Utilities
 
                 byte[] WriteDataBytes = Package.Packaging(Receiver);
 
-                UserNetwork.ClientNetwork.Send(WriteDataBytes);
-            } 
+                ClientNetwork.Send(WriteDataBytes);
+            }
             catch (SocketException ex)
             {
                 Debug.LogError("[Sender.Send] Socket exception:\n" + ex);
