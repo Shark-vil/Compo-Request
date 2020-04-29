@@ -17,6 +17,8 @@ using System.Windows.Shapes;
 using Compo_Request.Network;
 using Compo_Request.Network.Client;
 using Compo_Request.Network.Utilities;
+using Compo_Request.Network.Utilities.Validators;
+using Compo_Request.Windows;
 using Compo_Request.Windows.UserRegister;
 using Compo_Shared_Data.Debugging;
 using Compo_Shared_Data.Network;
@@ -44,6 +46,28 @@ namespace Compo_Request
             EventsInitialize();
 
             ConnectService.Start();
+
+            NetworkDelegates.Add(delegate (MResponse ServerResponse)
+            {
+                var NetUser = Package.Unpacking<MUserNetwork>(ServerResponse.DataBytes);
+
+                var Alert = new AlertWindow("Успешный вход", "Вы успешно вошли в систему! Ваш уникальный ID:\n" +
+                    $"{NetUser.Uid}");
+
+            }, Dispatcher, 2, "User.Auth.Confirm", "MainWindow");
+
+            NetworkDelegates.Add(delegate (MResponse ServerResponse)
+            {
+                if (StringValid.IsValidEmail(TextBox_LoginOrEmail.Text))
+                {
+                    var Alert = new AlertWindow("Ошибка", "Не верно указана почта или пароль!");
+                }
+                else
+                {
+                    var Alert = new AlertWindow("Ошибка", "Не верно указан логин или пароль!");
+                }
+
+            }, Dispatcher, 2, "User.Auth.Error", "MainWindow");
         }
 
         /// <summary>
@@ -58,7 +82,13 @@ namespace Compo_Request
 
         private void Button_Login_Click(object sender, RoutedEventArgs e)
         {
-            Sender.SendToServer("OnClient", TextBox_LoginOrEmail.Text, 1);
+            var UserData = new string[]
+            {
+                TextBox_LoginOrEmail.Text,
+                PasswordBox_Password.Password
+            };
+
+            Sender.SendToServer("User.Auth", UserData, 1);
         }
 
         /// <summary>

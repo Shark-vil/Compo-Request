@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Compo_Request_Server.Network;
+using Compo_Request_Server.Network.Events.Auth;
 using Compo_Request_Server.Network.Events.Register;
 using Compo_Request_Server.Network.Models;
 using Compo_Request_Server.Network.Server;
@@ -36,6 +37,7 @@ namespace Compo_Request_Server
         private static void RegisterEvents()
         {
             var EventRegister = new ERegister();
+            var EventAuth = new EAuth();
         }
     }
 }
