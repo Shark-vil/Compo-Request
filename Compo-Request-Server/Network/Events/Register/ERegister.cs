@@ -49,15 +49,14 @@ namespace Compo_Request_Server.Network.Events.Register
                         return;
                     }
 
-                    Debug.Log("New user added to database.");
+                    Debug.Log("В базу данных добавлен новый пользователь", ConsoleColor.Magenta);
 
                     Sender.Send(UserNetwork, "User.Register.Confirm", default, 2);
                 }
             }
             catch(DbUpdateException ex)
             {
-                Debug.LogError("An exception occurred while adding the user to the table. " +
-                    "Exeption code:\n " + ex);
+                Debug.LogError("Возникла ошибка при регистрации пользователя в системе! Код ошибки:\n" + ex);
 
                 Sender.Send(UserNetwork, "User.Register.Error", default, 2);
             }

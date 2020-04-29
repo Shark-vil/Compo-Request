@@ -15,6 +15,8 @@ namespace Compo_Request_Server
     {
         static void Main(string[] args)
         {
+            Debug.Log("Подготовка сервера...", ConsoleColor.Cyan);
+
             var Server = new ServerBase();
 
             try
@@ -26,11 +28,8 @@ namespace Compo_Request_Server
             }
             catch (Exception ex)
             {
-                Debug.LogError("Server main thread throws exceptions:\n" + ex.Message);
-
+                Debug.LogError("Возникла ошибка при попытке запустить сервер! Код ошибки:\n" + ex);
                 ServerBase.Disconnect();
-
-                Debug.LogError("Server forcibly shuts down.");
             }
         }
 

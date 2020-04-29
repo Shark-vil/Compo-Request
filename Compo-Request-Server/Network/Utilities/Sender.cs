@@ -15,11 +15,13 @@ namespace Compo_Request_Server.Network.Utilities
         {
             try
             {
+                Debug.Log("Подготовка запроса для отправки клиенту. Информация о запросе: \n" +
+                    $"KeyNetwork - {KeyNetwork}, WindowUid - {WindowUid}\n" +
+                    $"Информация о пользователе: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}");
+
                 if (!UserNetwork.ClientNetwork.Connected)
                 {
-                    Debug.LogWarning("Failed to send message to client!\n" +
-                        $"[{KeyNetwork}] WindowUid - {WindowUid}\n" +
-                        $"User info: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}\n");
+                    Debug.LogWarning("Не удалось проверить соединение с клиентом, запрос отклонён!");
                     return;
                 }
 
@@ -41,15 +43,16 @@ namespace Compo_Request_Server.Network.Utilities
                 {
                     UserNetwork.ClientNetwork.Send(WriteDataBytes);
                 }
-                catch (Exception ex)
+                catch (SocketException ex)
                 {
-                    Debug.LogError("An exception was thrown when sending a request to the user. " +
-                        "Exception code:\n" + ex);
+                    Debug.LogError("Возникла ошибка при попытке отправить запрос клиенту. " +
+                        "Код ошибки:\n" + ex);
                 }
             } 
-            catch (SocketException ex)
+            catch (Exception ex)
             {
-                Debug.LogError("[Sender.Send] Socket exception:\n" + ex);
+                Debug.LogError("Возникла ошибка при создании экземпляра транспортировки. " +
+                    "Код ошибки:\n" + ex);
             }
         }
 

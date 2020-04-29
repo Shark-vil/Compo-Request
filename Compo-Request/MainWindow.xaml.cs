@@ -40,7 +40,7 @@ namespace Compo_Request
         {
 #if DEBUG
             AllocConsole();
-            Debug.Log("The console is running!");
+            Debug.Log("Запущена консоль отладки", ConsoleColor.Green);
 #endif
             InitializeComponent();
             EventsInitialize();

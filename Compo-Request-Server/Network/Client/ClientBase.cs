@@ -37,7 +37,7 @@ namespace Compo_Request_Server.Network.Client
 
                         bool isBreak = false;
 
-                        Debug.Log($"New request from the client: " +
+                        Debug.Log($"Новый запрос от клиента [{UserNetwork.Id} - {UserNetwork.Ip}:{UserNetwork.NetPoint}]: " +
                             $"WindowUid - {ClientResponse.WindowUid}, KeyNetwork - {ClientResponse.KeyNetwork}");
 
                         foreach (var DataDelegate in NetworkDelegates.NetworkActions)
@@ -66,26 +66,29 @@ namespace Compo_Request_Server.Network.Client
                                 break;
                         }
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        Debug.Log($"The user has completed the local process.\n" +
-                            $"User info: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}");
+                        Debug.Log($"Возникла ошибка при обработке пользовательского запроса.\n" +
+                            $"Информация о пользователе: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}\n" +
+                            $"Код ошибки:\n" + ex);
+
                         break;
                     }
                 }
             }
             catch (Exception ex)
             {
-                Debug.LogError("The local user process was aborted with an error:\n" + ex + "\n" +
-                    $"User info: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}");
+                Debug.LogError("Возникла ошибка при обработке пользовательского процесса.\n" +
+                    $"Информация о пользователе: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}\n" +
+                    $"Код ошибки:\n" + ex);
             }
             finally
             {
                 Server.RemoveConnection(UserNetwork.Id);
                 Close();
 
-                Debug.Log($"Final completion of the user process.\n" +
-                    $"User info: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}");
+                Debug.Log($"Пользовательский процесс завершён.\n" +
+                    $"Информация о пользователе: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}\n");
             }
         }
 

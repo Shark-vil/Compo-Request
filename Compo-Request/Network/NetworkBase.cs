@@ -23,7 +23,7 @@ namespace Compo_Request.Network
             if (ClientNetwork != null && ClientNetwork.Connected)
                 return true;
             else
-                Debug.Log("There is no connection to the server.");
+                Debug.LogWarning("Не удаётся установить соединение с сервером");
 
             Host = ServerHost;
             Port = ServerPort;

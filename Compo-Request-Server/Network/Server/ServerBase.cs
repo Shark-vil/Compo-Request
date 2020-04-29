@@ -25,7 +25,7 @@ namespace Compo_Request_Server.Network.Server
         {
             NetworkBase.UsersNetwork.Add(UserNetwork);
 
-            Debug.Log($"User connected: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}");
+            Debug.Log($"Клиент подключён: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}");
         }
 
         protected internal void RemoveConnection(string id)
@@ -36,61 +36,99 @@ namespace Compo_Request_Server.Network.Server
             if (UserNetwork != null)
                 NetworkBase.UsersNetwork.Remove(UserNetwork);
 
-            Debug.Log($"User disconnected: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}");
+            Debug.Log($"Клиент отключён: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}");
         }
 
         protected internal void Listen()
         {
+            var ServerThreadWriter = new Thread(new ThreadStart(ConsoleWriter));
+            ServerThreadWriter.Start();
+
             try
             {
                 NetworkBase.Listener.Listen(10);
 
-                Debug.Log("Server is running!");
+                Debug.Log("Сервер запущен!", ConsoleColor.Green);
 
                 while (true)
                 {
+                    Debug.Log("Ожидание подключений...");
+
                     Socket ClientNetwork = NetworkBase.Listener.Accept();
 
-                    Debug.Log("Initialize user connection...");
+                    Debug.Log("Получен запрос на подключение!");
 
-                    Debug.Log("Creating a user component.");
+                    Debug.Log("Создание компонента клиента.");
                     ClientBase Client = new ClientBase(new UserNetwork(ClientNetwork), this);
 
-                    Debug.Log("Starting a user process in a separate thread.");
+                    Debug.Log("Запуск клиентского процесса.");
                     Thread ClientThread = new Thread(new ThreadStart(Client.Process));
                     ClientThread.IsBackground = true;
                     ClientThread.Start();
 
-                    Debug.Log("User connected successfully!");
+                    Debug.Log("Клиент инициализирован!");
                 }
             }
             catch (ThreadAbortException ex)
             {
-                Debug.LogError("Server forcibly terminated with an error:\n" + ex);
+                Debug.LogError("Возникла ошибка в главном серверном потоке! Код ошибки:\n" + ex);
+
+                if (ServerThreadWriter.IsAlive)
+                    ServerThreadWriter.Abort();
 
                 Disconnect();
             }
         }
 
+        protected internal void ConsoleWriter()
+        {
+            try
+            {
+                Debug.Log("Запуск потока ввода данных");
+
+                while (true)
+                {
+                    string Command = Console.ReadLine();
+
+                    switch (Command)
+                    {
+                        case "quit":
+                            Disconnect();
+                            break;
+                        default:
+                            Debug.Log("Введена неизвестная команда");
+                            break;
+                    }
+                }
+            }
+            catch { }
+        }
+
         public static void Disconnect()
         {
-            Debug.Log("Server shutdown process...");
+            Debug.Log("Процесс отключения сервера...");
 
             Sender.Broadcast("Server.Disconnect");
 
-            NetworkBase.Listener.Close();
-
-            Debug.Log("Closing the server listener.");
-            Debug.Log("User disconnect process...");
-
+            Debug.Log("Отключение пользователей...", ConsoleColor.Cyan);
             for (int i = 0; i < NetworkBase.UsersNetwork.Count; i++)
             {
                 NetworkBase.UsersNetwork[i].ClientNetwork.Close();
             }
+            Debug.Log("Все пользователи отключены", ConsoleColor.Green);
 
-            Debug.Log("All users are disconnected!");
+            Debug.Log("Закрытие процесса слушателя", ConsoleColor.Cyan);
+            if (NetworkBase.Listener.Connected)
+            {
+                NetworkBase.Listener.Blocking = false;
+                NetworkBase.Listener.Close();
+            }
+            Debug.Log("Прослушивание подключений остановлено", ConsoleColor.Green);
 
-            Debug.Log("The server is shutting down.");
+            Debug.Log("Сервер завершит работу через 5 секунд");
+
+            Thread.Sleep(5000);
+
             Environment.Exit(0);
         }
     }

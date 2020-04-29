@@ -12,7 +12,7 @@ namespace Compo_Request_Server.Network.Server
 
         public static void Add(NetworkDelegateTemplate Delegate, string KeyNetwork = null, int WindowUid = -1)
         {
-            Debug.Log($"Delegate Registration: WindowUid - {WindowUid}, KeyNetwork - {KeyNetwork}");
+            Debug.Log($"Регистрация делегата: WindowUid - {WindowUid}, KeyNetwork - {KeyNetwork}");
 
             NetworkActions.Add(new MNetworkAction(Delegate, KeyNetwork, WindowUid));
         }

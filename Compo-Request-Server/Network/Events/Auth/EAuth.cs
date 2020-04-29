@@ -50,7 +50,7 @@ namespace Compo_Request_Server.Network.Events.Auth
                             NetUser.Email = user.Email;
 
                             Sender.Send(UserNetwork, "User.Auth.Confirm", NetUser, 2);
-                            Debug.Log("User is logged in!");
+                            Debug.Log("Пользователь вошёл в систему!");
 
                             return;
                         }
@@ -62,8 +62,7 @@ namespace Compo_Request_Server.Network.Events.Auth
             }
             catch (DbUpdateException ex)
             {
-                Debug.LogError("An exception was raised while trying to retrieve user data. " +
-                    "Exeption code:\n " + ex);
+                Debug.LogError("Возникла ошибка при авторизации пользователя в системе! Код ошибки:\n" + ex);
 
                 Sender.Send(UserNetwork, "User.Auth.Error", default, 2);
             }

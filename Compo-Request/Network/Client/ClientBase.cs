@@ -25,7 +25,7 @@ namespace Compo_Request.Network.Client
 
                     MResponse ServerResponse = Package.Unpacking<MResponse>(Data);
 
-                    Debug.Log($"New request from the server: " +
+                    Debug.Log($"Новый запрос от сервера [{Host}:{Port}]: " +
                         $"WindowUid - {ServerResponse.WindowUid}, KeyNetwork - {ServerResponse.KeyNetwork}");
 
                     foreach (var DataDelegate in NetworkDelegates.NetworkActions)
@@ -53,7 +53,7 @@ namespace Compo_Request.Network.Client
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogError("Lost connection to server! Exception code:\n" + ex);
+                    Debug.LogError("Потеряно соединение с сервером! Код ошибки:\n" + ex);
 
                     foreach (var DataDelegate in NetworkDelegates.NetworkActions)
                         if (DataDelegate.KeyNetwork == "Server.Disconnect")
@@ -115,7 +115,7 @@ namespace Compo_Request.Network.Client
             if (ClientNetwork != null)
                 ClientNetwork.Close();
 
-            Debug.Log("Disconnect from the server.");
+            Debug.Log("Отключение от сервера");
         }
     }
 }

@@ -14,13 +14,13 @@ namespace Compo_Request.Network.Utilities
         {
             if (ServiceThread == null)
             {
-                Debug.Log("Preparing a server connection support service.");
+                Debug.Log("Подготовка службы поддержки соединения с сервером", ConsoleColor.Cyan);
 
                 ServiceThread = new Thread(new ThreadStart(Process));
                 ServiceThread.IsBackground = true;
                 ServiceThread.Start();
 
-                Debug.Log("The server connection support service has been started.");
+                Debug.Log("Служба поддержки соединения с сервером запущена", ConsoleColor.Green);
             }
         }
 
@@ -37,7 +37,7 @@ namespace Compo_Request.Network.Utilities
                 ServiceThread = null;
                 ClientThread = null;
 
-                Debug.Log("Server connection support service is stopped.");
+                Debug.Log("Служба поддержки соединения с сервером остановлена");
             }
         }
 
@@ -51,7 +51,7 @@ namespace Compo_Request.Network.Utilities
                     {
                         if (NetworkBase.Setup("127.0.0.1", 8888))
                         {
-                            Debug.Log("Attempt to establish a connection to the server.");
+                            Debug.Log("Попытка соединиться с сервером", ConsoleColor.Cyan);
                             ConnectToServer();
                         }
                     }
@@ -74,7 +74,7 @@ namespace Compo_Request.Network.Utilities
                 ClientThread.Start();
                 ClientBase.SelfThread = ClientThread;
 
-                Debug.Log("Connection to the server is established!");
+                Debug.Log("Подключение к серверу установлено", ConsoleColor.Green);
             }
         }
     }

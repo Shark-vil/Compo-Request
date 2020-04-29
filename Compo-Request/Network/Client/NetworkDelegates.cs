@@ -16,12 +16,12 @@ namespace Compo_Request.Network.Client
         {
             if (UniqueDelegateName == null || !NetworkActions.Exists(x => x.UniqueDelegateName == UniqueDelegateName && x.KeyNetwork == KeyNetwork))
             {
-                Debug.Log($"Delegate Registration: WindowUid - {WindowUid}, KeyNetwork - {KeyNetwork}");
+                Debug.Log($"Регистрация делегата: WindowUid - {WindowUid}, KeyNetwork - {KeyNetwork}");
                 NetworkActions.Add(new MNetworkAction(WindowUid, Delegate, Dispatcher, KeyNetwork, UniqueDelegateName));
             }
             else
             {
-                Debug.Log($"Update Delegate: WindowUid - {WindowUid}, KeyNetwork - {KeyNetwork}");
+                Debug.Log($"Обновление делегата: WindowUid - {WindowUid}, KeyNetwork - {KeyNetwork}");
                 NetworkActions.RemoveAll(x => x.UniqueDelegateName == UniqueDelegateName && x.KeyNetwork == KeyNetwork);
                 NetworkActions.Add(new MNetworkAction(WindowUid, Delegate, Dispatcher, KeyNetwork, UniqueDelegateName));
             }
@@ -29,7 +29,7 @@ namespace Compo_Request.Network.Client
 
         public static void RemoveByUniqueName(string UniqueDelegateName)
         {
-            Debug.Log($"Remove Delegate:  UniqueDelegateName - {UniqueDelegateName}");
+            Debug.Log($"Удаление делегата:  UniqueDelegateName - {UniqueDelegateName}");
             NetworkActions.RemoveAll(x => x.UniqueDelegateName == UniqueDelegateName);
         }
     }

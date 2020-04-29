@@ -14,8 +14,14 @@ namespace Compo_Request.Network.Utilities
         {
             try
             {
+                Debug.Log("Подготовка запроса для отправки на сервер. Информация о запросе: \n" +
+                    $"KeyNetwork - {KeyNetwork}, WindowUid - {WindowUid}");
+
                 if (!ClientNetwork.Connected)
+                {
+                    Debug.LogWarning("Не удалось проверить соединение с сервером, запрос отклонён!");
                     return false;
+                }
 
                 byte[] DataBytes;
 
@@ -35,17 +41,18 @@ namespace Compo_Request.Network.Utilities
                 {
                     ClientNetwork.Send(WriteDataBytes);
                 }
-                catch(Exception ex)
+                catch(SocketException ex)
                 {
-                    Debug.LogError("An exception was thrown when sending a request to the server. " +
-                        "Exception code:\n" + ex);
+                    Debug.LogError("Возникла ошибка при попытке отправить запрос на сервер. " +
+                        "Код ошибки:\n" + ex);
                 }
 
                 return true;
             }
-            catch (SocketException ex)
+            catch (Exception ex)
             {
-                Debug.LogError("[Sender.Send] Socket exception:\n" + ex);
+                Debug.LogError("Возникла ошибка при создании экземпляра транспортировки. " +
+                    "Код ошибки:\n" + ex);
             }
 
             return false;
