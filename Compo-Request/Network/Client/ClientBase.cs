@@ -1,4 +1,5 @@
 ﻿using Compo_Request.Network.Models;
+using Compo_Shared_Data.Debugging;
 using Compo_Shared_Data.Network;
 using Compo_Shared_Data.Network.Models;
 using System;
@@ -23,8 +24,6 @@ namespace Compo_Request.Network.Client
                     byte[] Data = GetRequest();
                     MResponse ServerResponse = Package.Unpacking<MResponse>(Data);
 
-                    Console.WriteLine("Сообщение с сервера");
-
                     foreach (var DataDelegate in NetworkDelegates.NetworkActions)
                     {
                         if (DataDelegate.Dispatcher != null && DataDelegate.WindowUid != -1)
@@ -48,9 +47,9 @@ namespace Compo_Request.Network.Client
                         }
                     }
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Console.WriteLine("Подключение прервано!");
+                    Debug.LogError("Lost connection to server! Exception code:\n" + ex);
 
                     foreach (var DataDelegate in NetworkDelegates.NetworkActions)
                         if (DataDelegate.KeyNetwork == "Server.Disconnect")
@@ -111,6 +110,8 @@ namespace Compo_Request.Network.Client
         {
             if (ClientNetwork != null)
                 ClientNetwork.Close();
+
+            Debug.Log("Disconnect from the server.");
         }
     }
 }

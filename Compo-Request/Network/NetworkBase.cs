@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Compo_Shared_Data.Debugging;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -17,8 +18,13 @@ namespace Compo_Request.Network
         public static IPEndPoint NetPoint;
         public static Socket ClientNetwork;
 
-        public static void Setup(string ServerHost, int ServerPort)
+        public static bool Setup(string ServerHost, int ServerPort)
         {
+            if (ClientNetwork != null && ClientNetwork.Connected)
+                return true;
+            else
+                Debug.Log("There is no connection to the server.");
+
             Host = ServerHost;
             Port = ServerPort;
 
@@ -31,10 +37,12 @@ namespace Compo_Request.Network
             {
                 ClientNetwork = new Socket(NetAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                 ClientNetwork.Connect(Host, Port);
+
+                return true;
             }
             catch(Exception ex)
             {
-
+                return false;
             }
         }
     }

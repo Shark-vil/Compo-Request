@@ -18,6 +18,7 @@ using Compo_Request.Network;
 using Compo_Request.Network.Client;
 using Compo_Request.Network.Utilities;
 using Compo_Request.Windows.UserRegister;
+using Compo_Shared_Data.Debugging;
 using Compo_Shared_Data.Network;
 using Compo_Shared_Data.Network.Models;
 
@@ -37,26 +38,15 @@ namespace Compo_Request
         {
 #if DEBUG
             AllocConsole();
+            Debug.Log("The console is running!");
 #endif
-
             InitializeComponent();
             LoadWindowParent();
             EventsInitialize();
 
-            NetworkBase.Setup("127.0.0.1", 8888);
+            ConnectService.Start();
 
             NetworkDelegates.Add(ServerShutdown, Dispatcher, default, "Server.Disconnect");
-
-            if (NetworkBase.ClientNetwork.Connected)
-            {
-                Thread ThreadClient = new Thread(new ThreadStart(ClientBase.Process));
-                ThreadClient.IsBackground = true;
-                ThreadClient.Start();
-
-                Console.WriteLine("Запуск");
-
-                ClientBase.SelfThread = ThreadClient;
-            }
         }
 
         private void ServerShutdown(MResponse receiver)
