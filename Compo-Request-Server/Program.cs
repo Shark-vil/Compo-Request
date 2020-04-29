@@ -5,6 +5,7 @@ using System.Threading;
 using Compo_Request_Server.Network;
 using Compo_Request_Server.Network.Models;
 using Compo_Request_Server.Network.Server;
+using Compo_Shared_Data.Debugging;
 
 namespace Compo_Request_Server
 {
@@ -21,8 +22,11 @@ namespace Compo_Request_Server
             }
             catch (Exception ex)
             {
+                Debug.LogError("Server main thread throws exceptions:\n" + ex.Message);
+
                 ServerBase.Disconnect();
-                Console.WriteLine(ex.Message);
+
+                Debug.LogError("Server forcibly shuts down.");
             }
         }
     }
