@@ -12,7 +12,7 @@ namespace Compo_Request_Server.Network
         public static IPEndPoint NetPoint;
         public static Socket Listener;
 
-        public static List<Models.UserNetwork> UsersNetwork = new List<Models.UserNetwork>();
+        public static List<Models.MNetworkClient> NetworkClients = new List<Models.MNetworkClient>();
 
         public static void Setup(int ServerPort)
         {

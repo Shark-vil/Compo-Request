@@ -21,22 +21,22 @@ namespace Compo_Request_Server.Network.Server
             NetworkBase.Setup(8888);
         }
 
-        protected internal void AddConnection(UserNetwork UserNetwork)
+        protected internal void AddConnection(MNetworkClient NetworkClient)
         {
-            NetworkBase.UsersNetwork.Add(UserNetwork);
+            NetworkBase.NetworkClients.Add(NetworkClient);
 
-            Debug.Log($"Клиент подключён: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}");
+            Debug.Log($"Клиент подключён: [{NetworkClient.Id}] {NetworkClient.Ip}:{NetworkClient.Port}");
         }
 
         protected internal void RemoveConnection(string id)
         {
 
-            UserNetwork UserNetwork = NetworkBase.UsersNetwork.FirstOrDefault(c => c.Id == id);
+            MNetworkClient NetworkClient = NetworkBase.NetworkClients.FirstOrDefault(c => c.Id == id);
 
-            if (UserNetwork != null)
-                NetworkBase.UsersNetwork.Remove(UserNetwork);
+            if (NetworkClient != null)
+                NetworkBase.NetworkClients.Remove(NetworkClient);
 
-            Debug.Log($"Клиент отключён: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}");
+            Debug.Log($"Клиент отключён: [{NetworkClient.Id}] {NetworkClient.Ip}:{NetworkClient.Port}");
         }
 
         protected internal void Listen()
@@ -54,12 +54,12 @@ namespace Compo_Request_Server.Network.Server
                 {
                     Debug.Log("Ожидание подключений...");
 
-                    Socket ClientNetwork = NetworkBase.Listener.Accept();
+                    Socket SocketClient = NetworkBase.Listener.Accept();
 
                     Debug.Log("Получен запрос на подключение!");
 
                     Debug.Log("Создание компонента клиента.");
-                    ClientBase Client = new ClientBase(new UserNetwork(ClientNetwork), this);
+                    ClientBase Client = new ClientBase(new MNetworkClient(SocketClient), this);
 
                     Debug.Log("Запуск клиентского процесса.");
                     Thread ClientThread = new Thread(new ThreadStart(Client.Process));
@@ -111,9 +111,9 @@ namespace Compo_Request_Server.Network.Server
             Sender.Broadcast("Server.Disconnect");
 
             Debug.Log("Отключение пользователей...", ConsoleColor.Cyan);
-            for (int i = 0; i < NetworkBase.UsersNetwork.Count; i++)
+            for (int i = 0; i < NetworkBase.NetworkClients.Count; i++)
             {
-                NetworkBase.UsersNetwork[i].ClientNetwork.Close();
+                NetworkBase.NetworkClients[i].ClientNetwork.Close();
             }
             Debug.Log("Все пользователи отключены", ConsoleColor.Green);
 

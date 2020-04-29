@@ -28,7 +28,7 @@ namespace Compo_Request_Server.Network.Events.Auth
             throw new NotImplementedException();
         }
 
-        private void AuthUser(MResponse ClientResponse, UserNetwork UserNetwork)
+        private void AuthUser(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
             try
             {
@@ -45,18 +45,18 @@ namespace Compo_Request_Server.Network.Events.Auth
                         if (Crypter.CheckPassword(UserData[1], user.Password))
                         {
                             var NetUser = new MUserNetwork();
-                            NetUser.Uid = UserNetwork.Id;
+                            NetUser.Uid = NetworkClient.Id;
                             NetUser.Login = user.Login;
                             NetUser.Email = user.Email;
 
-                            Sender.Send(UserNetwork, "User.Auth.Confirm", NetUser, 2);
+                            Sender.Send(NetworkClient, "User.Auth.Confirm", NetUser, 2);
                             Debug.Log("Пользователь вошёл в систему!");
 
                             return;
                         }
                     }
 
-                    Sender.Send(UserNetwork, "User.Auth.Error", default, 2);
+                    Sender.Send(NetworkClient, "User.Auth.Error", default, 2);
                     return;
                 }
             }
@@ -64,7 +64,7 @@ namespace Compo_Request_Server.Network.Events.Auth
             {
                 Debug.LogError("Возникла ошибка при авторизации пользователя в системе! Код ошибки:\n" + ex);
 
-                Sender.Send(UserNetwork, "User.Auth.Error", default, 2);
+                Sender.Send(NetworkClient, "User.Auth.Error", default, 2);
             }
         }
     }

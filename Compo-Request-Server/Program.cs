@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using Compo_Request_Server.Network;
+using Compo_Request_Server.Network.Database;
 using Compo_Request_Server.Network.Events.Auth;
 using Compo_Request_Server.Network.Events.Register;
 using Compo_Request_Server.Network.Models;
@@ -16,6 +17,9 @@ namespace Compo_Request_Server
         static void Main(string[] args)
         {
             Debug.Log("Подготовка сервера...", ConsoleColor.Cyan);
+
+            Debug.Log("Настройка базы данных");
+            DatabaseContext.Setup("localhost", "compo-request", "HYOuv8pBtMdMgVlp", "compo-request");
 
             var Server = new ServerBase();
 

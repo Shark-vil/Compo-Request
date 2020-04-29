@@ -28,7 +28,7 @@ namespace Compo_Request_Server.Network.Events.Register
             throw new NotImplementedException();
         }
 
-        private void RegisterUser(MResponse ClientResponse, UserNetwork UserNetwork)
+        private void RegisterUser(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
             try
             {
@@ -45,20 +45,20 @@ namespace Compo_Request_Server.Network.Events.Register
                     }
                     else
                     {
-                        Sender.Send(UserNetwork, "User.Register.Error", default, 2);
+                        Sender.Send(NetworkClient, "User.Register.Error", default, 2);
                         return;
                     }
 
                     Debug.Log("В базу данных добавлен новый пользователь", ConsoleColor.Magenta);
 
-                    Sender.Send(UserNetwork, "User.Register.Confirm", default, 2);
+                    Sender.Send(NetworkClient, "User.Register.Confirm", default, 2);
                 }
             }
             catch(DbUpdateException ex)
             {
                 Debug.LogError("Возникла ошибка при регистрации пользователя в системе! Код ошибки:\n" + ex);
 
-                Sender.Send(UserNetwork, "User.Register.Error", default, 2);
+                Sender.Send(NetworkClient, "User.Register.Error", default, 2);
             }
         }
     }

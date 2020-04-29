@@ -7,7 +7,7 @@ using System.Text;
 namespace Compo_Request_Server.Network.Models
 {
     [Serializable]
-    public class UserNetwork
+    public class MNetworkClient
     {
         public string Id { get; private set; }
         public string Ip { get; private set; }
@@ -15,7 +15,7 @@ namespace Compo_Request_Server.Network.Models
         public Socket ClientNetwork { get; private set; }
         public IPEndPoint NetPoint { get; private set; }
 
-        public UserNetwork(Socket ClientNetwork)
+        public MNetworkClient(Socket ClientNetwork)
         {
             Id = Guid.NewGuid().ToString();
             NetPoint = (IPEndPoint)ClientNetwork.RemoteEndPoint;

@@ -11,15 +11,15 @@ namespace Compo_Request_Server.Network.Utilities
 {
     public class Sender : NetworkBase
     {
-        public static void Send(UserNetwork UserNetwork, string KeyNetwork, object DataObject = null, int WindowUid = -1)
+        public static void Send(MNetworkClient NetworkClient, string KeyNetwork, object DataObject = null, int WindowUid = -1)
         {
             try
             {
                 Debug.Log("Подготовка запроса для отправки клиенту. Информация о запросе: \n" +
                     $"KeyNetwork - {KeyNetwork}, WindowUid - {WindowUid}\n" +
-                    $"Информация о пользователе: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}");
+                    $"Информация о пользователе: [{NetworkClient.Id}] {NetworkClient.Ip}:{NetworkClient.Port}");
 
-                if (!UserNetwork.ClientNetwork.Connected)
+                if (!NetworkClient.ClientNetwork.Connected)
                 {
                     Debug.LogWarning("Не удалось проверить соединение с клиентом, запрос отклонён!");
                     return;
@@ -41,7 +41,7 @@ namespace Compo_Request_Server.Network.Utilities
 
                 try
                 {
-                    UserNetwork.ClientNetwork.Send(WriteDataBytes);
+                    NetworkClient.ClientNetwork.Send(WriteDataBytes);
                 }
                 catch (SocketException ex)
                 {
@@ -58,7 +58,7 @@ namespace Compo_Request_Server.Network.Utilities
 
         public static void Broadcast(string KeyNetwork, object DataObject = null, int WindowUid = -1)
         {
-            foreach(var UserNetwork in UsersNetwork)
+            foreach(var UserNetwork in NetworkClients)
             {
                 Send(UserNetwork, KeyNetwork, DataObject, WindowUid);
             }

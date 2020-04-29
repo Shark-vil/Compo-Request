@@ -13,15 +13,15 @@ namespace Compo_Request_Server.Network.Client
 {
     public class ClientBase
     {
-        public UserNetwork UserNetwork;
+        public MNetworkClient NetworkClient;
         public ServerBase Server;
 
-        public ClientBase(UserNetwork UserNetwork, ServerBase Server)
+        public ClientBase(MNetworkClient NetworkClient, ServerBase Server)
         {
-            this.UserNetwork = UserNetwork;
+            this.NetworkClient = NetworkClient;
             this.Server = Server;
 
-            this.Server.AddConnection(UserNetwork);
+            this.Server.AddConnection(NetworkClient);
         }
 
         public void Process()
@@ -37,7 +37,7 @@ namespace Compo_Request_Server.Network.Client
 
                         bool isBreak = false;
 
-                        Debug.Log($"Новый запрос от клиента [{UserNetwork.Id} - {UserNetwork.Ip}:{UserNetwork.NetPoint}]: " +
+                        Debug.Log($"Новый запрос от клиента [{NetworkClient.Id} - {NetworkClient.Ip}:{NetworkClient.NetPoint}]: " +
                             $"WindowUid - {ClientResponse.WindowUid}, KeyNetwork - {ClientResponse.KeyNetwork}");
 
                         foreach (var DataDelegate in NetworkDelegates.NetworkActions)
@@ -48,7 +48,7 @@ namespace Compo_Request_Server.Network.Client
                                 {
                                     if (CheckKeyNetwork(DataDelegate, ClientResponse))
                                     {
-                                        DataDelegate.DataDelegate(ClientResponse, UserNetwork);
+                                        DataDelegate.DataDelegate(ClientResponse, NetworkClient);
                                         isBreak = true;
                                     }
                                 }
@@ -57,7 +57,7 @@ namespace Compo_Request_Server.Network.Client
                             {
                                 if (CheckKeyNetwork(DataDelegate, ClientResponse))
                                 {
-                                    DataDelegate.DataDelegate(ClientResponse, UserNetwork);
+                                    DataDelegate.DataDelegate(ClientResponse, NetworkClient);
                                     isBreak = true;
                                 }
                             }
@@ -69,7 +69,7 @@ namespace Compo_Request_Server.Network.Client
                     catch (Exception ex)
                     {
                         Debug.LogError($"Возникла ошибка при обработке пользовательского запроса.\n" +
-                            $"Информация о пользователе: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}\n" +
+                            $"Информация о пользователе: [{NetworkClient.Id}] {NetworkClient.Ip}:{NetworkClient.Port}\n" +
                             $"Код ошибки:\n" + ex);
 
                         break;
@@ -79,16 +79,16 @@ namespace Compo_Request_Server.Network.Client
             catch (Exception ex)
             {
                 Debug.LogError("Возникла ошибка при обработке пользовательского процесса.\n" +
-                    $"Информация о пользователе: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}\n" +
+                    $"Информация о пользователе: [{NetworkClient.Id}] {NetworkClient.Ip}:{NetworkClient.Port}\n" +
                     $"Код ошибки:\n" + ex);
             }
             finally
             {
-                Server.RemoveConnection(UserNetwork.Id);
+                Server.RemoveConnection(NetworkClient.Id);
                 Close();
 
                 Debug.Log($"Пользовательский процесс завершён.\n" +
-                    $"Информация о пользователе: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}\n");
+                    $"Информация о пользователе: [{NetworkClient.Id}] {NetworkClient.Ip}:{NetworkClient.Port}\n");
             }
         }
 
@@ -112,18 +112,18 @@ namespace Compo_Request_Server.Network.Client
 
             do
             {
-                Bytes = new byte[UserNetwork.ClientNetwork.ReceiveBufferSize];
-                ByteCount = UserNetwork.ClientNetwork.Receive(Bytes);
+                Bytes = new byte[NetworkClient.ClientNetwork.ReceiveBufferSize];
+                ByteCount = NetworkClient.ClientNetwork.Receive(Bytes);
             }
-            while (UserNetwork.ClientNetwork.Available > 0);
+            while (NetworkClient.ClientNetwork.Available > 0);
 
             return Bytes;
         }
 
         protected internal void Close()
         {
-            if (UserNetwork.ClientNetwork != null)
-                UserNetwork.ClientNetwork.Close();
+            if (NetworkClient.ClientNetwork != null)
+                NetworkClient.ClientNetwork.Close();
         }
     }
 }
