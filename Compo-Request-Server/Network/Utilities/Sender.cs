@@ -25,10 +25,10 @@ namespace Compo_Request_Server.Network.Utilities
 
                 byte[] DataBytes;
 
-                if (DataObject.GetType().Name == "Byte[]")
+                if (DataObject != null && DataObject.GetType().Name == "Byte[]")
                     DataBytes = (byte[])DataObject;
                 else
-                    DataBytes = Package.Packaging(DataObject);
+                    DataBytes = Package.Packaging((DataObject == null) ? "" : DataObject);
 
                 var Receiver = new MResponse();
                 Receiver.WindowUid = WindowUid;
@@ -37,7 +37,15 @@ namespace Compo_Request_Server.Network.Utilities
 
                 byte[] WriteDataBytes = Package.Packaging(Receiver);
 
-                UserNetwork.ClientNetwork.Send(WriteDataBytes);
+                try
+                {
+                    UserNetwork.ClientNetwork.Send(WriteDataBytes);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError("An exception was thrown when sending a request to the user. " +
+                        "Exception code:\n" + ex);
+                }
             } 
             catch (SocketException ex)
             {

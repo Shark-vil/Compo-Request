@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Compo_Shared_Data.Models
@@ -7,12 +8,17 @@ namespace Compo_Shared_Data.Models
     [Serializable]
     public class User
     {
-        public int Id;
-        public string Name;
-        public string Surname;
-        public string Patronymic;
-        public string Email;
-        public string Login;
-        public string Password;
+        [Key]
+        [Required]
+        public int Id { get; set; }
+        //public string Name { get; set; }
+        //public string Surname { get; set; }
+        //public string Patronymic { get; set; }
+        [Required]
+        public string Email { get; set; }
+        [Required]
+        public string Login { get; set; }
+        [Required]
+        public string Password { get; set; }
     }
 }

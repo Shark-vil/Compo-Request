@@ -41,22 +41,9 @@ namespace Compo_Request
             Debug.Log("The console is running!");
 #endif
             InitializeComponent();
-            LoadWindowParent();
             EventsInitialize();
 
             ConnectService.Start();
-
-            NetworkDelegates.Add(ServerShutdown, Dispatcher, default, "Server.Disconnect");
-        }
-
-        private void ServerShutdown(MResponse receiver)
-        {
-            TextBox_LoginOrEmail.Text = "Сервер завершил работу!";
-        }
-
-        public void LoadWindowParent()
-        {
-            registerWindow = new RegisterWindow(this);
         }
 
         /// <summary>
@@ -67,7 +54,6 @@ namespace Compo_Request
             // Регистрация события нажатия на кнопку регистрации
             Button_Register.Click += Button_Register_Click;
             Button_Login.Click += Button_Login_Click;
-            this.Closed += MainWindow_Closed;
         }
 
         private void Button_Login_Click(object sender, RoutedEventArgs e)
@@ -82,18 +68,9 @@ namespace Compo_Request
         /// <param name="e"></param>
         private void Button_Register_Click(object sender, RoutedEventArgs e)
         {
+            registerWindow = new RegisterWindow(this);
             this.Hide();
             registerWindow.Show();
-        }
-
-        /// <summary>
-        /// Действие происходящее при закрытии главного окна авторизации.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MainWindow_Closed(object sender, EventArgs e)
-        {
-            registerWindow.Close();
         }
     }
 }

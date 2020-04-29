@@ -10,14 +10,12 @@ namespace Compo_Request_Server.Network.Models
     public class MNetworkAction
     {
         public int WindowUid;
-        public string UserUid;
         public string KeyNetwork;
         public NetworkDelegateTemplate DataDelegate;
 
-        public MNetworkAction(NetworkDelegateTemplate DataDelegate, string KeyNetwork = null, int WindowUid = -1, string UserUid = null)
+        public MNetworkAction(NetworkDelegateTemplate DataDelegate, string KeyNetwork = null, int WindowUid = -1)
         {
             this.WindowUid = WindowUid;
-            this.UserUid = UserUid;
             this.KeyNetwork = KeyNetwork;
             this.DataDelegate = DataDelegate;
         }

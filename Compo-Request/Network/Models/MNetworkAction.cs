@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
 using System.Windows.Threading;
 using Compo_Shared_Data.Network.Models;
 
@@ -14,9 +15,11 @@ namespace Compo_Request.Network.Models
         public string KeyNetwork;
         public NetworkDelegateTemplate DataDelegate;
         public Dispatcher Dispatcher;
+        public string UniqueDelegateName;
 
-        public MNetworkAction(int WindowUid, NetworkDelegateTemplate DataDelegate, Dispatcher Dispatcher = null, string KeyNetwork = null)
+        public MNetworkAction(int WindowUid, NetworkDelegateTemplate DataDelegate, Dispatcher Dispatcher = null, string KeyNetwork = null, string UniqueDelegateName = null)
         {
+            this.UniqueDelegateName = UniqueDelegateName;
             this.WindowUid = WindowUid;
             this.KeyNetwork = KeyNetwork;
             this.DataDelegate = DataDelegate;

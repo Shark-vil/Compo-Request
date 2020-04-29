@@ -22,7 +22,11 @@ namespace Compo_Request.Network.Client
                 try
                 {
                     byte[] Data = GetRequest();
+
                     MResponse ServerResponse = Package.Unpacking<MResponse>(Data);
+
+                    Debug.Log($"New request from the server: " +
+                        $"WindowUid - {ServerResponse.WindowUid}, KeyNetwork - {ServerResponse.KeyNetwork}");
 
                     foreach (var DataDelegate in NetworkDelegates.NetworkActions)
                     {

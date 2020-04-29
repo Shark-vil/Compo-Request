@@ -10,19 +10,19 @@ namespace Compo_Request.Network.Utilities
 {
     public class Sender : NetworkBase
     {
-        public static void SendToServer(string KeyNetwork, object DataObject = null, int WindowUid = -1)
+        public static bool SendToServer(string KeyNetwork, object DataObject = null, int WindowUid = -1)
         {
             try
             {
                 if (!ClientNetwork.Connected)
-                    return;
+                    return false;
 
                 byte[] DataBytes;
 
-                if (DataObject.GetType().Name == "Byte[]")
+                if (DataObject != null && DataObject.GetType().Name == "Byte[]")
                     DataBytes = (byte[])DataObject;
                 else
-                    DataBytes = Package.Packaging(DataObject);
+                    DataBytes = Package.Packaging((DataObject == null) ? "" : DataObject);
 
                 var Receiver = new MResponse();
                 Receiver.WindowUid = WindowUid;
@@ -31,12 +31,24 @@ namespace Compo_Request.Network.Utilities
 
                 byte[] WriteDataBytes = Package.Packaging(Receiver);
 
-                ClientNetwork.Send(WriteDataBytes);
+                try
+                {
+                    ClientNetwork.Send(WriteDataBytes);
+                }
+                catch(Exception ex)
+                {
+                    Debug.LogError("An exception was thrown when sending a request to the server. " +
+                        "Exception code:\n" + ex);
+                }
+
+                return true;
             }
             catch (SocketException ex)
             {
                 Debug.LogError("[Sender.Send] Socket exception:\n" + ex);
             }
+
+            return false;
         }
     }
 }

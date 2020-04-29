@@ -33,30 +33,31 @@ namespace Compo_Request_Server.Network.Client
                     try
                     {
                         byte[] Data = GetRequest();
-                        MResponse ServerResponse = Package.Unpacking<MResponse>(Data);
+                        MResponse ClientResponse = Package.Unpacking<MResponse>(Data);
 
                         bool isBreak = false;
 
-                        Console.WriteLine("Новое сообщение от клиента");
+                        Debug.Log($"New request from the client: " +
+                            $"WindowUid - {ClientResponse.WindowUid}, KeyNetwork - {ClientResponse.KeyNetwork}");
 
-                        foreach (var DataDelegate in NetworkDelegates.VisualDataList)
+                        foreach (var DataDelegate in NetworkDelegates.NetworkActions)
                         {
                             if (DataDelegate.WindowUid != -1)
                             {
-                                if (DataDelegate.WindowUid == ServerResponse.WindowUid)
+                                if (DataDelegate.WindowUid == ClientResponse.WindowUid)
                                 {
-                                    if (CheckKeyNetwork(DataDelegate, ServerResponse))
+                                    if (CheckKeyNetwork(DataDelegate, ClientResponse))
                                     {
-                                        DataDelegate.DataDelegate(ServerResponse, UserNetwork);
+                                        DataDelegate.DataDelegate(ClientResponse, UserNetwork);
                                         isBreak = true;
                                     }
                                 }
                             }
                             else
                             {
-                                if (CheckKeyNetwork(DataDelegate, ServerResponse))
+                                if (CheckKeyNetwork(DataDelegate, ClientResponse))
                                 {
-                                    DataDelegate.DataDelegate(ServerResponse, UserNetwork);
+                                    DataDelegate.DataDelegate(ClientResponse, UserNetwork);
                                     isBreak = true;
                                 }
                             }
@@ -68,7 +69,7 @@ namespace Compo_Request_Server.Network.Client
                     catch
                     {
                         Debug.Log($"The user has completed the local process.\n" +
-                            $"User info: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}\n");
+                            $"User info: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}");
                         break;
                     }
                 }
@@ -76,7 +77,7 @@ namespace Compo_Request_Server.Network.Client
             catch (Exception ex)
             {
                 Debug.LogError("The local user process was aborted with an error:\n" + ex + "\n" +
-                    $"User info: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}\n");
+                    $"User info: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}");
             }
             finally
             {
@@ -84,7 +85,7 @@ namespace Compo_Request_Server.Network.Client
                 Close();
 
                 Debug.Log($"Final completion of the user process.\n" +
-                    $"User info: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}\n");
+                    $"User info: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}");
             }
         }
 
