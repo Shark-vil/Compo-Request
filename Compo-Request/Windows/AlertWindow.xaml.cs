@@ -17,10 +17,16 @@ namespace Compo_Request.Windows
     /// </summary>
     public partial class AlertWindow : Window
     {
-        public AlertWindow(string WindowName, string Message)
+        public delegate void CloseEventDelegate();
+
+        private CloseEventDelegate CloseEvent;
+
+        public AlertWindow(string WindowName, string Message, CloseEventDelegate CloseEvent = null)
         {
             InitializeComponent();
             EventsInitialize();
+
+            this.CloseEvent = CloseEvent;
 
             this.Title = WindowName;
             TextBlock_Message.Text = Message;
@@ -38,6 +44,8 @@ namespace Compo_Request.Windows
 
         private void Button_Close_Click(object sender, RoutedEventArgs e)
         {
+            CloseEvent?.Invoke();
+
             this.Close();
         }
     }

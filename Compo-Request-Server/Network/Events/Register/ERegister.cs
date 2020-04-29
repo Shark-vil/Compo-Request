@@ -10,6 +10,7 @@ using Compo_Shared_Data.Network.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Compo_Request_Server.Network.Events.Register
@@ -30,12 +31,21 @@ namespace Compo_Request_Server.Network.Events.Register
         {
             try
             {
-                using (DatabaseContext db = new DatabaseContext())
+                using (var db = new DatabaseContext())
                 {
                     User user = Package.Unpacking<User>(ClientResponse.DataBytes);
 
-                    db.Users.Add(user);
-                    db.SaveChanges();
+                    if (db.Users.Where(u => u.Email == user.Email).FirstOrDefault() == null 
+                        && db.Users.Where(u => u.Login == user.Login).FirstOrDefault() == null)
+                    {
+                        db.Users.Add(user);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        Sender.Send(UserNetwork, "User.Register.Error", default, 2);
+                        return;
+                    }
 
                     Debug.Log("New user added to database.");
 
@@ -46,6 +56,8 @@ namespace Compo_Request_Server.Network.Events.Register
             {
                 Debug.LogError("An exception occurred while adding the user to the table. " +
                     "Exeption code:\n " + ex);
+
+                Sender.Send(UserNetwork, "User.Register.Error", default, 2);
             }
         }
     }

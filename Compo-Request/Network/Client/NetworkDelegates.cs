@@ -14,7 +14,7 @@ namespace Compo_Request.Network.Client
 
         public static void Add(NetworkDelegateTemplate Delegate, Dispatcher Dispatcher = null, int WindowUid = -1, string KeyNetwork = null, string UniqueDelegateName = null)
         {
-            if (UniqueDelegateName == null || !NetworkActions.Exists(x => x.UniqueDelegateName == UniqueDelegateName))
+            if (UniqueDelegateName == null || !NetworkActions.Exists(x => x.UniqueDelegateName == UniqueDelegateName && x.KeyNetwork == KeyNetwork))
             {
                 Debug.Log($"Delegate Registration: WindowUid - {WindowUid}, KeyNetwork - {KeyNetwork}");
                 NetworkActions.Add(new MNetworkAction(WindowUid, Delegate, Dispatcher, KeyNetwork, UniqueDelegateName));
@@ -22,7 +22,7 @@ namespace Compo_Request.Network.Client
             else
             {
                 Debug.Log($"Update Delegate: WindowUid - {WindowUid}, KeyNetwork - {KeyNetwork}");
-                NetworkActions.RemoveAll(x => x.UniqueDelegateName == UniqueDelegateName);
+                NetworkActions.RemoveAll(x => x.UniqueDelegateName == UniqueDelegateName && x.KeyNetwork == KeyNetwork);
                 NetworkActions.Add(new MNetworkAction(WindowUid, Delegate, Dispatcher, KeyNetwork, UniqueDelegateName));
             }
         }
