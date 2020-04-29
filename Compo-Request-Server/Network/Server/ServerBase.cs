@@ -118,16 +118,14 @@ namespace Compo_Request_Server.Network.Server
             Debug.Log("Все пользователи отключены", ConsoleColor.Green);
 
             Debug.Log("Закрытие процесса слушателя", ConsoleColor.Cyan);
-            if (NetworkBase.Listener.Connected)
+            try
             {
                 NetworkBase.Listener.Blocking = false;
+                NetworkBase.Listener.Shutdown(SocketShutdown.Both);
                 NetworkBase.Listener.Close();
             }
+            catch { }
             Debug.Log("Прослушивание подключений остановлено", ConsoleColor.Green);
-
-            Debug.Log("Сервер завершит работу через 5 секунд");
-
-            Thread.Sleep(5000);
 
             Environment.Exit(0);
         }

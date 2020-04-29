@@ -68,7 +68,7 @@ namespace Compo_Request_Server.Network.Client
                     }
                     catch (Exception ex)
                     {
-                        Debug.Log($"Возникла ошибка при обработке пользовательского запроса.\n" +
+                        Debug.LogError($"Возникла ошибка при обработке пользовательского запроса.\n" +
                             $"Информация о пользователе: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}\n" +
                             $"Код ошибки:\n" + ex);
 
