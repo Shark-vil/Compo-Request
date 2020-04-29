@@ -105,10 +105,7 @@ namespace Compo_Request.Windows.UserRegister
             if (PasswordBox_Password.Password.Length >= 6)
             {
                 if (PasswordBox_Password.Password == PasswordBox_PasswordConfim.Password)
-                {
                     user.Password = PasswordBox_Password.Password;
-                    user.Password = Crypter.Blowfish.Crypt(user.Password);
-                }
                 else
                 {
                     var Alert = new AlertWindow("Ошибка", "Пароли не совпадают!",

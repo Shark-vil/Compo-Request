@@ -7,6 +7,7 @@ using Compo_Shared_Data.Debugging;
 using Compo_Shared_Data.Models;
 using Compo_Shared_Data.Network;
 using Compo_Shared_Data.Network.Models;
+using CryptSharp;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,7 @@ namespace Compo_Request_Server.Network.Events.Register
                     if (db.Users.Where(u => u.Email == user.Email).FirstOrDefault() == null 
                         && db.Users.Where(u => u.Login == user.Login).FirstOrDefault() == null)
                     {
+                        user.Password = Crypter.Blowfish.Crypt(user.Password);
                         db.Users.Add(user);
                         db.SaveChanges();
                     }
