@@ -45,7 +45,7 @@ namespace Compo_Request
 
             NetworkBase.Setup("127.0.0.1", 8888);
 
-            NetworkDelegates.Add(ServerShutdown, default, Dispatcher, "Server.Disconnect");
+            NetworkDelegates.Add(ServerShutdown, Dispatcher, default, "Server.Disconnect");
 
             if (NetworkBase.ClientNetwork.Connected)
             {
@@ -59,7 +59,7 @@ namespace Compo_Request
             }
         }
 
-        private void ServerShutdown(Receiver receiver)
+        private void ServerShutdown(MResponse receiver)
         {
             TextBox_LoginOrEmail.Text = "Сервер завершил работу!";
         }

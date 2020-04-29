@@ -30,7 +30,7 @@ namespace Compo_Request_Server.Network.Utilities
                 else
                     DataBytes = Package.Packaging(DataObject);
 
-                var Receiver = new Receiver();
+                var Receiver = new MResponse();
                 Receiver.UserUid = UserUid;
                 Receiver.WindowUid = WindowUid;
                 Receiver.KeyNetwork = KeyNetwork;

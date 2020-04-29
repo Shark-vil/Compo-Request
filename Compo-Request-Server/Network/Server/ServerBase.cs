@@ -62,16 +62,6 @@ namespace Compo_Request_Server.Network.Server
                     ClientThread.Start();
 
                     Debug.Log("User connected successfully!");
-
-                    Console.Read();
-                    try
-                    {
-                        Disconnect();
-                    }
-                    catch
-                    {
-                        Console.Read();
-                    }
                 }
             }
             catch (ThreadAbortException ex)

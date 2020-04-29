@@ -6,16 +6,16 @@ using Compo_Shared_Data.Network.Models;
 
 namespace Compo_Request.Network.Models
 {
-    public delegate void VisualDataDelegate(Receiver ReceiverData);
+    public delegate void NetworkDelegateTemplate(MResponse ReceiverData);
 
-    public class VisualData
+    public class MNetworkAction
     {
         public int WindowUid;
         public string KeyNetwork;
-        public VisualDataDelegate DataDelegate;
+        public NetworkDelegateTemplate DataDelegate;
         public Dispatcher Dispatcher;
 
-        public VisualData(int WindowUid, VisualDataDelegate DataDelegate, Dispatcher Dispatcher = null, string KeyNetwork = null)
+        public MNetworkAction(int WindowUid, NetworkDelegateTemplate DataDelegate, Dispatcher Dispatcher = null, string KeyNetwork = null)
         {
             this.WindowUid = WindowUid;
             this.KeyNetwork = KeyNetwork;

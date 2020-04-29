@@ -8,11 +8,11 @@ namespace Compo_Request.Network.Client
 {
     public class NetworkDelegates
     {
-        public static List<VisualData> VisualDataList = new List<VisualData>();
+        public static List<MNetworkAction> NetworkActions = new List<MNetworkAction>();
 
-        public static void Add(VisualDataDelegate Delegate , int WindowUid = -1, Dispatcher Dispatcher = null, string KeyNetwork = null)
+        public static void Add(NetworkDelegateTemplate Delegate, Dispatcher Dispatcher = null, int WindowUid = -1, string KeyNetwork = null)
         {
-            VisualDataList.Add(new VisualData(WindowUid, Delegate, Dispatcher, KeyNetwork));
+            NetworkActions.Add(new MNetworkAction(WindowUid, Delegate, Dispatcher, KeyNetwork));
         }
     }
 }

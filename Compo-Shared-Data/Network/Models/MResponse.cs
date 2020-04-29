@@ -5,7 +5,7 @@ using System.Text;
 namespace Compo_Shared_Data.Network.Models
 {
     [Serializable]
-    public class Receiver
+    public class MResponse
     {
         public string KeyNetwork;
         public string UserUid;

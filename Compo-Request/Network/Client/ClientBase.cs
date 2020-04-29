@@ -21,11 +21,11 @@ namespace Compo_Request.Network.Client
                 try
                 {
                     byte[] Data = GetRequest();
-                    Receiver ServerResponse = Package.Unpacking<Receiver>(Data);
+                    MResponse ServerResponse = Package.Unpacking<MResponse>(Data);
 
                     Console.WriteLine("Сообщение с сервера");
 
-                    foreach (var DataDelegate in NetworkDelegates.VisualDataList)
+                    foreach (var DataDelegate in NetworkDelegates.NetworkActions)
                     {
                         if (DataDelegate.Dispatcher != null && DataDelegate.WindowUid != -1)
                         {
@@ -52,7 +52,7 @@ namespace Compo_Request.Network.Client
                 {
                     Console.WriteLine("Подключение прервано!");
 
-                    foreach (var DataDelegate in NetworkDelegates.VisualDataList)
+                    foreach (var DataDelegate in NetworkDelegates.NetworkActions)
                         if (DataDelegate.KeyNetwork == "Server.Disconnect")
                             DispatcherExec(DataDelegate);
 
@@ -63,7 +63,7 @@ namespace Compo_Request.Network.Client
             }
         }
 
-        private static bool DispatcherExec(VisualData DataDelegate, Receiver ServerResponse = null)
+        private static bool DispatcherExec(MNetworkAction DataDelegate, MResponse ServerResponse = null)
         {
             if (DataDelegate.Dispatcher != null)
             {
@@ -79,7 +79,7 @@ namespace Compo_Request.Network.Client
             return false;
         }
 
-        private static bool CheckKeyNetwork(VisualData DataDelegate, Receiver ServerResponse)
+        private static bool CheckKeyNetwork(MNetworkAction DataDelegate, MResponse ServerResponse)
         {
             if (DataDelegate.KeyNetwork != null)
             {

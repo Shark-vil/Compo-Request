@@ -33,7 +33,7 @@ namespace Compo_Request_Server.Network.Client
                     try
                     {
                         byte[] Data = GetRequest();
-                        Receiver ServerResponse = Package.Unpacking<Receiver>(Data);
+                        MResponse ServerResponse = Package.Unpacking<MResponse>(Data);
 
                         bool isBreak = false;
 
@@ -89,7 +89,7 @@ namespace Compo_Request_Server.Network.Client
             }
         }
 
-        private static bool CheckKeyNetwork(ServerVisualData DataDelegate, Receiver ServerResponse)
+        private static bool CheckKeyNetwork(MNetworkAction DataDelegate, MResponse ServerResponse)
         {
             if (DataDelegate.KeyNetwork != null)
             {
