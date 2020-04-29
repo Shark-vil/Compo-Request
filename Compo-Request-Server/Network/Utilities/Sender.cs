@@ -11,14 +11,14 @@ namespace Compo_Request_Server.Network.Utilities
 {
     public class Sender : NetworkBase
     {
-        public static void Send(UserNetwork UserNetwork, string KeyNetwork, object DataObject = null, int WindowUid = -1, string UserUid = "server")
+        public static void Send(UserNetwork UserNetwork, string KeyNetwork, object DataObject = null, int WindowUid = -1)
         {
             try
             {
                 if (!UserNetwork.ClientNetwork.Connected)
                 {
                     Debug.LogWarning("Failed to send message to client!\n" +
-                        $"[{KeyNetwork}] WindowUid - {WindowUid}, UserUid - {UserUid}\n" +
+                        $"[{KeyNetwork}] WindowUid - {WindowUid}\n" +
                         $"User info: [{UserNetwork.Id}] {UserNetwork.Ip}:{UserNetwork.Port}\n");
                     return;
                 }
@@ -31,7 +31,6 @@ namespace Compo_Request_Server.Network.Utilities
                     DataBytes = Package.Packaging(DataObject);
 
                 var Receiver = new MResponse();
-                Receiver.UserUid = UserUid;
                 Receiver.WindowUid = WindowUid;
                 Receiver.KeyNetwork = KeyNetwork;
                 Receiver.DataBytes = DataBytes;
@@ -46,11 +45,11 @@ namespace Compo_Request_Server.Network.Utilities
             }
         }
 
-        public static void Broadcast(string KeyNetwork, object DataObject = null, int WindowUid = -1, string UserUid =  "server")
+        public static void Broadcast(string KeyNetwork, object DataObject = null, int WindowUid = -1)
         {
             foreach(var UserNetwork in UsersNetwork)
             {
-                Send(UserNetwork, KeyNetwork, DataObject, WindowUid, UserUid);
+                Send(UserNetwork, KeyNetwork, DataObject, WindowUid);
             }
         }
     }

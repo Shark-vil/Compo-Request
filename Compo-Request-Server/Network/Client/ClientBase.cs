@@ -47,8 +47,7 @@ namespace Compo_Request_Server.Network.Client
                                 {
                                     if (CheckKeyNetwork(DataDelegate, ServerResponse))
                                     {
-                                        // ВТОРОЙ АРГУМЕНТ - ПОЛЬЗОВАТЕЛЬ
-                                        DataDelegate.DataDelegate(ServerResponse);
+                                        DataDelegate.DataDelegate(ServerResponse, UserNetwork);
                                         isBreak = true;
                                     }
                                 }
@@ -57,7 +56,7 @@ namespace Compo_Request_Server.Network.Client
                             {
                                 if (CheckKeyNetwork(DataDelegate, ServerResponse))
                                 {
-                                    DataDelegate.DataDelegate(ServerResponse);
+                                    DataDelegate.DataDelegate(ServerResponse, UserNetwork);
                                     isBreak = true;
                                 }
                             }

@@ -10,7 +10,7 @@ namespace Compo_Request.Network.Utilities
 {
     public class Sender : NetworkBase
     {
-        public static void SendToServer(string KeyNetwork, object DataObject = null, int WindowUid = -1, string UserUid = null)
+        public static void SendToServer(string KeyNetwork, object DataObject = null, int WindowUid = -1)
         {
             try
             {
@@ -25,7 +25,6 @@ namespace Compo_Request.Network.Utilities
                     DataBytes = Package.Packaging(DataObject);
 
                 var Receiver = new MResponse();
-                Receiver.UserUid = UserUid;
                 Receiver.WindowUid = WindowUid;
                 Receiver.KeyNetwork = KeyNetwork;
                 Receiver.DataBytes = DataBytes;

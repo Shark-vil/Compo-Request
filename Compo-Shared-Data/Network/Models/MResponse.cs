@@ -8,7 +8,6 @@ namespace Compo_Shared_Data.Network.Models
     public class MResponse
     {
         public string KeyNetwork;
-        public string UserUid;
         public int WindowUid = -1;
         public byte[] DataBytes;
     }

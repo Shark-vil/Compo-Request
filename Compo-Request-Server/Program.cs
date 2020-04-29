@@ -29,5 +29,10 @@ namespace Compo_Request_Server
                 Debug.LogError("Server forcibly shuts down.");
             }
         }
+
+        private static void RegisterEvents()
+        {
+            
+        }
     }
 }
