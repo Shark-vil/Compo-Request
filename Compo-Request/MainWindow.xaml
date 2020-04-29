@@ -20,7 +20,8 @@
             <Grid Height="70">
                 <StackPanel>
                     <TextBlock FontSize="16" TextAlignment="Center" Text="Пароль"/>
-                    <PasswordBox Height="25" BorderBrush="Black"/>
+                    <PasswordBox x:Name="PasswordBox_Password"
+                        Height="25" BorderBrush="Black"/>
                 </StackPanel>
             </Grid>
             <Grid Margin="0,50,0,0" Height="30">
