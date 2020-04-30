@@ -5,8 +5,37 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Compo_Request"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Title="Авторизация в системе" Height="450" Width="300">
     <Grid>
-
+        <StackPanel Margin="10, 130, 10, 20">
+            <Grid Height="70">
+                <StackPanel>
+                    <TextBlock FontSize="16" TextAlignment="Center" Text="Логин / Почта"/>
+                    <TextBox x:Name="TextBox_LoginOrEmail"
+                        Height="25" BorderBrush="Black"/>
+                </StackPanel>
+            </Grid>
+            <Grid Height="70">
+                <StackPanel>
+                    <TextBlock FontSize="16" TextAlignment="Center" Text="Пароль"/>
+                    <PasswordBox x:Name="PasswordBox_Password"
+                        Height="25" BorderBrush="Black"/>
+                </StackPanel>
+            </Grid>
+            <Grid Height="20">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <CheckBox x:Name="CheckBox_AutoAuth"
+                        Content="Запомнить данные для быстрого входа?"/>
+                </StackPanel>
+            </Grid>
+            <Grid Margin="0,50,0,0" Height="30">
+                <Button x:Name="Button_Login"
+                    HorizontalAlignment="Left" Content="Авторизация" Width="130"/>
+                <Button x:Name="Button_Register" 
+                    HorizontalAlignment="Right" Content="Регистрация" Width="130"/>
+            </Grid>
+        </StackPanel>
     </Grid>
 </Window>

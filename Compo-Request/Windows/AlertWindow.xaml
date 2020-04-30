@@ -1,0 +1,29 @@
+﻿<Window x:Class="Compo_Request.Windows.AlertWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Compo_Request.Windows"
+        mc:Ignorable="d"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Title="AlertWindow" Height="230" Width="400">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="199*"/>
+            <RowDefinition Height="15*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.RowSpan="2">
+            <Grid Margin="10, 20, 10, 0">
+                <Border BorderBrush="Black" BorderThickness="0.5">
+                    <TextBlock x:Name="TextBlock_Message"
+                        TextWrapping="Wrap"  Height="100" Text="Test messages"/>
+                </Border>
+            </Grid>
+            <Grid Margin="0, 30, 0, 0">
+                <Button x:Name="Button_Close"
+                    Width="230" Height="25" Content="Закрыть"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>
