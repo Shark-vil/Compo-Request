@@ -56,6 +56,24 @@ namespace Compo_Request_Server.Network.Utilities
             }
         }
 
+        public static void SendOmit(MNetworkClient NetworkClient, string KeyNetwork, object DataObject = null, int WindowUid = -1)
+        {
+            foreach (var UserNetwork in NetworkClients)
+            {
+                if (NetworkClient.Id != UserNetwork.Id)
+                    Send(UserNetwork, KeyNetwork, DataObject, WindowUid);
+            }
+        }
+
+        public static void SendOmit(MNetworkClient[] NetworkClient, string KeyNetwork, object DataObject = null, int WindowUid = -1)
+        {
+            foreach (var UserNetwork in NetworkClients)
+            {
+                if (!Array.Exists(NetworkClient, x => x.Id == UserNetwork.Id))
+                    Send(UserNetwork, KeyNetwork, DataObject, WindowUid);
+            }
+        }
+
         public static void Broadcast(string KeyNetwork, object DataObject = null, int WindowUid = -1)
         {
             foreach(var UserNetwork in NetworkClients)

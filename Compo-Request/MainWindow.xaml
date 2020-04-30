@@ -24,6 +24,12 @@
                         Height="25" BorderBrush="Black"/>
                 </StackPanel>
             </Grid>
+            <Grid Height="20">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <CheckBox x:Name="CheckBox_AutoAuth"
+                        Content="Запомнить данные для быстрого входа?"/>
+                </StackPanel>
+            </Grid>
             <Grid Margin="0,50,0,0" Height="30">
                 <Button x:Name="Button_Login"
                     HorizontalAlignment="Left" Content="Авторизация" Width="130"/>

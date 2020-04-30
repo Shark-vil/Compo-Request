@@ -14,14 +14,14 @@ namespace Compo_Request_Server.Network.Client
     public class ClientBase
     {
         public MNetworkClient NetworkClient;
-        public ServerBase Server;
+        public ServerBase _ServerBase;
 
         public ClientBase(MNetworkClient NetworkClient, ServerBase Server)
         {
             this.NetworkClient = NetworkClient;
-            this.Server = Server;
+            this._ServerBase = Server;
 
-            this.Server.AddConnection(NetworkClient);
+            this._ServerBase.AddConnection(NetworkClient);
         }
 
         public void Process()
@@ -84,7 +84,9 @@ namespace Compo_Request_Server.Network.Client
             }
             finally
             {
-                Server.RemoveConnection(NetworkClient.Id);
+                Server.Users.Remove(NetworkClient);
+
+                _ServerBase.RemoveConnection(NetworkClient.Id);
                 Close();
 
                 Debug.Log($"Пользовательский процесс завершён.\n" +

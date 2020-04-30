@@ -44,13 +44,18 @@ namespace Compo_Request_Server.Network.Events.Auth
                     {
                         if (Crypter.CheckPassword(UserData[1], user.Password))
                         {
-                            var NetUser = new MUserNetwork();
-                            NetUser.Uid = NetworkClient.Id;
-                            NetUser.Login = user.Login;
-                            NetUser.Email = user.Email;
+                            var UserNetwork = new MUserNetwork();
+                            UserNetwork.Id = NetworkClient.Id;
+                            UserNetwork.Login = user.Login;
+                            UserNetwork.Email = user.Email;
+                            UserNetwork.Name = user.Name;
+                            UserNetwork.Surname = user.Surname;
+                            UserNetwork.Patronymic = user.Patronymic;
 
-                            Sender.Send(NetworkClient, "User.Auth.Confirm", NetUser, 2);
+                            Sender.Send(NetworkClient, "User.Auth.Confirm", UserNetwork, 2);
                             Debug.Log("Пользователь вошёл в систему!");
+
+                            Server.Users.Add(NetworkClient, UserNetwork);
 
                             return;
                         }
