@@ -7,6 +7,32 @@
         xmlns:local="clr-namespace:Compo_Request.Windows.Projects"
         mc:Ignorable="d"
         Title="ProjectsWindow" Height="450" Width="800">
+    <Window.Resources>
+        <Storyboard x:Key="OpenMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" 
+                                           Storyboard.TargetName="Grid_Menu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="50"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="200"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CloseMenu">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" 
+                    Storyboard.TargetName="Grid_Menu">
+                <EasingDoubleKeyFrame KeyTime="0" Value="200"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="50"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </Window.Resources>
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="Button_OpenMenu">
+            <BeginStoryboard Storyboard="{StaticResource OpenMenu}"/>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="Button_CloseMenu">
+            <BeginStoryboard Storyboard="{StaticResource CloseMenu}"/>
+        </EventTrigger>
+    </Window.Triggers>
+    
     <Grid>
         <Grid Height="50" VerticalAlignment="Top" Background="#FF87B5CB">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
@@ -22,8 +48,37 @@
                 </materialDesign:PopupBox>
             </StackPanel>
         </Grid>
-        <Grid Width="200" HorizontalAlignment="Left" Background="#FF365B87">
-            
+        <Grid x:Name="Grid_Menu" Width="50" HorizontalAlignment="Left" Background="#FF365B87">
+            <StackPanel>
+                <Grid Height="50" Background="#FF4B78AE">
+                    <Button x:Name="Button_CloseMenu"
+                            Width="60" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Visibility="Collapsed"
+                            VerticalAlignment="Center" HorizontalAlignment="Right">
+                        <materialDesign:PackIcon Foreground="#FF365B87" Width="25" Height="25" Kind="ArrowLeft"/>
+                    </Button>
+                    <Button x:Name="Button_OpenMenu"
+                            Width="53" Height="50" Background="{x:Null}" BorderBrush="{x:Null}"
+                            VerticalAlignment="Center" HorizontalAlignment="Right">
+                        <materialDesign:PackIcon Foreground="#FF365B87" Width="25" Height="25" Kind="Menu"/>
+                    </Button>
+                </Grid>
+                <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="AliceBlue">
+                    <ListViewItem Height="50">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Person" Foreground="White" Margin="2"
+                                                    Height="30" Width="30" VerticalAlignment="Center"/>
+                            <TextBlock Text="Команды" VerticalAlignment="Center" Margin="20, 0"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem Height="50">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Category" Foreground="White" Margin="2"
+                                                     Height="30" Width="30" VerticalAlignment="Center"/>
+                            <TextBlock Text="Проекты" VerticalAlignment="Center" Margin="20, 0"/>
+                        </StackPanel>
+                    </ListViewItem>
+                </ListView>
+            </StackPanel> 
         </Grid>
     </Grid>
 </Window>
