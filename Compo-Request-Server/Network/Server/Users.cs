@@ -52,14 +52,17 @@ namespace Compo_Request_Server.Network.Server
 
         public static void RemoveById(string ClientId)
         {
-            MNetworkClient NetworkClient = ActiveUsersMoreInfo.Find(x => x.NetworkClient.Id == ClientId).NetworkClient;
+            if (ActiveUsersMoreInfo.Exists(x => x.NetworkClient.Id == ClientId))
+            {
+                MNetworkClient NetworkClient = ActiveUsersMoreInfo.Find(x => x.NetworkClient.Id == ClientId).NetworkClient;
 
-            ActiveUsersMoreInfo.RemoveAll(x => x.NetworkClient == NetworkClient);
-            ActiveUsers.RemoveAll(x => x.Id == ClientId);
+                ActiveUsersMoreInfo.RemoveAll(x => x.NetworkClient == NetworkClient);
+                ActiveUsers.RemoveAll(x => x.Id == ClientId);
 
-            Debug.Log("Пользователь удалён из системного списка");
+                Debug.Log("Пользователь удалён из системного списка");
 
-            Sender.SendOmit(NetworkClient, "Users.Remove", ClientId);
+                Sender.SendOmit(NetworkClient, "Users.Remove", ClientId);
+            }
         }
     }
 }

@@ -36,6 +36,7 @@ namespace Compo_Request
         private RegisterWindow _RegisterWindow;
         private ProjectsWindow _ProjectsWindow;
         private DispatcherTimer MainWindowElementsUnblockTimer;
+        private string[] UserData;
 
         [DllImport("Kernel32")]
         public static extern void AllocConsole();
@@ -61,6 +62,9 @@ namespace Compo_Request
 
                 MainWindowElements_Unblock();
 
+                if ((bool)CheckBox_AutoAuth.IsChecked)
+                    Data.Windows.AutomaticAuthorizate.Save(UserData);
+
             }, Dispatcher, 2, "User.Auth.Confirm", "MainWindow");
 
             NetworkDelegates.Add(delegate (MResponse ServerResponse)
@@ -77,6 +81,18 @@ namespace Compo_Request
                 MainWindowElements_Unblock();
 
             }, Dispatcher, 2, "User.Auth.Error", "MainWindow");
+
+            if (Data.Windows.AutomaticAuthorizate.Exists())
+            {
+                Console.WriteLine("Файл есть");
+                CheckBox_AutoAuth.IsChecked = true;
+
+                UserData = Data.Windows.AutomaticAuthorizate.Read();
+                TextBox_LoginOrEmail.Text = UserData[0];
+                PasswordBox_Password.Password = UserData[1];
+
+                UserAuthorization(UserData);
+            }
         }
 
         /// <summary>
@@ -91,12 +107,17 @@ namespace Compo_Request
 
         private void Button_Login_Click(object sender, RoutedEventArgs e)
         {
-            var UserData = new string[]
+            UserData = new string[]
             {
                 TextBox_LoginOrEmail.Text,
                 PasswordBox_Password.Password
             };
 
+            UserAuthorization(UserData);
+        }
+
+        private bool UserAuthorization(string[] UserData)
+        {
             if (Sender.SendToServer("User.Auth", UserData, 1))
             {
                 MainWindowElementsUnblockTimer = new DispatcherTimer();
@@ -105,6 +126,8 @@ namespace Compo_Request
                 MainWindowElementsUnblockTimer.Start();
 
                 MainWindowElements_Block();
+
+                return true;
             }
             else
             {
@@ -112,6 +135,8 @@ namespace Compo_Request
                     "Возможно сервер выключен или присутствуют неполадки в вашем интернет-соединении.",
                     MainWindowElements_Unblock);
             }
+
+            return false;
         }
 
         private void MainWindowElements_UnblockTimer(object sender, EventArgs e)
@@ -143,6 +168,7 @@ namespace Compo_Request
 
         private void MainWindowElements_Block()
         {
+            CheckBox_AutoAuth.IsEnabled = false;
             TextBox_LoginOrEmail.IsEnabled = false;
             PasswordBox_Password.IsEnabled = false;
             Button_Login.IsEnabled = false;
@@ -151,6 +177,7 @@ namespace Compo_Request
 
         private void MainWindowElements_Unblock()
         {
+            CheckBox_AutoAuth.IsEnabled = true;
             TextBox_LoginOrEmail.IsEnabled = true;
             PasswordBox_Password.IsEnabled = true;
             Button_Login.IsEnabled = true;
