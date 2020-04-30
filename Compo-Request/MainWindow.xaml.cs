@@ -20,7 +20,6 @@ using Compo_Request.Network.Client;
 using Compo_Request.Network.Utilities;
 using Compo_Request.Network.Utilities.Validators;
 using Compo_Request.Windows;
-using Compo_Request.Windows.Projects;
 using Compo_Request.Windows.UserRegister;
 using Compo_Shared_Data.Debugging;
 using Compo_Shared_Data.Network;
@@ -34,7 +33,7 @@ namespace Compo_Request
     public partial class MainWindow : Window
     {
         private RegisterWindow _RegisterWindow;
-        private ProjectsWindow _ProjectsWindow;
+        private MainMenuWindow _MainMenuWindow;
         private DispatcherTimer MainWindowElementsUnblockTimer;
         private string[] UserData;
 
@@ -56,9 +55,9 @@ namespace Compo_Request
             {
                 var NetUser = Package.Unpacking<MUserNetwork>(ServerResponse.DataBytes);
 
-                _ProjectsWindow = new ProjectsWindow(this);
+                _MainMenuWindow = new MainMenuWindow(this);
                 this.Hide();
-                _ProjectsWindow.Show();
+                _MainMenuWindow.Show();
 
                 MainWindowElements_Unblock();
 

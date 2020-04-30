@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Compo_Request.Windows.Projects;
+using Compo_Request.Windows.Teams;
+using Compo_Shared_Data.Debugging;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -10,16 +13,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Compo_Request.Windows.Projects
+namespace Compo_Request.Windows
 {
     /// <summary>
     /// Логика взаимодействия для ProjectsWindow.xaml
     /// </summary>
-    public partial class ProjectsWindow : Window
+    public partial class MainMenuWindow : Window
     {
         private MainWindow _MainWindow;
+        private TeamMainPage _TeamMainPage;
+        private ProjectsMainPage _ProjectsMainPage;
 
-        public ProjectsWindow(MainWindow _MainWindow)
+        protected Page CurrentPage;
+
+        public MainMenuWindow(MainWindow _MainWindow)
         {
             InitializeComponent();
             LoadWindowParent(_MainWindow);
@@ -29,6 +36,9 @@ namespace Compo_Request.Windows.Projects
         public void LoadWindowParent(MainWindow mainWindow)
         {
             this._MainWindow = mainWindow;
+
+            _TeamMainPage = new TeamMainPage();
+            _ProjectsMainPage = new ProjectsMainPage();
         }
 
         /// <summary>
@@ -40,6 +50,18 @@ namespace Compo_Request.Windows.Projects
             this.Closing += ProjectsWindow_Closing;
             this.Button_OpenMenu.Click += Button_OpenMenu_Click;
             this.Button_CloseMenu.Click += Button_CloseMenu_Click;
+            this.Button_Teams.Click += Button_Teams_Click;
+            this.Button_Projects.Click += Button_Projects_Click;
+        }
+
+        private void Button_Projects_Click(object sender, RoutedEventArgs e)
+        {
+            Frame_Content.Content = _ProjectsMainPage;
+        }
+
+        private void Button_Teams_Click(object sender, RoutedEventArgs e)
+        {
+            Frame_Content.Content = _TeamMainPage;
         }
 
         private void Button_CloseMenu_Click(object sender, RoutedEventArgs e)

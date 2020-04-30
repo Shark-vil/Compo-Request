@@ -1,19 +1,25 @@
-﻿<Window x:Class="Compo_Request.Windows.Projects.ProjectsWindow"
+﻿<Window x:Class="Compo_Request.Windows.MainMenuWindow"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Compo_Request.Windows.Projects"
+        xmlns:local="clr-namespace:Compo_Request.Windows"
         mc:Ignorable="d"
         Title="ProjectsWindow" Height="450" Width="800">
     <Window.Resources>
         <Storyboard x:Key="OpenMenu">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" 
-                                           Storyboard.TargetName="Grid_Menu">
+                    Storyboard.TargetName="Grid_Menu">
                 <EasingDoubleKeyFrame KeyTime="0" Value="50"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="200"/>
             </DoubleAnimationUsingKeyFrames>
+
+            <ThicknessAnimationUsingKeyFrames  Storyboard.TargetProperty="(FrameworkElement.Margin)" 
+                    Storyboard.TargetName="Grid_Frame">
+                <SplineThicknessKeyFrame KeyTime="0" Value="50, 50, 0, 0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:0.5" Value="200, 50, 0, 0"/>
+            </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="CloseMenu">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" 
@@ -21,6 +27,12 @@
                 <EasingDoubleKeyFrame KeyTime="0" Value="200"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="50"/>
             </DoubleAnimationUsingKeyFrames>
+
+            <ThicknessAnimationUsingKeyFrames  Storyboard.TargetProperty="(FrameworkElement.Margin)" 
+                    Storyboard.TargetName="Grid_Frame">
+                <SplineThicknessKeyFrame KeyTime="0" Value="200, 50, 0, 0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:0.5" Value="50, 50, 0, 0"/>
+            </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
     </Window.Resources>
 
@@ -62,23 +74,32 @@
                         <materialDesign:PackIcon Foreground="#FF365B87" Width="25" Height="25" Kind="Menu"/>
                     </Button>
                 </Grid>
-                <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Foreground="AliceBlue">
-                    <ListViewItem Height="50">
-                        <StackPanel Orientation="Horizontal">
+                <StackPanel ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <Button x:Name="Button_Teams"
+                        Height="40" Background="{x:Null}" BorderBrush="{x:Null}">
+                        <StackPanel Margin="-8" Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Person" Foreground="White" Margin="2"
                                                     Height="30" Width="30" VerticalAlignment="Center"/>
                             <TextBlock Text="Команды" VerticalAlignment="Center" Margin="20, 0"/>
                         </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem Height="50">
-                        <StackPanel Orientation="Horizontal">
+                    </Button>
+                    <Button x:Name="Button_Projects"
+                        Height="40" Background="{x:Null}" BorderBrush="{x:Null}">
+                        <StackPanel Margin="-8" Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Category" Foreground="White" Margin="2"
-                                                     Height="30" Width="30" VerticalAlignment="Center"/>
+                                                    Height="30" Width="30" VerticalAlignment="Center"/>
                             <TextBlock Text="Проекты" VerticalAlignment="Center" Margin="20, 0"/>
                         </StackPanel>
-                    </ListViewItem>
-                </ListView>
-            </StackPanel> 
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="Grid_Frame" Margin="50, 50, 0, 0">
+            <Frame x:Name="Frame_Content"
+                   Width="auto"
+                   Height="auto"
+                   Content="{Binding CurrentPage}"
+                   NavigationUIVisibility="Hidden"/>
         </Grid>
     </Grid>
 </Window>
