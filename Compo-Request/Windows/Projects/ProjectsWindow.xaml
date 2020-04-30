@@ -1,4 +1,5 @@
 ﻿<Window x:Class="Compo_Request.Windows.Projects.ProjectsWindow"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,6 +8,22 @@
         mc:Ignorable="d"
         Title="ProjectsWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid Height="50" VerticalAlignment="Top" Background="#FF87B5CB">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
+                <TextBlock FontSize="14" VerticalAlignment="Center" Text="Меню" Foreground="White"/>
+                <materialDesign:PopupBox Margin="10" Foreground="White" StaysOpen="False">
+                    <StackPanel HorizontalAlignment="Left" Width="180">
+                        <Button Content="Профиль"/>
+                        <Button Content="Настройки"/>
+                        <Button Content="Помощь"/>
+                        <Separator/>
+                        <Button Content="Выход из аккаунта"/>
+                    </StackPanel>
+                </materialDesign:PopupBox>
+            </StackPanel>
+        </Grid>
+        <Grid Width="200" HorizontalAlignment="Left" Background="#FF365B87">
+            
+        </Grid>
     </Grid>
 </Window>
