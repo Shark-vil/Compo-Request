@@ -45,6 +45,7 @@ namespace Compo_Request_Server.Network.Events.Register
 
                         Debug.Log("В базу данных добавлен новый пользователь", ConsoleColor.Magenta);
                         Sender.Send(NetworkClient, "User.Register.Confirm", default, 2);
+                        return;
                     }
 
                     Sender.Send(NetworkClient, "User.Register.Error", default, 2);

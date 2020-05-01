@@ -37,6 +37,7 @@ namespace Compo_Request_Server.Network.Events.Team
 
                         Debug.Log("В базу данных добавлена новая команда", ConsoleColor.Magenta);
                         Sender.Send(NetworkClient, "Team.Add.Confirm");
+                        return;
                     }
 
                     Sender.Send(NetworkClient, "Team.Add.Error");
