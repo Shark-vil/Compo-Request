@@ -1,4 +1,5 @@
 ﻿<Page x:Class="Compo_Request.Windows.Teams.TeamMainPage"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -9,6 +10,42 @@
       Title="TeamMainPage">
 
     <Grid>
-        <TextBlock Margin="50" FontSize="48" Text="Страница 1"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="50*"/>
+            <ColumnDefinition Width="70*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid VerticalAlignment="Top" Height="70" Grid.Column="0">
+            <TextBlock Margin="15" FontSize="24" Text="Команды"/>
+        </Grid>
+
+        <Grid Margin="70,0,70,0" Height="150" VerticalAlignment="Center" Grid.Column="0">
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                    <Button Margin="20" Width="60" Height="60">
+                        <materialDesign:PackIcon Kind="Add"/>
+                    </Button>
+                    <TextBlock HorizontalAlignment="Center" Text="Добавить"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                    <Button Margin="20" Width="60" Height="60">
+                        <materialDesign:PackIcon Kind="Edit"/>
+                    </Button>
+                    <TextBlock HorizontalAlignment="Center" Text="Редактировать"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <ListView Margin="15">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="50">Id</GridViewColumn>
+                        <GridViewColumn Width="100">Название</GridViewColumn>
+                        <GridViewColumn Width="190">Количество участников</GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
     </Grid>
 </Page>

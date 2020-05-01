@@ -6,6 +6,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Compo_Request.Windows"
         mc:Ignorable="d"
+        WindowState="Maximized"
+        WindowStartupLocation="CenterScreen"
         Title="ProjectsWindow" Height="450" Width="800">
     <Window.Resources>
         <Storyboard x:Key="OpenMenu">
