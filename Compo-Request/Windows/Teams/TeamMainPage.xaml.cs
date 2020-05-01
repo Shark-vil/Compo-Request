@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Compo_Request.Network.Utilities;
+using Compo_Shared_Data.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -21,6 +23,17 @@ namespace Compo_Request.Windows.Teams
         public TeamMainPage()
         {
             InitializeComponent();
+
+            Button_AddTeamMenuOpen.Click += Button_AddTeamMenuOpen_Click;
+        }
+
+        private void Button_AddTeamMenuOpen_Click(object sender, RoutedEventArgs e)
+        {
+            TeamGroup Team = new TeamGroup();
+            Team.TeamUid = "my_team";
+            Team.Title = "Команда";
+
+            Sender.SendToServer("Team.Add", Team);
         }
     }
 }

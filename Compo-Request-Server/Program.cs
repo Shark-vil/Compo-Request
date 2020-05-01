@@ -6,6 +6,7 @@ using Compo_Request_Server.Network;
 using Compo_Request_Server.Network.Database;
 using Compo_Request_Server.Network.Events.Auth;
 using Compo_Request_Server.Network.Events.Register;
+using Compo_Request_Server.Network.Events.Team;
 using Compo_Request_Server.Network.Models;
 using Compo_Request_Server.Network.Server;
 using Compo_Shared_Data.Debugging;
@@ -41,6 +42,7 @@ namespace Compo_Request_Server
         {
             var EventRegister = new ERegister();
             var EventAuth = new EAuth();
+            var EventTeamAdd = new ETeamAdd();
         }
     }
 }

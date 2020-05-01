@@ -42,16 +42,13 @@ namespace Compo_Request_Server.Network.Events.Register
                         user.Password = Crypter.Blowfish.Crypt(user.Password);
                         db.Users.Add(user);
                         db.SaveChanges();
-                    }
-                    else
-                    {
-                        Sender.Send(NetworkClient, "User.Register.Error", default, 2);
-                        return;
+
+                        Debug.Log("В базу данных добавлен новый пользователь", ConsoleColor.Magenta);
+                        Sender.Send(NetworkClient, "User.Register.Confirm", default, 2);
                     }
 
-                    Debug.Log("В базу данных добавлен новый пользователь", ConsoleColor.Magenta);
-
-                    Sender.Send(NetworkClient, "User.Register.Confirm", default, 2);
+                    Sender.Send(NetworkClient, "User.Register.Error", default, 2);
+                    return;
                 }
             }
             catch(DbUpdateException ex)

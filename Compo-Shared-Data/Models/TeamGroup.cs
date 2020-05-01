@@ -6,22 +6,15 @@ using System.Text;
 namespace Compo_Shared_Data.Models
 {
     [Serializable]
-    public class User
+    public class TeamGroup
     {
         [Key]
         [Required]
         public int Id { get; set; }
         [Required]
-        public string Name { get; set; }
+        public string Title { get; set; }
         [Required]
-        public string Surname { get; set; }
-        public string Patronymic { get; set; }
-        [Required]
-        public string Email { get; set; }
-        [Required]
-        public string Login { get; set; }
-        [Required]
-        public string Password { get; set; }
+        public string TeamUid { get; set; }
 
         public ICollection<TeamUser> TeamUsers { get; set; }
     }
