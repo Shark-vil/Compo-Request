@@ -29,11 +29,7 @@ namespace Compo_Request.Windows.Teams
 
         private void Button_AddTeamMenuOpen_Click(object sender, RoutedEventArgs e)
         {
-            TeamGroup Team = new TeamGroup();
-            Team.TeamUid = "my_team";
-            Team.Title = "Команда";
-
-            Sender.SendToServer("Team.Add", Team);
+            
         }
     }
 }

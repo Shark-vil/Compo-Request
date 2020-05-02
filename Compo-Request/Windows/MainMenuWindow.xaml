@@ -97,7 +97,7 @@
             </StackPanel>
         </Grid>
         <Grid x:Name="Grid_Frame" Margin="50, 50, 0, 0">
-            <Frame x:Name="Frame_Content"
+            <Frame x:Name="Frame_Main"
                    Width="auto"
                    Height="auto"
                    Content="{Binding CurrentPage}"
