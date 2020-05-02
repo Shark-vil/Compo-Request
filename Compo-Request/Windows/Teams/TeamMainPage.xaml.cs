@@ -20,16 +20,23 @@ namespace Compo_Request.Windows.Teams
     /// </summary>
     public partial class TeamMainPage : Page
     {
-        public TeamMainPage()
+        internal MainMenuWindow _MainMenuWindow;
+        internal TeamAddPage _TeamAddPage;
+
+        public TeamMainPage(MainMenuWindow _MainMenuWindow)
         {
             InitializeComponent();
+
+            this._MainMenuWindow = _MainMenuWindow;
+
+            _TeamAddPage = new TeamAddPage();
 
             Button_AddTeamMenuOpen.Click += Button_AddTeamMenuOpen_Click;
         }
 
         private void Button_AddTeamMenuOpen_Click(object sender, RoutedEventArgs e)
         {
-            
+            _MainMenuWindow.WindowLogic.SetPage(_TeamAddPage);
         }
     }
 }

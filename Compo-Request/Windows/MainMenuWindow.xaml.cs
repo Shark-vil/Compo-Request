@@ -22,7 +22,7 @@ namespace Compo_Request.Windows
     public partial class MainMenuWindow : Window
     {
         // Основная логика текущего окна
-        private LMainMenu WindowLogic;
+        internal LMainMenu WindowLogic;
         // Окно авторизации (Главное окно)
         internal MainWindow _MainWindow;
         // Главное окно команд
@@ -51,7 +51,7 @@ namespace Compo_Request.Windows
         {
             this._MainWindow = mainWindow;
 
-            _TeamMainPage = new TeamMainPage();
+            _TeamMainPage = new TeamMainPage(this);
             _ProjectsMainPage = new ProjectsMainPage();
         }
 
