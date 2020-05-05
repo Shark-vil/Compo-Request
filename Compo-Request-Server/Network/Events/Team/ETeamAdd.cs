@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text;
 using Compo_Shared_Data.Models;
 using System.Linq;
+using Compo_Shared_Data.WPF.Models;
 
 namespace Compo_Request_Server.Network.Events.Team
 {
@@ -18,7 +19,7 @@ namespace Compo_Request_Server.Network.Events.Team
     {
         public ETeamAdd()
         {
-            NetworkDelegates.Add(AddTeam, "Team.Add");
+            NetworkDelegates.Add(AddTeam, "TeamGroup.Add");
         }
 
         private void AddTeam(MResponse ClientResponse, MNetworkClient NetworkClient)
@@ -32,15 +33,28 @@ namespace Compo_Request_Server.Network.Events.Team
 
                     if (TeamGroup == null)
                     {
+                        var NetworkUser = Users.ActiveUsers.Find(x => x.Id == NetworkClient.Id);
+                        TeamData.Users = db.Users.Where(u => u.Login == NetworkUser.Login).FirstOrDefault();
+
                         db.TeamGroups.Add(TeamData);
                         db.SaveChanges();
 
                         Debug.Log("В базу данных добавлена новая команда", ConsoleColor.Magenta);
-                        Sender.Send(NetworkClient, "Team.Add.Confirm");
+
+                        var TeamGroupDb = db.TeamGroups.Where(t => t.TeamUid == TeamData.TeamUid).FirstOrDefault();
+
+                        var TeamGroupRequest = new WpfTeamGroup
+                        {
+                            Id = TeamGroupDb.Id,
+                            Title = TeamGroupDb.Title,
+                            TeamUid = TeamGroupDb.TeamUid
+                        };
+
+                        Sender.Broadcast("TeamGroup.Add.Confirm", TeamGroupRequest);
                         return;
                     }
 
-                    Sender.Send(NetworkClient, "Team.Add.Error");
+                    Sender.Send(NetworkClient, "TeamGroup.Add.Error");
                     return;
                 }
             }
@@ -48,7 +62,7 @@ namespace Compo_Request_Server.Network.Events.Team
             {
                 Debug.LogError("Возникла ошибка при авторизации пользователя в системе! Код ошибки:\n" + ex);
 
-                Sender.Send(NetworkClient, "Team.Add.Error");
+                Sender.Send(NetworkClient, "TeamGroup.Add.Error");
             }
         }
     }

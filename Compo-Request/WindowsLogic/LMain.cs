@@ -68,6 +68,9 @@ namespace Compo_Request.WindowsLogic
 
                 var NetUser = Package.Unpacking<MUserNetwork>(ServerResponse.DataBytes);
 
+                UserInfo.NetworkSelf = NetUser;
+                UserInfo.NetworkUsers.Add(NetUser);
+
                 _MainWindow._MainMenuWindow = new MainMenuWindow(_MainWindow);
                 _MainWindow.Hide();
                 _MainWindow._MainMenuWindow.Show();

@@ -24,5 +24,6 @@ namespace Compo_Shared_Data.Models
         public string Password { get; set; }
 
         public ICollection<TeamUser> TeamUsers { get; set; }
+        public ICollection<TeamGroup> TeamGroups { get; set; }
     }
 }
