@@ -42,7 +42,7 @@ namespace Compo_Request_Server
         {
             var EventRegister = new ERegister();
             var EventAuth = new EAuth();
-            var EventTeamAdd = new ETeamAdd();
+            var EventTeamAdd = new ETeam();
         }
     }
 }

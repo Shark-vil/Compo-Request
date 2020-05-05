@@ -15,14 +15,15 @@ using Compo_Shared_Data.WPF.Models;
 
 namespace Compo_Request_Server.Network.Events.Team
 {
-    public class ETeamAdd
+    public class ETeam
     {
-        public ETeamAdd()
+        public ETeam()
         {
-            NetworkDelegates.Add(AddTeam, "TeamGroup.Add");
+            NetworkDelegates.Add(AddTeamGroup, "TeamGroup.Add");
+            NetworkDelegates.Add(GetAllTeamGroups, "TeamGroup.GetAll");
         }
 
-        private void AddTeam(MResponse ClientResponse, MNetworkClient NetworkClient)
+        private void AddTeamGroup(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
             try
             {
@@ -63,6 +64,25 @@ namespace Compo_Request_Server.Network.Events.Team
                 Debug.LogError("Возникла ошибка при авторизации пользователя в системе! Код ошибки:\n" + ex);
 
                 Sender.Send(NetworkClient, "TeamGroup.Add.Error");
+            }
+        }
+
+        private void GetAllTeamGroups(MResponse ClientResponse, MNetworkClient NetworkClient)
+        {
+            using (var db = new DatabaseContext())
+            {
+                var TeamGroupsDb = db.TeamGroups.ToArray();
+                var TeamGroupRequest = new List<WpfTeamGroup>();
+
+                foreach (var TGroup in TeamGroupsDb)
+                    TeamGroupRequest.Add(new WpfTeamGroup
+                    {
+                        Id = TGroup.Id,
+                        Title = TGroup.Title,
+                        TeamUid = TGroup.TeamUid
+                    });
+
+                Sender.Send(NetworkClient, "TeamGroup.GetAll", TeamGroupRequest.ToArray(), ClientResponse.WindowUid);
             }
         }
     }

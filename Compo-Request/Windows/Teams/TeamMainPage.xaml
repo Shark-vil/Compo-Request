@@ -47,6 +47,28 @@
                     <DataGridTextColumn Binding="{Binding Path=Id}" Header="Id" Width="50"/>
                     <DataGridTextColumn Binding="{Binding Path=Title}" Header="Название" Width="100"/>
                     <DataGridTextColumn Binding="{Binding Path=TeamUid}" Header="Ключ" Width="100"/>
+                    <DataGridTemplateColumn Width="150">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                                    <Button Click="ButtonClick_EditTeamGroup" Width="50" Height="50">
+                                        <materialDesign:PackIcon Kind="Edit"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="150">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                                    <Button Click="ButtonClick_DeleteTeamGroup" Width="50" Height="50">
+                                        <materialDesign:PackIcon Kind="Delete"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>
