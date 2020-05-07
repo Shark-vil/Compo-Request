@@ -35,7 +35,8 @@ namespace Compo_Request_Server.Network.Client
                         byte[] Data = GetRequest();
                         MResponse ClientResponse = Package.Unpacking<MResponse>(Data);
 
-                        bool isBreak = false;
+                        //bool isBreak = false;
+                        bool IsCorrectKey = false;
 
                         Debug.Log($"Новый запрос от клиента [{NetworkClient.Id} - {NetworkClient.Ip}:{NetworkClient.NetPoint}]: " +
                             $"WindowUid - {ClientResponse.WindowUid}, KeyNetwork - {ClientResponse.KeyNetwork}");
@@ -49,7 +50,9 @@ namespace Compo_Request_Server.Network.Client
                                     if (CheckKeyNetwork(DataDelegate, ClientResponse))
                                     {
                                         DataDelegate.DataDelegate(ClientResponse, NetworkClient);
-                                        isBreak = true;
+                                        IsCorrectKey = true;
+                                        //isBreak = true;
+                                        break;
                                     }
                                 }
                             }
@@ -58,13 +61,20 @@ namespace Compo_Request_Server.Network.Client
                                 if (CheckKeyNetwork(DataDelegate, ClientResponse))
                                 {
                                     DataDelegate.DataDelegate(ClientResponse, NetworkClient);
-                                    isBreak = true;
+                                    IsCorrectKey = true;
+                                    //isBreak = true;
+                                    break;
                                 }
                             }
 
+                            /*
                             if (isBreak)
                                 break;
+                            */
                         }
+
+                        if (!IsCorrectKey)
+                            Debug.LogWarning("Не найдено делегатов с таким идентификатором!");
                     }
                     catch (Exception ex)
                     {

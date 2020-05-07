@@ -28,6 +28,8 @@ namespace Compo_Request.Network.Client
                     Debug.Log($"Новый запрос от сервера [{Host}:{Port}]: " +
                         $"WindowUid - {ServerResponse.WindowUid}, KeyNetwork - {ServerResponse.KeyNetwork}");
 
+                    bool IsCorrectKey = false;
+
                     foreach (var DataDelegate in NetworkDelegates.NetworkActions)
                     {
                         if (DataDelegate.Dispatcher != null && DataDelegate.WindowUid != -1)
@@ -37,6 +39,7 @@ namespace Compo_Request.Network.Client
                                 if (CheckKeyNetwork(DataDelegate, ServerResponse))
                                 {
                                     DispatcherExec(DataDelegate, ServerResponse);
+                                    IsCorrectKey = true;
                                     break;
                                 }
                             }
@@ -46,10 +49,14 @@ namespace Compo_Request.Network.Client
                             if (CheckKeyNetwork(DataDelegate, ServerResponse))
                             {
                                 DispatcherExec(DataDelegate, ServerResponse);
+                                IsCorrectKey = true;
                                 break;
                             }
                         }
                     }
+
+                    if (!IsCorrectKey)
+                        Debug.LogWarning("Не найдено делегатов с таким идентификатором!");
                 }
                 catch (Exception ex)
                 {
@@ -68,16 +75,23 @@ namespace Compo_Request.Network.Client
 
         private static bool DispatcherExec(MNetworkAction DataDelegate, MResponse ServerResponse = null)
         {
-            if (DataDelegate.Dispatcher != null)
+            try
             {
-
-                DataDelegate.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                (ThreadStart)delegate ()
+                if (DataDelegate.Dispatcher != null)
                 {
-                    DataDelegate.DataDelegate(ServerResponse);
-                });
 
-                return true;
+                    DataDelegate.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+                    (ThreadStart)delegate ()
+                    {
+                        DataDelegate.DataDelegate(ServerResponse);
+                    });
+
+                    return true;
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.LogError("Возникла ошибка при вызове делегата. Код ошибки:\n" + ex);
             }
 
             return false;

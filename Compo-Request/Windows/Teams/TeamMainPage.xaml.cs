@@ -35,6 +35,8 @@ namespace Compo_Request.Windows.Teams
 
         internal ObservableCollection<WpfTeamGroup> TeamGroups = new ObservableCollection<WpfTeamGroup>();
 
+        private DispatcherTimer ServerResponseDelay = null;
+
         public TeamMainPage(MainMenuWindow _MainMenuWindow)
         {
             InitializeComponent();
@@ -80,7 +82,13 @@ namespace Compo_Request.Windows.Teams
 
                 TeamGroups.Remove(TeamGroups.SingleOrDefault(t => t.Id == TGroup.Id));
 
-                Debug.Log("Remove");
+                DataGrid_Teams.IsEnabled = true;
+
+                if (ServerResponseDelay != null)
+                {
+                    ServerResponseDelay.Stop();
+                    ServerResponseDelay = null;
+                }
 
             }, Dispatcher, -1, "TeamGroup.Delete.Confirm");
         }
@@ -104,7 +112,16 @@ namespace Compo_Request.Windows.Teams
 
             if (Sender.SendToServer("TeamGroup.Delete", TGroup))
             {
-                Debug.Log("Ok");
+                DataGrid_Teams.IsEnabled = false;
+
+                ServerResponseDelay = CustomTimer.Create(delegate (object sender, EventArgs e)
+                {
+                    ServerResponseDelay = null;
+
+                    new AlertWindow("Ошибка", "Время ожидания ответа от сервера истекло.",
+                        () => DataGrid_Teams.IsEnabled = true);
+
+                }, new TimeSpan(0, 0, 5), true);
             }
         }
     }
