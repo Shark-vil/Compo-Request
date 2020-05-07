@@ -21,6 +21,8 @@ namespace Compo_Request_Server.Network.Events.Team
         {
             NetworkDelegates.Add(AddTeamGroup, "TeamGroup.Add");
             NetworkDelegates.Add(GetAllTeamGroups, "TeamGroup.GetAll");
+            NetworkDelegates.Add(UpdateTeamGroup, "TeamGroup.Update");
+            NetworkDelegates.Add(DeleteTeamGroup, "TeamGroup.Delete");
         }
 
         private void AddTeamGroup(MResponse ClientResponse, MNetworkClient NetworkClient)
@@ -64,6 +66,35 @@ namespace Compo_Request_Server.Network.Events.Team
                 Debug.LogError("Возникла ошибка при авторизации пользователя в системе! Код ошибки:\n" + ex);
 
                 Sender.Send(NetworkClient, "TeamGroup.Add.Error");
+            }
+        }
+
+        private void UpdateTeamGroup(MResponse ClientResponse, MNetworkClient NetworkClient)
+        {
+            using (var db = new DatabaseContext())
+            {
+                var TGroup = Package.Unpacking<WpfTeamGroup>(ClientResponse.DataBytes);
+
+                TeamGroup DbTeamGroup = db.TeamGroups.Where(x => x.Id == TGroup.Id).FirstOrDefault();
+                DbTeamGroup.TeamUid = TGroup.TeamUid;
+                DbTeamGroup.Title = TGroup.Title;
+                db.SaveChanges();
+
+                Sender.Send(NetworkClient, "TeamGroup.Update.Confirm", default, ClientResponse.WindowUid);
+            }
+        }
+
+        private void DeleteTeamGroup(MResponse ClientResponse, MNetworkClient NetworkClient)
+        {
+            using (var db = new DatabaseContext())
+            {
+                var TGroup = Package.Unpacking<WpfTeamGroup>(ClientResponse.DataBytes);
+
+                TeamGroup DbTeamGroup = db.TeamGroups.Where(x => x.Id == TGroup.Id).FirstOrDefault();
+                db.TeamGroups.Remove(DbTeamGroup);
+                db.SaveChanges();
+
+                Sender.Send(NetworkClient, "TeamGroup.Delete.Confirm", TGroup, ClientResponse.WindowUid);
             }
         }
 

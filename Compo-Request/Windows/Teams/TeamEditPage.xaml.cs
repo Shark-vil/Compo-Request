@@ -7,6 +7,8 @@ using Compo_Shared_Data.Network.Models;
 using Compo_Shared_Data.WPF.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,18 +23,25 @@ using System.Windows.Shapes;
 namespace Compo_Request.Windows.Teams
 {
     /// <summary>
-    /// Логика взаимодействия для TeamAddPage.xaml
+    /// Логика взаимодействия для TeamEditPage.xaml
     /// </summary>
-    public partial class TeamAddPage : Page
+    public partial class TeamEditPage : Page
     {
         internal TeamMainPage _TeamMainPage;
+        internal WpfTeamGroup TGroup;
+        internal int Id;
 
-        public TeamAddPage(TeamMainPage _TeamMainPage)
+        public TeamEditPage(TeamMainPage _TeamMainPage, int Id, string Title, string Uid)
         {
             InitializeComponent();
             LoadWindowParent(_TeamMainPage);
             EventsInitialize();
             NetworkEventsLoad();
+
+            this.Id = Id;
+
+            TextBox_TeamName.Text = Title;
+            TextBox_TeamUid.Text = Uid;
         }
 
         private void LoadWindowParent(TeamMainPage _TeamMainPage)
@@ -42,29 +51,35 @@ namespace Compo_Request.Windows.Teams
 
         private void EventsInitialize()
         {
-            Button_TeamAdd.Click += Button_TeamAdd_Click;
+            Button_TeamUpdate.Click += Button_TeamUpdate_Click;
         }
 
         private void NetworkEventsLoad()
         {
             NetworkDelegates.Add(delegate (MResponse ServerResponse)
             {
-                var TGroup = Package.Unpacking<WpfTeamGroup>(ServerResponse.DataBytes);
+                var TGroupItem = _TeamMainPage.TeamGroups.FirstOrDefault(x => x.Id == Id);
+                if (TGroupItem != null && TGroup != null)
+                {
+                    TGroupItem.Title = TGroup.Title;
+                    TGroupItem.TeamUid = TGroup.TeamUid;
 
-                _TeamMainPage.TeamGroups.Add(TGroup);
+                    _TeamMainPage.DataGridReload();
+                }
 
-            }, Dispatcher, -1, "TeamGroup.Add.Confirm", "TeamMainPage");
+            }, Dispatcher, -1, "TeamGroup.Update.Confirm", "TeamEditPage");
         }
 
-        private void Button_TeamAdd_Click(object sender, RoutedEventArgs e)
+        private void Button_TeamUpdate_Click(object sender, RoutedEventArgs e)
         {
-            var TeamGroupEntity = new TeamGroup();
-            TeamGroupEntity.TeamUid = TextBox_TeamUid.Text;
-            TeamGroupEntity.Title = TextBox_TeamName.Text;
+            TGroup = new WpfTeamGroup();
+            TGroup.Id = Id;
+            TGroup.TeamUid = TextBox_TeamUid.Text;
+            TGroup.Title = TextBox_TeamName.Text;
 
-            if (Sender.SendToServer("TeamGroup.Add", TeamGroupEntity))
+            if (Sender.SendToServer("TeamGroup.Update", TGroup))
             {
-                
+                Debug.Log("Отправка");
             }
             else
             {

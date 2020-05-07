@@ -45,7 +45,7 @@ namespace Compo_Request.Network.Client
                         {
                             if (CheckKeyNetwork(DataDelegate, ServerResponse))
                             {
-                                DataDelegate.DataDelegate(ServerResponse);
+                                DispatcherExec(DataDelegate, ServerResponse);
                                 break;
                             }
                         }
@@ -70,6 +70,7 @@ namespace Compo_Request.Network.Client
         {
             if (DataDelegate.Dispatcher != null)
             {
+
                 DataDelegate.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
                 (ThreadStart)delegate ()
                 {

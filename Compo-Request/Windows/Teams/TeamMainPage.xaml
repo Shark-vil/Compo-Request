@@ -29,12 +29,14 @@
                     </Button>
                     <TextBlock HorizontalAlignment="Center" Text="Добавить"/>
                 </StackPanel>
+                <!--
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                     <Button Margin="20" Width="60" Height="60">
                         <materialDesign:PackIcon Kind="Edit"/>
                     </Button>
                     <TextBlock HorizontalAlignment="Center" Text="Редактировать"/>
                 </StackPanel>
+                -->
             </StackPanel>
         </Grid>
 
