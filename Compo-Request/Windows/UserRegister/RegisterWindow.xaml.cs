@@ -14,8 +14,6 @@ namespace Compo_Request.Windows.UserRegister
     public partial class RegisterWindow : Window
     {
         private MainWindow _MainWindow;
-        private DispatcherTimer RegFormUnblockTimer;
-
         internal LRegister WindowLogic;
 
         public RegisterWindow(MainWindow _MainWindow)

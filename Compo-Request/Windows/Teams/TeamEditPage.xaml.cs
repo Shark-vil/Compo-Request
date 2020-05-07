@@ -28,7 +28,6 @@ namespace Compo_Request.Windows.Teams
     public partial class TeamEditPage : Page
     {
         internal TeamMainPage _TeamMainPage;
-        internal WpfTeamGroup TGroup;
         internal int Id;
 
         public TeamEditPage(TeamMainPage _TeamMainPage, int Id, string Title, string Uid)
@@ -56,23 +55,12 @@ namespace Compo_Request.Windows.Teams
 
         private void NetworkEventsLoad()
         {
-            NetworkDelegates.Add(delegate (MResponse ServerResponse)
-            {
-                var TGroupItem = _TeamMainPage.TeamGroups.FirstOrDefault(x => x.Id == Id);
-                if (TGroupItem != null && TGroup != null)
-                {
-                    TGroupItem.Title = TGroup.Title;
-                    TGroupItem.TeamUid = TGroup.TeamUid;
-
-                    _TeamMainPage.DataGridReload();
-                }
-
-            }, Dispatcher, -1, "TeamGroup.Update.Confirm", "TeamEditPage");
+            //
         }
 
         private void Button_TeamUpdate_Click(object sender, RoutedEventArgs e)
         {
-            TGroup = new WpfTeamGroup();
+            var TGroup = new WpfTeamGroup();
             TGroup.Id = Id;
             TGroup.TeamUid = TextBox_TeamUid.Text;
             TGroup.Title = TextBox_TeamName.Text;

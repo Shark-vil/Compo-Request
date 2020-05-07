@@ -80,7 +80,7 @@ namespace Compo_Request_Server.Network.Events.Team
                 DbTeamGroup.Title = TGroup.Title;
                 db.SaveChanges();
 
-                Sender.Send(NetworkClient, "TeamGroup.Update.Confirm", default, ClientResponse.WindowUid);
+                Sender.Broadcast("TeamGroup.Update.Confirm", TGroup, ClientResponse.WindowUid);
             }
         }
 
@@ -94,7 +94,7 @@ namespace Compo_Request_Server.Network.Events.Team
                 db.TeamGroups.Remove(DbTeamGroup);
                 db.SaveChanges();
 
-                Sender.Send(NetworkClient, "TeamGroup.Delete.Confirm", TGroup, ClientResponse.WindowUid);
+                Sender.Broadcast("TeamGroup.Delete.Confirm", TGroup, ClientResponse.WindowUid);
             }
         }
 

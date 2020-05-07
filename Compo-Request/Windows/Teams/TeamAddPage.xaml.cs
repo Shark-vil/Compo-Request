@@ -47,13 +47,7 @@ namespace Compo_Request.Windows.Teams
 
         private void NetworkEventsLoad()
         {
-            NetworkDelegates.Add(delegate (MResponse ServerResponse)
-            {
-                var TGroup = Package.Unpacking<WpfTeamGroup>(ServerResponse.DataBytes);
-
-                _TeamMainPage.TeamGroups.Add(TGroup);
-
-            }, Dispatcher, -1, "TeamGroup.Add.Confirm", "TeamMainPage");
+            //
         }
 
         private void Button_TeamAdd_Click(object sender, RoutedEventArgs e)

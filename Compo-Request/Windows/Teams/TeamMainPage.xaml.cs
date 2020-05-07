@@ -67,6 +67,9 @@ namespace Compo_Request.Windows.Teams
 
         private void NetworkEventsLoad()
         {
+            /**
+             * Получение данных списка
+             */
             NetworkDelegates.Add(delegate (MResponse ServerResponse) {
 
                 var TeamGroups = Package.Unpacking<WpfTeamGroup[]>(ServerResponse.DataBytes);
@@ -76,6 +79,20 @@ namespace Compo_Request.Windows.Teams
 
             }, Dispatcher, 4, "TeamGroup.GetAll");
 
+            /**
+             * Добавление элемента списка
+             */
+            NetworkDelegates.Add(delegate (MResponse ServerResponse)
+            {
+                var TGroup = Package.Unpacking<WpfTeamGroup>(ServerResponse.DataBytes);
+
+                TeamGroups.Add(TGroup);
+
+            }, Dispatcher, -1, "TeamGroup.Add.Confirm", "TeamMainPage");
+
+            /**
+             * Удаление элемента списка
+             */
             NetworkDelegates.Add(delegate (MResponse ServerResponse) {
 
                 var TGroup = Package.Unpacking<WpfTeamGroup>(ServerResponse.DataBytes);
@@ -91,11 +108,34 @@ namespace Compo_Request.Windows.Teams
                 }
 
             }, Dispatcher, -1, "TeamGroup.Delete.Confirm");
+
+            /**
+             * Обновление списка
+             */
+            NetworkDelegates.Add(delegate (MResponse ServerResponse)
+            {
+                var TGroup = Package.Unpacking<WpfTeamGroup>(ServerResponse.DataBytes);
+                var TGroupItem = TeamGroups.FirstOrDefault(x => x.Id == TGroup.Id);
+
+                if (TGroupItem != null && TGroup != null)
+                {
+                    TGroupItem.Title = TGroup.Title;
+                    TGroupItem.TeamUid = TGroup.TeamUid;
+
+                    DataGridReload();
+                }
+
+            }, Dispatcher, -1, "TeamGroup.Update.Confirm", "TeamEditPage");
         }
 
         private void Button_AddTeamMenuOpen_Click(object sender, RoutedEventArgs e)
         {
             _MainMenuWindow.WindowLogic.SetPage(_TeamAddPage);
+        }
+
+        private void ButtonClick_AddUserToTeam(object sender, RoutedEventArgs e)
+        {
+
         }
 
         private void ButtonClick_EditTeamGroup(object sender, RoutedEventArgs e)
@@ -108,21 +148,24 @@ namespace Compo_Request.Windows.Teams
 
         private void ButtonClick_DeleteTeamGroup(object sender, RoutedEventArgs e)
         {
-            WpfTeamGroup TGroup = (sender as Button).DataContext as WpfTeamGroup;
-
-            if (Sender.SendToServer("TeamGroup.Delete", TGroup))
+            new ConfirmWindow("Предупреждение", "Вы уверены что хотите удалить элемент?", delegate ()
             {
-                DataGrid_Teams.IsEnabled = false;
+                WpfTeamGroup TGroup = (sender as Button).DataContext as WpfTeamGroup;
 
-                ServerResponseDelay = CustomTimer.Create(delegate (object sender, EventArgs e)
+                if (Sender.SendToServer("TeamGroup.Delete", TGroup))
                 {
-                    ServerResponseDelay = null;
+                    DataGrid_Teams.IsEnabled = false;
 
-                    new AlertWindow("Ошибка", "Время ожидания ответа от сервера истекло.",
-                        () => DataGrid_Teams.IsEnabled = true);
+                    ServerResponseDelay = CustomTimer.Create(delegate (object sender, EventArgs e)
+                    {
+                        ServerResponseDelay = null;
 
-                }, new TimeSpan(0, 0, 5), true);
-            }
+                        new AlertWindow("Ошибка", "Время ожидания ответа от сервера истекло.",
+                            () => DataGrid_Teams.IsEnabled = true);
+
+                    }, new TimeSpan(0, 0, 5), true);
+                }
+            });
         }
     }
 }
