@@ -25,8 +25,8 @@ namespace Compo_Request.Windows.Teams
         internal TeamUserAddPage _TeamUserAddPage;
         internal TeamEditPage _TeamEditPage;
 
-        internal ObservableCollection<WTeamGroup> TeamGroups = new ObservableCollection<WTeamGroup>();
-        internal WTeamGroup[] DbTeamGroups;
+        internal ObservableCollection<TeamGroup> TeamGroups = new ObservableCollection<TeamGroup>();
+        internal TeamGroup[] DbTeamGroups;
 
         private DispatcherTimer ServerResponseDelay = null;
 
@@ -48,7 +48,7 @@ namespace Compo_Request.Windows.Teams
              */
             NetworkDelegates.Add(delegate (MResponse ServerResponse) {
 
-                DbTeamGroups = Package.Unpacking<WTeamGroup[]>(ServerResponse.DataBytes);
+                DbTeamGroups = Package.Unpacking<TeamGroup[]>(ServerResponse.DataBytes);
 
                 foreach (var TGroup in DbTeamGroups)
                     this.TeamGroups.Add(TGroup);
@@ -60,7 +60,7 @@ namespace Compo_Request.Windows.Teams
              */
             NetworkDelegates.Add(delegate (MResponse ServerResponse)
             {
-                var TGroup = Package.Unpacking<WTeamGroup>(ServerResponse.DataBytes);
+                var TGroup = Package.Unpacking<TeamGroup>(ServerResponse.DataBytes);
 
                 TeamGroups.Add(TGroup);
 
@@ -71,7 +71,7 @@ namespace Compo_Request.Windows.Teams
              */
             NetworkDelegates.Add(delegate (MResponse ServerResponse) {
 
-                var TGroup = Package.Unpacking<WTeamGroup>(ServerResponse.DataBytes);
+                var TGroup = Package.Unpacking<TeamGroup>(ServerResponse.DataBytes);
 
                 TeamGroups.Remove(TeamGroups.SingleOrDefault(t => t.Id == TGroup.Id));
 
@@ -90,13 +90,13 @@ namespace Compo_Request.Windows.Teams
              */
             NetworkDelegates.Add(delegate (MResponse ServerResponse)
             {
-                var TGroup = Package.Unpacking<WTeamGroup>(ServerResponse.DataBytes);
+                var TGroup = Package.Unpacking<TeamGroup>(ServerResponse.DataBytes);
                 var TGroupItem = TeamGroups.FirstOrDefault(x => x.Id == TGroup.Id);
 
                 if (TGroupItem != null && TGroup != null)
                 {
                     TGroupItem.Title = TGroup.Title;
-                    TGroupItem.TeamUid = TGroup.TeamUid;
+                    TGroupItem.Uid = TGroup.Uid;
 
                     DataGridReload();
                 }
@@ -129,7 +129,8 @@ namespace Compo_Request.Windows.Teams
 
         private void ButtonClick_AddUserToTeam(object sender, RoutedEventArgs e)
         {
-            WTeamGroup TGroup = (sender as Button).DataContext as WTeamGroup;
+            TeamGroup TGroup = (sender as Button).DataContext as TeamGroup;
+            TGroup = TeamGroups.FirstOrDefault(t => t.Uid == TGroup.Uid);
 
             _TeamUserAddPage.TGroup = TGroup;
             _MainMenuWindow.WindowLogic.SetPage(_TeamUserAddPage);
@@ -138,7 +139,8 @@ namespace Compo_Request.Windows.Teams
 
         private void ButtonClick_EditTeamGroup(object sender, RoutedEventArgs e)
         {
-            WTeamGroup TGroup = (sender as Button).DataContext as WTeamGroup;
+            TeamGroup TGroup = (sender as Button).DataContext as TeamGroup;
+            TGroup = TeamGroups.FirstOrDefault(t => t.Uid == TGroup.Uid);
 
             _TeamEditPage = new TeamEditPage(this, TGroup);
             _MainMenuWindow.Frame_Main.Content = _TeamEditPage;
@@ -148,7 +150,8 @@ namespace Compo_Request.Windows.Teams
         {
             new ConfirmWindow("Предупреждение", "Вы уверены что хотите удалить элемент?", delegate ()
             {
-                WTeamGroup TGroup = (sender as Button).DataContext as WTeamGroup;
+                TeamGroup TGroup = (sender as Button).DataContext as TeamGroup;
+                TGroup = TeamGroups.FirstOrDefault(t => t.Uid == TGroup.Uid);
 
                 if (Sender.SendToServer("TeamGroup.Delete", TGroup))
                 {
