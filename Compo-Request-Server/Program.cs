@@ -5,11 +5,13 @@ using System.Threading;
 using Compo_Request_Server.Network;
 using Compo_Request_Server.Network.Database;
 using Compo_Request_Server.Network.Events.Auth;
+using Compo_Request_Server.Network.Events.Projects;
 using Compo_Request_Server.Network.Events.Register;
 using Compo_Request_Server.Network.Events.Team;
 using Compo_Request_Server.Network.Models;
 using Compo_Request_Server.Network.Server;
 using Compo_Shared_Data.Debugging;
+using Compo_Shared_Data.Models;
 
 namespace Compo_Request_Server
 {
@@ -44,6 +46,7 @@ namespace Compo_Request_Server
             var EventAuth = new EAuth();
             var EventTeamGroup = new ETeam();
             var EventTemUser = new ETeamUser();
+            var EventProject = new EProject();
         }
     }
 }

@@ -43,11 +43,7 @@ namespace Compo_Request.Windows.Teams
             TGroup.TeamUid = TextBox_TeamUid.Text;
             TGroup.Title = TextBox_TeamName.Text;
 
-            if (Sender.SendToServer("TeamGroup.Add", TGroup))
-            {
-                new AlertWindow("Успех", "Упаковано");
-            }
-            else
+            if (!Sender.SendToServer("TeamGroup.Add", TGroup))
             {
                 new AlertWindow("Ошибка", "Нихуя не вышло");
             }

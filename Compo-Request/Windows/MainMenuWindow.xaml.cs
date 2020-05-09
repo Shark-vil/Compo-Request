@@ -41,7 +41,7 @@ namespace Compo_Request.Windows
             this._MainWindow = mainWindow;
 
             _TeamMainPage = new TeamMainPage(this);
-            _ProjectsMainPage = new ProjectsMainPage();
+            _ProjectsMainPage = new ProjectsMainPage(this);
         }
 
         /// <summary>

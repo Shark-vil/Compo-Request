@@ -22,7 +22,7 @@
         <Grid Margin="70,0,70,0" Height="150" VerticalAlignment="Center" Grid.Column="0">
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                    <Button x:Name="Button_AddProjectMenuOpen"
+                    <Button Click="ButtonClick_AddProjectMenuOpen"
                         Margin="20" Width="60" Height="60">
                         <materialDesign:PackIcon Kind="Add"/>
                     </Button>
@@ -32,7 +32,7 @@
         </Grid>
 
         <Grid Grid.Column="1">
-            <DataGrid x:Name="DataGrid_Teams"
+            <DataGrid x:Name="DataGrid_Projects"
                     Margin="15" AutoGenerateColumns="False" 
                     HorizontalGridLinesBrush="DarkGray" RowBackground="LightGray" AlternatingRowBackground="White"
                     IsReadOnly="True">
@@ -68,6 +68,17 @@
                                 <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                                     <Button Click="ButtonClick_AddTeamToProject" Width="50" Height="50">
                                         <materialDesign:PackIcon Kind="PersonMultiple"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="100" Header="Открыть проект">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                                    <Button Click="ButtonClick_OpenProject" Width="50" Height="50">
+                                        <materialDesign:PackIcon Kind="MenuOpen"/>
                                     </Button>
                                 </StackPanel>
                             </DataTemplate>

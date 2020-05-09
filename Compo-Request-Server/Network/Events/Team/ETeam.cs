@@ -36,7 +36,7 @@ namespace Compo_Request_Server.Network.Events.Team
 
                     if (TeamGroup == null)
                     {
-                        var NetworkUser = Users.ActiveUsers.Find(x => x.Id == NetworkClient.Id);
+                        var NetworkUser = Users.ActiveUsers.Find(x => x.NetworkId == NetworkClient.Id);
 
                         var DbTeamGroup = new TeamGroup();
                         DbTeamGroup.TeamUid = TeamData.TeamUid;

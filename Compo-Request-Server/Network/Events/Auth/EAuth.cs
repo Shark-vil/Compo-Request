@@ -45,7 +45,8 @@ namespace Compo_Request_Server.Network.Events.Auth
                         if (Crypter.CheckPassword(UserData[1], user.Password))
                         {
                             var UserNetwork = new MUserNetwork();
-                            UserNetwork.Id = NetworkClient.Id;
+                            UserNetwork.Id = user.Id;
+                            UserNetwork.NetworkId = NetworkClient.Id;
                             UserNetwork.Login = user.Login;
                             UserNetwork.Email = user.Email;
                             UserNetwork.Name = user.Name;

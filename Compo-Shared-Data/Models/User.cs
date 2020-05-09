@@ -27,5 +27,7 @@ namespace Compo_Shared_Data.Models
         public ICollection<TeamUser> TeamUsers { get; set; }
         [System.Xml.Serialization.XmlIgnore]
         public ICollection<TeamGroup> TeamGroups { get; set; }
+        [System.Xml.Serialization.XmlIgnore]
+        public ICollection<Project> Projects { get; set; }
     }
 }
