@@ -15,6 +15,7 @@ namespace Compo_Request_Server.Network.Database
 
         public DbSet<User> Users { get; set; }
         public DbSet<TeamGroup> TeamGroups { get; set; }
+        public DbSet<TeamUser> TeamUser { get; set; }
 
         public static void Setup(string DbHost, string DbUser, string DbPassword, string DbDatabase)
         {
@@ -33,6 +34,10 @@ namespace Compo_Request_Server.Network.Database
         {
             MBuilder.Entity<User>()
                 .HasIndex(u => new { u.Email, u.Login })
+                .IsUnique();
+
+            MBuilder.Entity<TeamGroup>()
+                .HasIndex(u => new { u.TeamUid })
                 .IsUnique();
         }
 

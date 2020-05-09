@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Compo_Request.Network.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -16,11 +17,36 @@ namespace Compo_Request.Windows.Projects
     /// <summary>
     /// Логика взаимодействия для ProjectsMainPage.xaml
     /// </summary>
-    public partial class ProjectsMainPage : Page
+    public partial class ProjectsMainPage : Page, ICustomPage
     {
         public ProjectsMainPage()
         {
             InitializeComponent();
+        }
+
+        public void ClosePage()
+        {
+            //
+        }
+
+        public void OpenPage()
+        {
+            //
+        }
+
+        private void ButtonClick_EditProject(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonClick_DeleteProject(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonClick_AddTeamToProject(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

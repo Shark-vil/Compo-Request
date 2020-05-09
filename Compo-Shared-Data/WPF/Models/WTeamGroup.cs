@@ -5,7 +5,7 @@ using System.Text;
 namespace Compo_Shared_Data.WPF.Models
 {
     [Serializable]
-    public class WpfTeamGroup
+    public class WTeamGroup
     {
         public int Id { get; set; }
         public string Title { get; set; }

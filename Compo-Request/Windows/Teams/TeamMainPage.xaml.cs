@@ -1,4 +1,5 @@
 ﻿using Compo_Request.Network.Client;
+using Compo_Request.Network.Interfaces;
 using Compo_Request.Network.Utilities;
 using Compo_Shared_Data.Debugging;
 using Compo_Shared_Data.Models;
@@ -6,20 +7,10 @@ using Compo_Shared_Data.Network;
 using Compo_Shared_Data.Network.Models;
 using Compo_Shared_Data.WPF.Models;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace Compo_Request.Windows.Teams
@@ -27,13 +18,15 @@ namespace Compo_Request.Windows.Teams
     /// <summary>
     /// Логика взаимодействия для TeamMainPage.xaml
     /// </summary>
-    public partial class TeamMainPage : Page
+    public partial class TeamMainPage : Page, ICustomPage
     {
         internal MainMenuWindow _MainMenuWindow;
         internal TeamAddPage _TeamAddPage;
+        internal TeamUserAddPage _TeamUserAddPage;
         internal TeamEditPage _TeamEditPage;
 
-        internal ObservableCollection<WpfTeamGroup> TeamGroups = new ObservableCollection<WpfTeamGroup>();
+        internal ObservableCollection<WTeamGroup> TeamGroups = new ObservableCollection<WTeamGroup>();
+        internal WTeamGroup[] DbTeamGroups;
 
         private DispatcherTimer ServerResponseDelay = null;
 
@@ -41,11 +34,74 @@ namespace Compo_Request.Windows.Teams
         {
             InitializeComponent();
             LoadWindowParent(_MainMenuWindow);
+            NetworkEvemtsLoad();
             EventsInitialize();
-            NetworkEventsLoad();
 
             DataGrid_Teams.ItemsSource = TeamGroups;
             Sender.SendToServer("TeamGroup.GetAll", default, 4);
+        }
+
+        private void NetworkEvemtsLoad()
+        {
+            /**
+             * Получение данных списка
+             */
+            NetworkDelegates.Add(delegate (MResponse ServerResponse) {
+
+                DbTeamGroups = Package.Unpacking<WTeamGroup[]>(ServerResponse.DataBytes);
+
+                foreach (var TGroup in DbTeamGroups)
+                    this.TeamGroups.Add(TGroup);
+
+            }, Dispatcher, 4, "TeamGroup.GetAll", "TeamMainPage");
+
+            /**
+             * Добавление элемента списка
+             */
+            NetworkDelegates.Add(delegate (MResponse ServerResponse)
+            {
+                var TGroup = Package.Unpacking<WTeamGroup>(ServerResponse.DataBytes);
+
+                TeamGroups.Add(TGroup);
+
+            }, Dispatcher, -1, "TeamGroup.Add.Confirm", "TeamMainPage");
+
+            /**
+             * Удаление элемента списка
+             */
+            NetworkDelegates.Add(delegate (MResponse ServerResponse) {
+
+                var TGroup = Package.Unpacking<WTeamGroup>(ServerResponse.DataBytes);
+
+                TeamGroups.Remove(TeamGroups.SingleOrDefault(t => t.Id == TGroup.Id));
+
+                DataGrid_Teams.IsEnabled = true;
+
+                if (ServerResponseDelay != null)
+                {
+                    ServerResponseDelay.Stop();
+                    ServerResponseDelay = null;
+                }
+
+            }, Dispatcher, -1, "TeamGroup.Delete.Confirm", "TeamMainPage");
+
+            /**
+             * Обновление списка
+             */
+            NetworkDelegates.Add(delegate (MResponse ServerResponse)
+            {
+                var TGroup = Package.Unpacking<WTeamGroup>(ServerResponse.DataBytes);
+                var TGroupItem = TeamGroups.FirstOrDefault(x => x.Id == TGroup.Id);
+
+                if (TGroupItem != null && TGroup != null)
+                {
+                    TGroupItem.Title = TGroup.Title;
+                    TGroupItem.TeamUid = TGroup.TeamUid;
+
+                    DataGridReload();
+                }
+
+            }, Dispatcher, -1, "TeamGroup.Update.Confirm", "TeamMainPage");
         }
 
         internal void DataGridReload()
@@ -58,74 +114,12 @@ namespace Compo_Request.Windows.Teams
             this._MainMenuWindow = _MainMenuWindow;
 
             _TeamAddPage = new TeamAddPage(this);
+            _TeamUserAddPage = new TeamUserAddPage(this);
         }
 
         private void EventsInitialize()
         {
             Button_AddTeamMenuOpen.Click += Button_AddTeamMenuOpen_Click;
-        }
-
-        private void NetworkEventsLoad()
-        {
-            /**
-             * Получение данных списка
-             */
-            NetworkDelegates.Add(delegate (MResponse ServerResponse) {
-
-                var TeamGroups = Package.Unpacking<WpfTeamGroup[]>(ServerResponse.DataBytes);
-
-                foreach (var TGroup in TeamGroups)
-                    this.TeamGroups.Add(TGroup);
-
-            }, Dispatcher, 4, "TeamGroup.GetAll");
-
-            /**
-             * Добавление элемента списка
-             */
-            NetworkDelegates.Add(delegate (MResponse ServerResponse)
-            {
-                var TGroup = Package.Unpacking<WpfTeamGroup>(ServerResponse.DataBytes);
-
-                TeamGroups.Add(TGroup);
-
-            }, Dispatcher, -1, "TeamGroup.Add.Confirm", "TeamMainPage");
-
-            /**
-             * Удаление элемента списка
-             */
-            NetworkDelegates.Add(delegate (MResponse ServerResponse) {
-
-                var TGroup = Package.Unpacking<WpfTeamGroup>(ServerResponse.DataBytes);
-
-                TeamGroups.Remove(TeamGroups.SingleOrDefault(t => t.Id == TGroup.Id));
-
-                DataGrid_Teams.IsEnabled = true;
-
-                if (ServerResponseDelay != null)
-                {
-                    ServerResponseDelay.Stop();
-                    ServerResponseDelay = null;
-                }
-
-            }, Dispatcher, -1, "TeamGroup.Delete.Confirm");
-
-            /**
-             * Обновление списка
-             */
-            NetworkDelegates.Add(delegate (MResponse ServerResponse)
-            {
-                var TGroup = Package.Unpacking<WpfTeamGroup>(ServerResponse.DataBytes);
-                var TGroupItem = TeamGroups.FirstOrDefault(x => x.Id == TGroup.Id);
-
-                if (TGroupItem != null && TGroup != null)
-                {
-                    TGroupItem.Title = TGroup.Title;
-                    TGroupItem.TeamUid = TGroup.TeamUid;
-
-                    DataGridReload();
-                }
-
-            }, Dispatcher, -1, "TeamGroup.Update.Confirm", "TeamEditPage");
         }
 
         private void Button_AddTeamMenuOpen_Click(object sender, RoutedEventArgs e)
@@ -135,14 +129,18 @@ namespace Compo_Request.Windows.Teams
 
         private void ButtonClick_AddUserToTeam(object sender, RoutedEventArgs e)
         {
+            WTeamGroup TGroup = (sender as Button).DataContext as WTeamGroup;
 
+            _TeamUserAddPage.TGroup = TGroup;
+            _MainMenuWindow.WindowLogic.SetPage(_TeamUserAddPage);
+            _TeamUserAddPage.UpdateData();
         }
 
         private void ButtonClick_EditTeamGroup(object sender, RoutedEventArgs e)
         {
-            WpfTeamGroup TGroup = (sender as Button).DataContext as WpfTeamGroup;
+            WTeamGroup TGroup = (sender as Button).DataContext as WTeamGroup;
 
-            _TeamEditPage = new TeamEditPage(this, TGroup.Id, TGroup.Title, TGroup.TeamUid);
+            _TeamEditPage = new TeamEditPage(this, TGroup);
             _MainMenuWindow.Frame_Main.Content = _TeamEditPage;
         }
 
@@ -150,7 +148,7 @@ namespace Compo_Request.Windows.Teams
         {
             new ConfirmWindow("Предупреждение", "Вы уверены что хотите удалить элемент?", delegate ()
             {
-                WpfTeamGroup TGroup = (sender as Button).DataContext as WpfTeamGroup;
+                WTeamGroup TGroup = (sender as Button).DataContext as WTeamGroup;
 
                 if (Sender.SendToServer("TeamGroup.Delete", TGroup))
                 {
@@ -166,6 +164,16 @@ namespace Compo_Request.Windows.Teams
                     }, new TimeSpan(0, 0, 5), true);
                 }
             });
+        }
+
+        public void OpenPage()
+        {
+            //
+        }
+
+        public void ClosePage()
+        {
+            //
         }
     }
 }

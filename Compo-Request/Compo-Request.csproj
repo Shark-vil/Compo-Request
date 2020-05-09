@@ -13,13 +13,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Compo-Shared-Data">
-      <HintPath>..\Compo-Shared-Data\bin\Debug\netcoreapp3.1\Compo-Shared-Data.dll</HintPath>
-    </Reference>
+    <Folder Include="Utilities\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Utilities\" />
+    <Reference Include="Compo-Shared-Data">
+      <HintPath>..\Compo-Shared-Data\bin\Debug\netcoreapp3.1\Compo-Shared-Data.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

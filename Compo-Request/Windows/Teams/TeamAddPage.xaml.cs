@@ -1,29 +1,16 @@
-﻿using Compo_Request.Network.Client;
+﻿using Compo_Request.Network.Interfaces;
 using Compo_Request.Network.Utilities;
-using Compo_Shared_Data.Debugging;
 using Compo_Shared_Data.Models;
-using Compo_Shared_Data.Network;
-using Compo_Shared_Data.Network.Models;
 using Compo_Shared_Data.WPF.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Compo_Request.Windows.Teams
 {
     /// <summary>
     /// Логика взаимодействия для TeamAddPage.xaml
     /// </summary>
-    public partial class TeamAddPage : Page
+    public partial class TeamAddPage : Page, ICustomPage
     {
         internal TeamMainPage _TeamMainPage;
 
@@ -52,18 +39,28 @@ namespace Compo_Request.Windows.Teams
 
         private void Button_TeamAdd_Click(object sender, RoutedEventArgs e)
         {
-            var TeamGroupEntity = new TeamGroup();
-            TeamGroupEntity.TeamUid = TextBox_TeamUid.Text;
-            TeamGroupEntity.Title = TextBox_TeamName.Text;
+            var TGroup = new WTeamGroup();
+            TGroup.TeamUid = TextBox_TeamUid.Text;
+            TGroup.Title = TextBox_TeamName.Text;
 
-            if (Sender.SendToServer("TeamGroup.Add", TeamGroupEntity))
+            if (Sender.SendToServer("TeamGroup.Add", TGroup))
             {
-                
+                new AlertWindow("Успех", "Упаковано");
             }
             else
             {
                 new AlertWindow("Ошибка", "Нихуя не вышло");
             }
+        }
+
+        public void OpenPage()
+        {
+            //
+        }
+
+        public void ClosePage()
+        {
+            //
         }
     }
 }

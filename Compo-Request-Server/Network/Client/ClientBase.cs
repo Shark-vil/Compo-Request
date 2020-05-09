@@ -38,7 +38,7 @@ namespace Compo_Request_Server.Network.Client
                         //bool isBreak = false;
                         bool IsCorrectKey = false;
 
-                        Debug.Log($"Новый запрос от клиента [{NetworkClient.Id} - {NetworkClient.Ip}:{NetworkClient.NetPoint}]: " +
+                        Debug.Log($"Новый запрос от клиента [{NetworkClient.Id} - {NetworkClient.NetPoint}]: " +
                             $"WindowUid - {ClientResponse.WindowUid}, KeyNetwork - {ClientResponse.KeyNetwork}");
 
                         foreach (var DataDelegate in NetworkDelegates.NetworkActions)

@@ -37,6 +37,14 @@
     <Compile Remove="Migrations\20200501020609_InitialDb.Designer.cs" />
     <Compile Remove="Migrations\20200501020709_InitialDb.cs" />
     <Compile Remove="Migrations\20200501020709_InitialDb.Designer.cs" />
+    <Compile Remove="Migrations\20200509003832_UpdateTeamGroup_UserId.cs" />
+    <Compile Remove="Migrations\20200509003832_UpdateTeamGroup_UserId.Designer.cs" />
+    <Compile Remove="Migrations\20200509004051_UpdateTeamGroup_UserId.cs" />
+    <Compile Remove="Migrations\20200509004051_UpdateTeamGroup_UserId.Designer.cs" />
+    <Compile Remove="Migrations\20200509004200_UpdateTeamGroup_UserId.cs" />
+    <Compile Remove="Migrations\20200509004200_UpdateTeamGroup_UserId.Designer.cs" />
+    <Compile Remove="Migrations\20200509004249_UpdateTeamGroup_UserId.cs" />
+    <Compile Remove="Migrations\20200509004249_UpdateTeamGroup_UserId.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

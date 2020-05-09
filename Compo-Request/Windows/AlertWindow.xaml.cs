@@ -22,6 +22,11 @@ namespace Compo_Request.Windows
         // Событие выполняющееся после закрытия окна
         private CloseEventDelegate CloseEvent;
 
+        public enum AlertCode
+        {
+            SendToServer = 0,
+        }
+
         /// <summary>
         /// Конструктор оповещения.
         /// </summary>
@@ -37,6 +42,23 @@ namespace Compo_Request.Windows
 
             this.Title = WindowName;
             TextBlock_Message.Text = Message;
+
+            this.Show();
+        }
+
+        public AlertWindow(string WindowName, AlertCode NAlertCode, CloseEventDelegate CloseEvent = null)
+        {
+            InitializeComponent();
+            EventsInitialize();
+
+            this.CloseEvent = CloseEvent;
+
+            this.Title = WindowName;
+
+
+            if (NAlertCode == AlertCode.SendToServer)
+                TextBlock_Message.Text = "Не удалось установить соединение с сервером. " +
+                    "Возможно сервер выключен, или у вас проблемы с интернет-соединением.";
 
             this.Show();
         }

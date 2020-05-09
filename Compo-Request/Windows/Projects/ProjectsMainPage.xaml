@@ -11,7 +11,7 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="50*"/>
+            <ColumnDefinition Width="25*"/>
             <ColumnDefinition Width="70*"/>
         </Grid.ColumnDefinitions>
 
@@ -22,30 +22,59 @@
         <Grid Margin="70,0,70,0" Height="150" VerticalAlignment="Center" Grid.Column="0">
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                    <Button Margin="20" Width="60" Height="60">
+                    <Button x:Name="Button_AddProjectMenuOpen"
+                        Margin="20" Width="60" Height="60">
                         <materialDesign:PackIcon Kind="Add"/>
                     </Button>
                     <TextBlock HorizontalAlignment="Center" Text="Добавить"/>
-                </StackPanel>
-                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                    <Button Margin="20" Width="60" Height="60">
-                        <materialDesign:PackIcon Kind="Edit"/>
-                    </Button>
-                    <TextBlock HorizontalAlignment="Center" Text="Редактировать"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
 
         <Grid Grid.Column="1">
-            <ListView Margin="15">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Width="50">Id</GridViewColumn>
-                        <GridViewColumn Width="100">Название</GridViewColumn>
-                        <GridViewColumn Width="190">Количество команд</GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+            <DataGrid x:Name="DataGrid_Teams"
+                    Margin="15" AutoGenerateColumns="False" 
+                    HorizontalGridLinesBrush="DarkGray" RowBackground="LightGray" AlternatingRowBackground="White"
+                    IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=Id}" Header="Id" Width="50"/>
+                    <DataGridTextColumn Binding="{Binding Path=Title}" Header="Название" Width="100"/>
+                    <DataGridTextColumn Binding="{Binding Path=Uid}" Header="Ключ" Width="100"/>
+                    <DataGridTemplateColumn Width="120" Header="Редактировать">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                                    <Button Click="ButtonClick_EditProject" Width="50" Height="50">
+                                        <materialDesign:PackIcon Kind="Edit"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="100" Header="Удалить">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                                    <Button Click="ButtonClick_DeleteProject" Width="50" Height="50">
+                                        <materialDesign:PackIcon Kind="Delete"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="100" Header="Команды">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                                    <Button Click="ButtonClick_AddTeamToProject" Width="50" Height="50">
+                                        <materialDesign:PackIcon Kind="PersonMultiple"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
     </Grid>
 </Page>

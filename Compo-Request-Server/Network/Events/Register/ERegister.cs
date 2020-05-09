@@ -34,7 +34,7 @@ namespace Compo_Request_Server.Network.Events.Register
             {
                 using (var db = new DatabaseContext())
                 {
-                    var user = Package.Unpacking<User>(ClientResponse.DataBytes);
+                    var user = Package.Unpacking<Compo_Shared_Data.Models.User>(ClientResponse.DataBytes);
 
                     if (db.Users.Where(u => u.Email == user.Email).FirstOrDefault() == null 
                         && db.Users.Where(u => u.Login == user.Login).FirstOrDefault() == null)

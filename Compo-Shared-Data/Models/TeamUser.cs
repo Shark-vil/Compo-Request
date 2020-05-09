@@ -12,11 +12,15 @@ namespace Compo_Shared_Data.Models
         [Key]
         [Required]
         public int Id { get; set; }
+
         [Required]
+        public int TeamGroupId { get; set; }
         [ForeignKey("TeamGroupId")]
         public TeamGroup TeamGroups { get; set; }
+
         [Required]
+        public int UserId { get; set; }
         [ForeignKey("UserId")]
-        public User Users { get; set; }
+        public User User { get; set; }
     }
 }

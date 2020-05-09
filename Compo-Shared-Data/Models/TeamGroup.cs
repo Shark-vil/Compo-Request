@@ -17,9 +17,11 @@ namespace Compo_Shared_Data.Models
         [Required]
         public string TeamUid { get; set; }
         [Required]
-        [ForeignKey("OwnerId")]
-        public User Users { get; set; }
+        public int UserId { get; set; }
+        [ForeignKey("UserId")]
+        public User User { get; set; }
 
+        [System.Xml.Serialization.XmlIgnore]
         public ICollection<TeamUser> TeamUsers { get; set; }
     }
 }
