@@ -116,6 +116,10 @@ namespace Compo_Request_Server.Network.Events.Team
                     var TGroup = Package.Unpacking<WTeamGroup>(ClientResponse.DataBytes);
 
                     TeamGroup DbTeamGroup = WpfConvertToBd.ConvertTeamGroup(db, TGroup);
+
+                    foreach (var TeamUser in db.TeamUser.Where(tu => tu.TeamGroupId == DbTeamGroup.Id).ToArray())
+                        db.TeamUser.Remove(TeamUser);
+
                     db.TeamGroups.Remove(DbTeamGroup);
                     db.SaveChanges();
 
