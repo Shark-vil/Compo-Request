@@ -21,6 +21,77 @@ namespace Compo_Request_Server.Network.Events.Projects
         {
             NetworkDelegates.Add(AddProject, "Project.Add");
             NetworkDelegates.Add(GetAllProjects, "Project.GetAll");
+            NetworkDelegates.Add(UpdateProject, "Project.Update");
+            NetworkDelegates.Add(DeleteProject, "Project.Delete");
+        }
+
+        private void DeleteProject(MResponse ClientResponse, MNetworkClient NetworkClient)
+        {
+            try
+            {
+                using (var db = new DatabaseContext())
+                {
+                    var MProject = Package.Unpacking<Project>(ClientResponse.DataBytes);
+
+                    db.Projects.Attach(MProject);
+                    db.Projects.Remove(MProject);
+                    db.SaveChanges();
+
+                    Debug.Log($"Команда удалена:\n" +
+                            $"Id - {MProject.Id}\n" +
+                            $"TeamUid - {MProject.Uid}\n" +
+                            $"Title - {MProject.Title}\n" +
+                            $"UserId - {MProject.UserId}", ConsoleColor.Magenta);
+
+                    Sender.Broadcast("Project.Delete.Confirm", MProject, ClientResponse.WindowUid);
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                Debug.LogError("Возникла ошибка при удалении команды из базы данных! Код ошибки:\n" + ex);
+
+                Sender.Send(NetworkClient, "Project.Delete.Error");
+            }
+        }
+
+        private void UpdateProject(MResponse ClientResponse, MNetworkClient NetworkClient)
+        {
+            try
+            {
+                using (var db = new DatabaseContext())
+                {
+                    var MProject = Package.Unpacking<Project>(ClientResponse.DataBytes);
+
+                    Project DbProject = db.Projects.Where(p => p.Id == MProject.Id).FirstOrDefault();
+
+                    Project DbProjectCache = new Project
+                    {
+                        Id = DbProject.Id,
+                        Uid = DbProject.Uid,
+                        Title = DbProject.Title,
+                        UserId = DbProject.UserId
+                    };
+
+                    DbProject.Uid = MProject.Uid;
+                    DbProject.Title = MProject.Title;
+
+                    db.SaveChanges();
+
+                    Debug.Log($"Информация о команде обновлена:\n" +
+                            $"Id - {DbProjectCache.Id} > {MProject.Id}\n" +
+                            $"TeamUid - {DbProjectCache.Uid} > {MProject.Uid}\n" +
+                            $"Title - {DbProjectCache.Title} > {MProject.Title}\n" +
+                            $"UserId - {DbProjectCache.UserId} > {MProject.UserId}", ConsoleColor.Magenta);
+
+                    Sender.Broadcast("Project.Update.Confirm", DbProject, ClientResponse.WindowUid);
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                Debug.LogError("Возникла ошибка при обновлении команды в базе данных! Код ошибки:\n" + ex);
+
+                Sender.Send(NetworkClient, "Project.Update.Error");
+            }
         }
 
         private void GetAllProjects(MResponse ClientResponse, MNetworkClient NetworkClient)
