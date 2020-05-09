@@ -24,7 +24,7 @@ namespace Compo_Request.Windows.Teams
             this.TGroup = TGroup;
 
             TextBox_TeamName.Text = TGroup.Title;
-            TextBox_TeamUid.Text = TGroup.TeamUid;
+            TextBox_TeamUid.Text = TGroup.Uid;
         }
 
         private void LoadWindowParent(TeamMainPage _TeamMainPage)
@@ -39,7 +39,7 @@ namespace Compo_Request.Windows.Teams
 
         private void Button_TeamUpdate_Click(object sender, RoutedEventArgs e)
         {
-            TGroup.TeamUid = TextBox_TeamUid.Text;
+            TGroup.Uid = TextBox_TeamUid.Text;
             TGroup.Title = TextBox_TeamName.Text;
 
             if (!Sender.SendToServer("TeamGroup.Update", TGroup))

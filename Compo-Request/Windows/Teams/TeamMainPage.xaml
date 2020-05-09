@@ -39,7 +39,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Path=Id}" Header="Id" Width="50"/>
                     <DataGridTextColumn Binding="{Binding Path=Title}" Header="Название" Width="100"/>
-                    <DataGridTextColumn Binding="{Binding Path=TeamUid}" Header="Ключ" Width="100"/>
+                    <DataGridTextColumn Binding="{Binding Path=Uid}" Header="Ключ" Width="100"/>
                     <DataGridTemplateColumn Width="120" Header="Редактировать">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

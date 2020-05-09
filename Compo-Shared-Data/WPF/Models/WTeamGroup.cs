@@ -9,7 +9,7 @@ namespace Compo_Shared_Data.WPF.Models
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public string TeamUid { get; set; }
+        public string Uid { get; set; }
         public int UserId { get; set; }
     }
 }

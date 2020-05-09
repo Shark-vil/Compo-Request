@@ -32,14 +32,14 @@ namespace Compo_Request_Server.Network.Events.Team
                 using (var db = new DatabaseContext())
                 {
                     var TeamData = Package.Unpacking<WTeamGroup>(ClientResponse.DataBytes);
-                    var TeamGroup = db.TeamGroups.Where(t => t.TeamUid == TeamData.TeamUid).FirstOrDefault();
+                    var TeamGroup = db.TeamGroups.Where(t => t.Uid == TeamData.Uid).FirstOrDefault();
 
                     if (TeamGroup == null)
                     {
                         var NetworkUser = Users.ActiveUsers.Find(x => x.NetworkId == NetworkClient.Id);
 
                         var DbTeamGroup = new TeamGroup();
-                        DbTeamGroup.TeamUid = TeamData.TeamUid;
+                        DbTeamGroup.Uid = TeamData.Uid;
                         DbTeamGroup.Title = TeamData.Title;
                         DbTeamGroup.User = db.Users.Where(u => u.Login == NetworkUser.Login).FirstOrDefault();
 
@@ -48,7 +48,7 @@ namespace Compo_Request_Server.Network.Events.Team
 
                         Debug.Log($"В базу данных добавлена новая команда:\n" +
                             $"Id - {DbTeamGroup.Id}\n" +
-                            $"TeamUid - {DbTeamGroup.TeamUid}\n" +
+                            $"Uid - {DbTeamGroup.Uid}\n" +
                             $"Title - {DbTeamGroup.Title}\n" + 
                             $"UserId - {DbTeamGroup.UserId}", ConsoleColor.Magenta);
 
@@ -80,19 +80,19 @@ namespace Compo_Request_Server.Network.Events.Team
                     TeamGroup DbTeamGroupCache = new TeamGroup
                     {
                         Id = DbTeamGroup.Id,
-                        TeamUid = DbTeamGroup.TeamUid,
+                        Uid = DbTeamGroup.Uid,
                         Title = DbTeamGroup.Title,
                         UserId = DbTeamGroup.UserId
                     };
 
-                    DbTeamGroup.TeamUid = TGroup.TeamUid;
+                    DbTeamGroup.Uid = TGroup.Uid;
                     DbTeamGroup.Title = TGroup.Title;
 
                     db.SaveChanges();
 
                     Debug.Log($"Информация о команде обновлена:\n" +
                             $"Id - {DbTeamGroupCache.Id} > {DbTeamGroup.Id}\n" +
-                            $"TeamUid - {DbTeamGroupCache.TeamUid} > {DbTeamGroup.TeamUid}\n" +
+                            $"TeamUid - {DbTeamGroupCache.Uid} > {DbTeamGroup.Uid}\n" +
                             $"Title - {DbTeamGroupCache.Title} > {DbTeamGroup.Title}\n" +
                             $"UserId - {DbTeamGroupCache.UserId} > {DbTeamGroup.UserId}", ConsoleColor.Magenta);
 
@@ -125,7 +125,7 @@ namespace Compo_Request_Server.Network.Events.Team
 
                     Debug.Log($"Команда удалена:\n" +
                             $"Id - {DbTeamGroup.Id}\n" +
-                            $"TeamUid - {DbTeamGroup.TeamUid}\n" +
+                            $"TeamUid - {DbTeamGroup.Uid}\n" +
                             $"Title - {DbTeamGroup.Title}\n" +
                             $"UserId - {DbTeamGroup.UserId}", ConsoleColor.Magenta);
 

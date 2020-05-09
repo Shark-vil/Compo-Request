@@ -96,7 +96,7 @@ namespace Compo_Request.Windows.Teams
                 if (TGroupItem != null && TGroup != null)
                 {
                     TGroupItem.Title = TGroup.Title;
-                    TGroupItem.TeamUid = TGroup.TeamUid;
+                    TGroupItem.Uid = TGroup.Uid;
 
                     DataGridReload();
                 }

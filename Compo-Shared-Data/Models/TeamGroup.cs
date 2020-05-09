@@ -15,7 +15,7 @@ namespace Compo_Shared_Data.Models
         [Required]
         public string Title { get; set; }
         [Required]
-        public string TeamUid { get; set; }
+        public string Uid { get; set; }
         [Required]
         public int UserId { get; set; }
         [ForeignKey("UserId")]
