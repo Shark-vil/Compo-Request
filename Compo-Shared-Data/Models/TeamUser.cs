@@ -16,11 +16,13 @@ namespace Compo_Shared_Data.Models
         [Required]
         public int TeamGroupId { get; set; }
         [ForeignKey("TeamGroupId")]
+        [System.Xml.Serialization.XmlIgnore]
         public TeamGroup TeamGroups { get; set; }
 
         [Required]
         public int UserId { get; set; }
         [ForeignKey("UserId")]
+        [System.Xml.Serialization.XmlIgnore]
         public User User { get; set; }
     }
 }
