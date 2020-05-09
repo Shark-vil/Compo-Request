@@ -17,6 +17,7 @@ namespace Compo_Request_Server.Network.Database
         public DbSet<TeamGroup> TeamGroups { get; set; }
         public DbSet<TeamUser> TeamUser { get; set; }
         public DbSet<Project> Projects { get; set; }
+        public DbSet<TeamProject> TeamProjects { get; set; }
 
         public static void Setup(string DbHost, string DbUser, string DbPassword, string DbDatabase)
         {

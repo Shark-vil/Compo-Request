@@ -2,14 +2,16 @@
 using Compo_Request_Server.Network.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Compo_Request_Server.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20200509230650_AddTableTeamProject")]
+    partial class AddTableTeamProject
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -152,7 +154,7 @@ namespace Compo_Request_Server.Migrations
             modelBuilder.Entity("Compo_Shared_Data.Models.Project", b =>
                 {
                     b.HasOne("Compo_Shared_Data.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Projects")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -161,7 +163,7 @@ namespace Compo_Request_Server.Migrations
             modelBuilder.Entity("Compo_Shared_Data.Models.TeamGroup", b =>
                 {
                     b.HasOne("Compo_Shared_Data.Models.User", "User")
-                        .WithMany()
+                        .WithMany("TeamGroups")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -185,13 +187,13 @@ namespace Compo_Request_Server.Migrations
             modelBuilder.Entity("Compo_Shared_Data.Models.TeamUser", b =>
                 {
                     b.HasOne("Compo_Shared_Data.Models.TeamGroup", "TeamGroups")
-                        .WithMany()
+                        .WithMany("TeamUsers")
                         .HasForeignKey("TeamGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Compo_Shared_Data.Models.User", "User")
-                        .WithMany()
+                        .WithMany("TeamUsers")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
