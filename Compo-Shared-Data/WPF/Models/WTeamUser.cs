@@ -18,4 +18,11 @@ namespace Compo_Shared_Data.WPF.Models
         public WTeamUser[] TeamUsers;
         public WUser[] Users;
     }
+
+    [Serializable]
+    public class WTeamUserTeamId
+    {
+        public int TeamGroupId;
+        public WUser[] Users;
+    }
 }

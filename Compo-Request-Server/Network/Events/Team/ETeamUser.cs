@@ -30,9 +30,9 @@ namespace Compo_Request_Server.Network.Events.Team
             {
                 using (var db = new DatabaseContext())
                 {
-                    var Users = Package.Unpacking<WUser[]>(ClientResponse.DataBytes);
+                    var TeamUserTeamId = Package.Unpacking<WTeamUserTeamId>(ClientResponse.DataBytes);
 
-                    foreach (var User in Users)
+                    foreach (var User in TeamUserTeamId.Users)
                     {
                         TeamUser DbTeamUser = new TeamUser
                         {
@@ -40,7 +40,7 @@ namespace Compo_Request_Server.Network.Events.Team
                             TeamGroupId = User.TeamGroupId
                         };
 
-                        if (db.TeamUser.Where(tu => 
+                        if (db.TeamUser.Where(tu =>
                             tu.TeamGroupId == DbTeamUser.TeamGroupId && tu.UserId == DbTeamUser.UserId)
                             .FirstOrDefault() != null)
                         {
@@ -51,15 +51,24 @@ namespace Compo_Request_Server.Network.Events.Team
                         db.SaveChanges();
                     }
 
-                    var DbTeamUsers = db.TeamUser.ToArray();
+                    var DbTeamUsers = db.TeamUser.Where(tu =>
+                        tu.TeamGroupId == TeamUserTeamId.TeamGroupId).ToArray();
 
                     List<TeamUser> RemoveTeamUsers = new List<TeamUser>();
                     foreach (var DbTeamUser in DbTeamUsers)
                     {
                         bool IsContinue = false;
-                        foreach (var User in Users)
+                        foreach (var User in TeamUserTeamId.Users)
                         {
-                            if (User.Id == DbTeamUser.UserId && User.TeamGroupId == DbTeamUser.TeamGroupId)
+                            /*
+                            if (User.TeamGroupId != DbTeamUser.TeamGroupId)
+                            {
+                                IsContinue = true;
+                                break;
+                            }
+                            */
+
+                            if (User.Id == DbTeamUser.UserId)
                             {
                                 IsContinue = true;
                                 break;
@@ -78,7 +87,8 @@ namespace Compo_Request_Server.Network.Events.Team
                         db.SaveChanges();
                     }
 
-                    Sender.Broadcast("TeamUser.Save.Confirm", Users);
+                    Sender.Broadcast("TeamUser.Save.Confirm", 
+                        db.TeamUser.Where(tu => tu.TeamGroupId == TeamUserTeamId.TeamGroupId).ToArray());
                 }
             }
             catch(DbUpdateException ex)

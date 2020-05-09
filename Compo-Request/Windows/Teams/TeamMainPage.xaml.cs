@@ -131,9 +131,11 @@ namespace Compo_Request.Windows.Teams
         {
             TeamGroup TGroup = (sender as Button).DataContext as TeamGroup;
 
+            _TeamUserAddPage.ClosePage();
+            _TeamUserAddPage = new TeamUserAddPage(this);
             _TeamUserAddPage.TGroup = TGroup;
             _MainMenuWindow.WindowLogic.SetPage(_TeamUserAddPage);
-            _TeamUserAddPage.UpdateData();
+            //_TeamUserAddPage.UpdateData();
         }
 
         private void ButtonClick_EditTeamGroup(object sender, RoutedEventArgs e)
