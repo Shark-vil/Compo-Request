@@ -13,9 +13,9 @@ namespace Compo_Request.Windows.Teams
     public partial class TeamEditPage : Page
     {
         internal TeamMainPage _TeamMainPage;
-        private WTeamGroup TGroup;
+        private TeamGroup TGroup;
 
-        public TeamEditPage(TeamMainPage _TeamMainPage, WTeamGroup TGroup)
+        public TeamEditPage(TeamMainPage _TeamMainPage, TeamGroup TGroup)
         {
             InitializeComponent();
             LoadWindowParent(_TeamMainPage);

@@ -99,7 +99,7 @@ namespace Compo_Request_Server.Network.Events.Team
 
                     Debug.Log($"Получен список пользователей из базы данных в количестве {UsersDb.Length} записей.", ConsoleColor.Magenta);
 
-                    var TGroup = Package.Unpacking<WTeamGroup>(ClientResponse.DataBytes);
+                    var TGroup = Package.Unpacking<TeamGroup>(ClientResponse.DataBytes);
                     var TeamUsersDb = db.TeamUser.Where(t => t.TeamGroupId == TGroup.Id).ToArray();
 
                     Debug.Log($"Получен список команд и пользователей из базы данных в количестве {TeamUsersDb.Length} записей.", ConsoleColor.Magenta);

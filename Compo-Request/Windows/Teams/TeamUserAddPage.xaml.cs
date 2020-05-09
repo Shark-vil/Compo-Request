@@ -21,7 +21,7 @@ namespace Compo_Request.Windows.Teams
     public partial class TeamUserAddPage : Page, ICustomPage
     {
         private TeamMainPage _TeamMainPage;
-        internal WTeamGroup TGroup;
+        internal TeamGroup TGroup;
 
         internal ObservableCollection<WUser> UsersNotTeam = new ObservableCollection<WUser>();
         internal ObservableCollection<WUser> UsersOnTeam = new ObservableCollection<WUser>();

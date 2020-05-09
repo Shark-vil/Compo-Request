@@ -39,7 +39,7 @@ namespace Compo_Request.Windows.Teams
 
         private void Button_TeamAdd_Click(object sender, RoutedEventArgs e)
         {
-            var TGroup = new WTeamGroup();
+            var TGroup = new TeamGroup();
             TGroup.Uid = TextBox_TeamUid.Text;
             TGroup.Title = TextBox_TeamName.Text;
 
