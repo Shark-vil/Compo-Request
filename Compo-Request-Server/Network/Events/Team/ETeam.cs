@@ -31,25 +31,28 @@ namespace Compo_Request_Server.Network.Events.Team
             {
                 using (var db = new DatabaseContext())
                 {
-                    var MTeamGroup = Package.Unpacking<TeamGroup>(ClientResponse.DataBytes);
-                    var TeamGroup = db.TeamGroups.FirstOrDefault(t => t.Uid == MTeamGroup.Uid);
+                    var TeamData = Package.Unpacking<WTeamGroup>(ClientResponse.DataBytes);
+                    var TeamGroup = db.TeamGroups.Where(t => t.TeamUid == TeamData.TeamUid).FirstOrDefault();
 
                     if (TeamGroup == null)
                     {
                         var NetworkUser = Users.ActiveUsers.Find(x => x.NetworkId == NetworkClient.Id);
 
-                        MTeamGroup.User = db.Users.Where(u => u.Login == NetworkUser.Login).FirstOrDefault();
+                        var DbTeamGroup = new TeamGroup();
+                        DbTeamGroup.TeamUid = TeamData.TeamUid;
+                        DbTeamGroup.Title = TeamData.Title;
+                        DbTeamGroup.User = db.Users.Where(u => u.Login == NetworkUser.Login).FirstOrDefault();
 
-                        db.TeamGroups.Add(MTeamGroup);
+                        db.TeamGroups.Add(DbTeamGroup);
                         db.SaveChanges();
 
                         Debug.Log($"В базу данных добавлена новая команда:\n" +
-                            $"Id - {MTeamGroup.Id}\n" +
-                            $"Uid - {MTeamGroup.Uid}\n" +
-                            $"Title - {MTeamGroup.Title}\n" + 
-                            $"UserId - {MTeamGroup.UserId}", ConsoleColor.Magenta);
+                            $"Id - {DbTeamGroup.Id}\n" +
+                            $"TeamUid - {DbTeamGroup.TeamUid}\n" +
+                            $"Title - {DbTeamGroup.Title}\n" + 
+                            $"UserId - {DbTeamGroup.UserId}", ConsoleColor.Magenta);
 
-                        Sender.Broadcast("TeamGroup.Add.Confirm", MTeamGroup);
+                        Sender.Broadcast("TeamGroup.Add.Confirm", DbConvertToWpf.ConvertTeamGroup(DbTeamGroup));
                         return;
                     }
 
@@ -71,30 +74,29 @@ namespace Compo_Request_Server.Network.Events.Team
             {
                 using (var db = new DatabaseContext())
                 {
-                    var MTeamGroup = Package.Unpacking<TeamGroup>(ClientResponse.DataBytes);
-                    TeamGroup DbTeamGroup = db.TeamGroups.FirstOrDefault(t => t.Id == MTeamGroup.Id);
+                    var TGroup = Package.Unpacking<WTeamGroup>(ClientResponse.DataBytes);
 
+                    TeamGroup DbTeamGroup = WpfConvertToBd.ConvertTeamGroup(db, TGroup);
                     TeamGroup DbTeamGroupCache = new TeamGroup
                     {
                         Id = DbTeamGroup.Id,
+                        TeamUid = DbTeamGroup.TeamUid,
                         Title = DbTeamGroup.Title,
-                        Uid = DbTeamGroup.Uid,
                         UserId = DbTeamGroup.UserId
                     };
 
-
-                    DbTeamGroup.Uid = MTeamGroup.Uid;
-                    DbTeamGroup.Title = MTeamGroup.Title;
+                    DbTeamGroup.TeamUid = TGroup.TeamUid;
+                    DbTeamGroup.Title = TGroup.Title;
 
                     db.SaveChanges();
 
                     Debug.Log($"Информация о команде обновлена:\n" +
                             $"Id - {DbTeamGroupCache.Id} > {DbTeamGroup.Id}\n" +
-                            $"TeamUid - {DbTeamGroupCache.Uid} > {DbTeamGroup.Uid}\n" +
+                            $"TeamUid - {DbTeamGroupCache.TeamUid} > {DbTeamGroup.TeamUid}\n" +
                             $"Title - {DbTeamGroupCache.Title} > {DbTeamGroup.Title}\n" +
                             $"UserId - {DbTeamGroupCache.UserId} > {DbTeamGroup.UserId}", ConsoleColor.Magenta);
 
-                    Sender.Broadcast("TeamGroup.Update.Confirm", DbTeamGroup);
+                    Sender.Broadcast("TeamGroup.Update.Confirm", TGroup, ClientResponse.WindowUid);
                 }
             }
             catch(DbUpdateException ex)
@@ -111,22 +113,23 @@ namespace Compo_Request_Server.Network.Events.Team
             {
                 using (var db = new DatabaseContext())
                 {
-                    var MTeamGroup = Package.Unpacking<TeamGroup>(ClientResponse.DataBytes);
+                    var TGroup = Package.Unpacking<WTeamGroup>(ClientResponse.DataBytes);
 
-                    foreach (var TeamUser in db.TeamUser.Where(tu => tu.TeamGroupId == MTeamGroup.Id).ToArray())
+                    TeamGroup DbTeamGroup = WpfConvertToBd.ConvertTeamGroup(db, TGroup);
+
+                    foreach (var TeamUser in db.TeamUser.Where(tu => tu.TeamGroupId == DbTeamGroup.Id).ToArray())
                         db.TeamUser.Remove(TeamUser);
 
-                    db.TeamGroups.Attach(MTeamGroup);
-                    db.TeamGroups.Remove(MTeamGroup);
+                    db.TeamGroups.Remove(DbTeamGroup);
                     db.SaveChanges();
 
                     Debug.Log($"Команда удалена:\n" +
-                            $"Id - {MTeamGroup.Id}\n" +
-                            $"TeamUid - {MTeamGroup.Uid}\n" +
-                            $"Title - {MTeamGroup.Title}\n" +
-                            $"UserId - {MTeamGroup.UserId}", ConsoleColor.Magenta);
+                            $"Id - {DbTeamGroup.Id}\n" +
+                            $"TeamUid - {DbTeamGroup.TeamUid}\n" +
+                            $"Title - {DbTeamGroup.Title}\n" +
+                            $"UserId - {DbTeamGroup.UserId}", ConsoleColor.Magenta);
 
-                    Sender.Broadcast("TeamGroup.Delete.Confirm", MTeamGroup);
+                    Sender.Broadcast("TeamGroup.Delete.Confirm", TGroup, ClientResponse.WindowUid);
                 }
             }
             catch (DbUpdateException ex)
@@ -147,7 +150,8 @@ namespace Compo_Request_Server.Network.Events.Team
 
                     Debug.Log($"Получен список команд из базы данных в количестве {TeamGroupsDb.Length} записей.", ConsoleColor.Magenta);
 
-                    Sender.Send(NetworkClient, "TeamGroup.GetAll", TeamGroupsDb, ClientResponse.WindowUid);
+                    Sender.Send(NetworkClient, "TeamGroup.GetAll",
+                        DbConvertToWpf.ConvertTeamGroup(TeamGroupsDb), ClientResponse.WindowUid);
                 }
             }
             catch(Exception ex)

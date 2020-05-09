@@ -15,15 +15,14 @@ namespace Compo_Shared_Data.Models
         [Required]
         public string Title { get; set; }
         [Required]
-        public string Uid { get; set; }
+        public string TeamUid { get; set; }
         [Required]
         public int UserId { get; set; }
         [ForeignKey("UserId")]
         [System.Xml.Serialization.XmlIgnore]
         public User User { get; set; }
-        /*
+
         [System.Xml.Serialization.XmlIgnore]
         public ICollection<TeamUser> TeamUsers { get; set; }
-        */
     }
 }

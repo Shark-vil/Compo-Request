@@ -38,11 +38,7 @@ namespace Compo_Request_Server.Network.Database
                 .IsUnique();
 
             MBuilder.Entity<TeamGroup>()
-                .HasIndex(u => new { u.Uid })
-                .IsUnique();
-
-            MBuilder.Entity<Project>()
-                .HasIndex(u => new { u.Uid })
+                .HasIndex(u => new { u.TeamUid })
                 .IsUnique();
         }
 

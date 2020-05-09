@@ -15,7 +15,7 @@ namespace Compo_Request_Server.Network.Utilities
             {
                 Id = DbTeamGroup.Id,
                 Title = DbTeamGroup.Title,
-                TeamUid = DbTeamGroup.Uid
+                TeamUid = DbTeamGroup.TeamUid
             };
         }
 
