@@ -25,6 +25,9 @@ namespace Compo_Request.Windows
         public enum AlertCode
         {
             SendToServer = 0,
+            AddConfirm = 1,
+            UpdateConfirm = 2,
+            DeleteConfirm = 3,
         }
 
         /// <summary>
@@ -59,6 +62,12 @@ namespace Compo_Request.Windows
             if (NAlertCode == AlertCode.SendToServer)
                 TextBlock_Message.Text = "Не удалось установить соединение с сервером. " +
                     "Возможно сервер выключен, или у вас проблемы с интернет-соединением.";
+            else if (NAlertCode == AlertCode.AddConfirm)
+                TextBlock_Message.Text = "Данные успешно добавлены.";
+            else if (NAlertCode == AlertCode.UpdateConfirm)
+                TextBlock_Message.Text = "Данные успешно обновлены.";
+            else if (NAlertCode == AlertCode.DeleteConfirm)
+                TextBlock_Message.Text = "Данные успешно удалены.";
 
             this.Show();
         }

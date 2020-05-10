@@ -21,6 +21,25 @@ namespace Compo_Request.Windows.Projects
         public ProjectTeamAddPage()
         {
             InitializeComponent();
+
+            Button_NextTeam.Click += Button_NextTeam_Click;
+            Button_BeforeTeam.Click += Button_BeforeTeam_Click;
+            Button_ProjectSave.Click += Button_ProjectSave_Click;
+        }
+
+        private void Button_ProjectSave_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Button_BeforeTeam_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void Button_NextTeam_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿<Page x:Class="Compo_Request.Windows.Projects.ProjectTeamAddPage"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -9,6 +10,56 @@
       Title="ProjectTeamAddPage">
 
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70*"/>
+            <ColumnDefinition Width="15*"/>
+            <ColumnDefinition Width="73*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Margin="25,25,25,25" Grid.Column="0">
+            <DataGrid x:Name="DataGrid_Teams"
+                    AutoGenerateColumns="False" SelectionMode="Extended" SelectionUnit="FullRow"
+                    HorizontalGridLinesBrush="DarkGray" RowBackground="LightGray" AlternatingRowBackground="White"
+                    CanUserAddRows="False">
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Binding="{Binding Path=IsSelected, 
+                        NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged }" Header="X" Width="40"/>
+                    <DataGridTextColumn IsReadOnly="true" Binding="{Binding Path=Id}" Header="Id" Width="50"/>
+                    <DataGridTextColumn IsReadOnly="true" Binding="{Binding Path=Title}" Header="Название" Width="100"/>
+                    <DataGridTextColumn IsReadOnly="true" Binding="{Binding Path=Uid}" Header="Ключ" Width="100"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+        <Grid VerticalAlignment="Center" Grid.Column="1">
+            <StackPanel Orientation="Vertical">
+                <Button x:Name="Button_NextTeam"
+                    Margin="0, 0, 0, 10" Width="60" Height="30">
+                    <materialDesign:PackIcon Kind="NavigateNext"/>
+                </Button>
+                <Button x:Name="Button_ProjectSave"
+                    Margin="0, 0, 0, 10" Width="60" Height="30">
+                    <materialDesign:PackIcon Kind="ContentSave"/>
+                </Button>
+                <Button x:Name="Button_BeforeTeam"
+                    Margin="0, 0, 0, 10" Width="60" Height="30">
+                    <materialDesign:PackIcon Kind="NavigateBefore"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid Margin="25,25,25,25" Grid.Column="2">
+            <DataGrid x:Name="DataGrid_TeamsOnProject"
+                    AutoGenerateColumns="False" SelectionMode="Extended" SelectionUnit="FullRow"
+                    HorizontalGridLinesBrush="DarkGray" RowBackground="LightGray" AlternatingRowBackground="White"
+                    CanUserAddRows="False">
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Binding="{Binding Path=IsSelected, 
+                        NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged }" Header="X" Width="40"/>
+                    <DataGridTextColumn IsReadOnly="true" Binding="{Binding Path=Id}" Header="Id" Width="50"/>
+                    <DataGridTextColumn IsReadOnly="true" Binding="{Binding Path=Title}" Header="Название" Width="100"/>
+                    <DataGridTextColumn IsReadOnly="true" Binding="{Binding Path=Uid}" Header="Ключ" Width="100"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </Grid>
 </Page>

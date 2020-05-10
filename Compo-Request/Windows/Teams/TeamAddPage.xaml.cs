@@ -45,7 +45,7 @@ namespace Compo_Request.Windows.Teams
 
             if (!Sender.SendToServer("TeamGroup.Add", TGroup))
             {
-                new AlertWindow("Ошибка", "Нихуя не вышло");
+                new AlertWindow("Ошибка", AlertWindow.AlertCode.SendToServer);
             }
         }
 

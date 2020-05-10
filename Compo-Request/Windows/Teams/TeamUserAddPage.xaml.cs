@@ -42,16 +42,19 @@ namespace Compo_Request.Windows.Teams
 
         private void Button_TeamSave_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            var TeamUserTeamId = new WTeamUserTeamId
+            new ConfirmWindow("Предупреждение", "Вы уверены что хотите сохранить изменения?", delegate ()
             {
-                TeamGroupId = TGroup.Id,
-                Users = UsersOnTeam.ToArray()
-            };
+                var TeamUserTeamId = new WTeamUserTeamId
+                {
+                    TeamGroupId = TGroup.Id,
+                    Users = UsersOnTeam.ToArray()
+                };
 
-            if (Sender.SendToServer("TeamUser.Save", TeamUserTeamId))
-            {
-
-            }
+                if (!Sender.SendToServer("TeamUser.Save", TeamUserTeamId))
+                {
+                    new AlertWindow("Ошибка", AlertWindow.AlertCode.SendToServer);
+                }
+            });
         }
 
         private void Button_BeforeUser_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -125,6 +128,11 @@ namespace Compo_Request.Windows.Teams
                     }
 
             }, Dispatcher, 6, "TeamUser.Get", "TeamUserAddPage");
+
+            NetworkDelegates.Add(delegate (MResponse ServerResponse)
+            {
+                new AlertWindow("Оповещение", AlertWindow.AlertCode.UpdateConfirm);
+            }, Dispatcher, 6, "TeamUser.Save.Confirm", "TeamUserAddPage");
 
             //CustomTimer.Create(delegate (object sender, EventArgs e)
             //{
