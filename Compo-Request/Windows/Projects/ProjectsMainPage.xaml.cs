@@ -1,6 +1,7 @@
 ﻿using Compo_Request.Network.Client;
 using Compo_Request.Network.Interfaces;
 using Compo_Request.Network.Utilities;
+using Compo_Request.Windows.Editor;
 using Compo_Shared_Data.Debugging;
 using Compo_Shared_Data.Models;
 using Compo_Shared_Data.Network;
@@ -190,7 +191,11 @@ namespace Compo_Request.Windows.Projects
 
         private void ButtonClick_OpenProject(object sender, RoutedEventArgs e)
         {
+            Project MProject = (sender as Button).DataContext as Project;
+            MProject = Projects.Where(p => p.Uid == MProject.Uid).FirstOrDefault();
 
+            var EditorWindow = new EditorMainMenuWindow(_MainMenuWindow, MProject);
+            EditorWindow.Show();
         }
 
         public void ClosePage()
