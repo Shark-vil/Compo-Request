@@ -64,7 +64,8 @@ namespace Compo_Request.Windows.Teams
 
                 TeamGroups.Add(TGroup);
 
-                new AlertWindow("Оповещение", AlertWindow.AlertCode.AddConfirm);
+                if (_MainMenuWindow.IsActive)
+                    new AlertWindow("Оповещение", AlertWindow.AlertCode.AddConfirm);
 
             }, Dispatcher, -1, "TeamGroup.Add.Confirm", "TeamMainPage");
 
@@ -85,7 +86,8 @@ namespace Compo_Request.Windows.Teams
                     ServerResponseDelay = null;
                 }
 
-                new AlertWindow("Оповещение", AlertWindow.AlertCode.DeleteConfirm);
+                if (_MainMenuWindow.IsActive)
+                    new AlertWindow("Оповещение", AlertWindow.AlertCode.DeleteConfirm);
 
             }, Dispatcher, -1, "TeamGroup.Delete.Confirm", "TeamMainPage");
 
@@ -104,7 +106,8 @@ namespace Compo_Request.Windows.Teams
 
                     DataGridReload();
 
-                    new AlertWindow("Оповещение", AlertWindow.AlertCode.UpdateConfirm);
+                    if (_MainMenuWindow.IsActive)
+                        new AlertWindow("Оповещение", AlertWindow.AlertCode.UpdateConfirm);
                 }
 
             }, Dispatcher, -1, "TeamGroup.Update.Confirm", "TeamMainPage");

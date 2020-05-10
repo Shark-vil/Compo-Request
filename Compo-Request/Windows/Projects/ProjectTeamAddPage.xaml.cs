@@ -29,16 +29,18 @@ namespace Compo_Request.Windows.Projects
     /// </summary>
     public partial class ProjectTeamAddPage : Page, ICustomPage
     {
-        internal Project MProject;
+        private Project MProject;
+        private ProjectsMainPage _ProjectsMainPage;
 
         internal ObservableCollection<WTeamGroup> NotTeamGroup = new ObservableCollection<WTeamGroup>();
         internal ObservableCollection<WTeamGroup> OnTeamGroup = new ObservableCollection<WTeamGroup>();
 
-        public ProjectTeamAddPage(Project MProject)
+        public ProjectTeamAddPage(ProjectsMainPage _ProjectsMainPage, Project MProject)
         {
             InitializeComponent();
 
             this.MProject = MProject;
+            this._ProjectsMainPage = _ProjectsMainPage;
 
             Button_NextTeam.Click += Button_NextTeam_Click;
             Button_BeforeTeam.Click += Button_BeforeTeam_Click;
@@ -133,7 +135,9 @@ namespace Compo_Request.Windows.Projects
 
             NetworkDelegates.Add(delegate (MResponse ServerResponse)
             {
-                new AlertWindow("Оповещение", AlertWindow.AlertCode.UpdateConfirm);
+                if (_ProjectsMainPage._MainMenuWindow.IsActive)
+                    new AlertWindow("Оповещение", AlertWindow.AlertCode.UpdateConfirm);
+
             }, Dispatcher, -1, "TeamProject.Save.Confirm", "ProjectTeamAddPage");
 
             Sender.SendToServer("TeamProject.Get", MProject, 8);

@@ -124,7 +124,9 @@ namespace Compo_Request.Windows.Teams
 
             NetworkDelegates.Add(delegate (MResponse ServerResponse)
             {
-                new AlertWindow("Оповещение", AlertWindow.AlertCode.UpdateConfirm);
+                if (_TeamMainPage._MainMenuWindow.IsActive)
+                    new AlertWindow("Оповещение", AlertWindow.AlertCode.UpdateConfirm);
+
             }, Dispatcher, -1, "TeamUser.Save.Confirm", "TeamUserAddPage");
 
             Sender.SendToServer("TeamUser.Get", TGroup, 6);

@@ -80,7 +80,8 @@ namespace Compo_Request.Windows.Projects
 
                 Projects.Add(DbProject);
 
-                new AlertWindow("Оповещение", AlertWindow.AlertCode.AddConfirm);
+                if (_MainMenuWindow.IsActive)
+                    new AlertWindow("Оповещение", AlertWindow.AlertCode.AddConfirm);
 
             }, Dispatcher, -1, "Project.Add.Confirm", "ProjectsMainPage");
 
@@ -101,7 +102,8 @@ namespace Compo_Request.Windows.Projects
                     ServerResponseDelay = null;
                 }
 
-                new AlertWindow("Оповещение", AlertWindow.AlertCode.DeleteConfirm);
+                if (_MainMenuWindow.IsActive)
+                    new AlertWindow("Оповещение", AlertWindow.AlertCode.DeleteConfirm);
 
             }, Dispatcher, -1, "Project.Delete.Confirm", "ProjectsMainPage");
 
@@ -120,7 +122,8 @@ namespace Compo_Request.Windows.Projects
 
                     DataGrid_Projects.Items.Refresh();
 
-                    new AlertWindow("Оповещение", AlertWindow.AlertCode.UpdateConfirm);
+                    if (_MainMenuWindow.IsActive)
+                        new AlertWindow("Оповещение", AlertWindow.AlertCode.UpdateConfirm);
                 }
 
             }, Dispatcher, -1, "Project.Update.Confirm", "TeamMainPage");
@@ -180,7 +183,7 @@ namespace Compo_Request.Windows.Projects
             if (_ProjectTeamAddPage != null)
                 _ProjectTeamAddPage.ClosePage();
 
-            _ProjectTeamAddPage = new ProjectTeamAddPage(MProject);
+            _ProjectTeamAddPage = new ProjectTeamAddPage(this, MProject);
             _MainMenuWindow.Frame_Main.Content = _ProjectTeamAddPage;
             _ProjectTeamAddPage.OpenPage();
         }
