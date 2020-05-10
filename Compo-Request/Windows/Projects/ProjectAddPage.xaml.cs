@@ -44,7 +44,7 @@ namespace Compo_Request.Windows.Projects
 
             if (!Sender.SendToServer("Project.Add", MProject))
             {
-                new AlertWindow("Ошибка", "Нихуя не вышло");
+                new AlertWindow("Ошибка", AlertWindow.AlertCode.SendToServer);
             }
         }
 

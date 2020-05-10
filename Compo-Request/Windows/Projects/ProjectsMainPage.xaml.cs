@@ -79,6 +79,8 @@ namespace Compo_Request.Windows.Projects
 
                 Projects.Add(DbProject);
 
+                new AlertWindow("Оповещение", AlertWindow.AlertCode.AddConfirm);
+
             }, Dispatcher, -1, "Project.Add.Confirm", "ProjectsMainPage");
 
             /**
@@ -98,6 +100,8 @@ namespace Compo_Request.Windows.Projects
                     ServerResponseDelay = null;
                 }
 
+                new AlertWindow("Оповещение", AlertWindow.AlertCode.DeleteConfirm);
+
             }, Dispatcher, -1, "Project.Delete.Confirm", "ProjectsMainPage");
 
             /**
@@ -114,6 +118,8 @@ namespace Compo_Request.Windows.Projects
                     MProject.Uid = DbProject.Uid;
 
                     DataGrid_Projects.Items.Refresh();
+
+                    new AlertWindow("Оповещение", AlertWindow.AlertCode.UpdateConfirm);
                 }
 
             }, Dispatcher, -1, "Project.Update.Confirm", "TeamMainPage");
@@ -157,6 +163,10 @@ namespace Compo_Request.Windows.Projects
                             () => DataGrid_Projects.IsEnabled = true);
 
                     }, new TimeSpan(0, 0, 5), true);
+                }
+                else
+                {
+                    new AlertWindow("Ошибка", AlertWindow.AlertCode.SendToServer);
                 }
             });
         }

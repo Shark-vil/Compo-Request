@@ -132,12 +132,9 @@ namespace Compo_Request.Windows.Teams
             NetworkDelegates.Add(delegate (MResponse ServerResponse)
             {
                 new AlertWindow("Оповещение", AlertWindow.AlertCode.UpdateConfirm);
-            }, Dispatcher, 6, "TeamUser.Save.Confirm", "TeamUserAddPage");
+            }, Dispatcher, -1, "TeamUser.Save.Confirm", "TeamUserAddPage");
 
-            //CustomTimer.Create(delegate (object sender, EventArgs e)
-            //{
-                Sender.SendToServer("TeamUser.Get", TGroup, 6);
-            //}, new TimeSpan(0, 0, 1), true);
+            Sender.SendToServer("TeamUser.Get", TGroup, 6);
         }
 
         public void ClosePage()

@@ -50,7 +50,7 @@ namespace Compo_Request.Windows.Projects
 
             if (!Sender.SendToServer("Project.Update", MProject))
             {
-                new AlertWindow("Ошибка", "Нихуя не вышло");
+                new AlertWindow("Ошибка", AlertWindow.AlertCode.SendToServer);
             }
         }
 
