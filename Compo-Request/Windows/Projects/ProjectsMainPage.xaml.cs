@@ -31,6 +31,7 @@ namespace Compo_Request.Windows.Projects
         internal MainMenuWindow _MainMenuWindow;
         internal ProjectAddPage _ProjectAddPage;
         internal ProjectEditPage _ProjectEditPage;
+        internal ProjectTeamAddPage _ProjectTeamAddPage;
 
         internal ObservableCollection<Project> Projects = new ObservableCollection<Project>();
 
@@ -173,7 +174,15 @@ namespace Compo_Request.Windows.Projects
 
         private void ButtonClick_AddTeamToProject(object sender, RoutedEventArgs e)
         {
+            Project MProject = (sender as Button).DataContext as Project;
+            MProject = Projects.Where(p => p.Uid == MProject.Uid).FirstOrDefault();
 
+            if (_ProjectTeamAddPage != null)
+                _ProjectTeamAddPage.ClosePage();
+
+            _ProjectTeamAddPage = new ProjectTeamAddPage(MProject);
+            _MainMenuWindow.Frame_Main.Content = _ProjectTeamAddPage;
+            _ProjectTeamAddPage.OpenPage();
         }
 
         private void ButtonClick_OpenProject(object sender, RoutedEventArgs e)

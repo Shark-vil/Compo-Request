@@ -88,16 +88,6 @@ namespace Compo_Request.Windows.Teams
                 UsersNotTeam.Remove(User);
         }
 
-        /*
-        internal void UpdateData()
-        {
-            if (Sender.SendToServer("TeamUser.Get", TGroup, 6))
-            {
-                //
-            }
-        }
-        */
-
         public void OpenPage()
         {
             DataGrid_Users.ItemsSource = UsersNotTeam;
@@ -107,6 +97,7 @@ namespace Compo_Request.Windows.Teams
             {
                 var TeamUsersCompilation = Package.Unpacking<WTeamUserCompilation>(ServerResponse.DataBytes);
 
+                /*
                 Debug.Log("TeamUsersCompilation.Users");
                 TeamUsersCompilation.Users.ToList().ForEach(
                     i => Console.WriteLine(i.Login));
@@ -114,9 +105,11 @@ namespace Compo_Request.Windows.Teams
                 Debug.Log("TeamUsersCompilation.TeamUsers");
                 TeamUsersCompilation.TeamUsers.ToList().ForEach(
                     i => Console.WriteLine(i.UserId));
+                */
 
                 foreach (var User in TeamUsersCompilation.Users)
-                    if (!Array.Exists(TeamUsersCompilation.TeamUsers, u => u.UserId == User.Id && u.TeamGroupId == TGroup.Id))
+                    if (!Array.Exists(TeamUsersCompilation.TeamUsers, 
+                        u => u.UserId == User.Id && u.TeamGroupId == TGroup.Id))
                     {
                         if (UsersNotTeam.Where(u => u.Id == User.Id).FirstOrDefault() == null)
                             UsersNotTeam.Add(User);

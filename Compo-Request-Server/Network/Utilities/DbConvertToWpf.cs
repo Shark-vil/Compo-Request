@@ -31,6 +31,16 @@ namespace Compo_Request_Server.Network.Utilities
             return WTeamGroups;
         }
 
+        public static WTeamProject ConvertTeamProject(TeamProject DbTeamProject)
+        {
+            return new WTeamProject
+            {
+                Id = DbTeamProject.Id,
+                ProjectId = DbTeamProject.ProjectId,
+                TeamGroupId = DbTeamProject.TeamGroupId
+            };
+        }
+
         public static WUser ConvertUser(User DbUser)
         {
             return new WUser
@@ -56,14 +66,14 @@ namespace Compo_Request_Server.Network.Utilities
 
         public static WTeamUserCompilation ConvertTeamUserCompilation(User[] DbUsers, TeamUser[] DbTeamUsers)
         {
-            WUser[] Users = new WUser[DbUsers.Length];
+            var Users = new WUser[DbUsers.Length];
 
             for (int i = 0; i < DbUsers.Length; i++)
             {
                 Users[i] = ConvertUser(DbUsers[i]);
             }
 
-            WTeamUser[] TeamUsers = new WTeamUser[DbTeamUsers.Length];
+            var TeamUsers = new WTeamUser[DbTeamUsers.Length];
 
             for (int i = 0; i < DbTeamUsers.Length; i++)
             {
@@ -74,6 +84,29 @@ namespace Compo_Request_Server.Network.Utilities
             {
                 TeamUsers = TeamUsers,
                 Users = Users
+            };
+        }
+
+        public static WTeamGroupCompilation ConvertTeamProjectCompilation(TeamGroup[] DbTeamGroup, TeamProject[] DbTeamProject)
+        {
+           var TeamGroups = new WTeamGroup[DbTeamGroup.Length];
+
+            for (int i = 0; i < DbTeamGroup.Length; i++)
+            {
+                TeamGroups[i] = ConvertTeamGroup(DbTeamGroup[i]);
+            }
+
+            var TeamProjects = new WTeamProject[DbTeamProject.Length];
+
+            for (int i = 0; i < DbTeamProject.Length; i++)
+            {
+                TeamProjects[i] = ConvertTeamProject(DbTeamProject[i]);
+            }
+
+            return new WTeamGroupCompilation
+            {
+                WTeamGroups = TeamGroups,
+                WTeamProjects = TeamProjects
             };
         }
     }

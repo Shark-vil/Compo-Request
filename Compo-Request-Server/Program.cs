@@ -47,6 +47,7 @@ namespace Compo_Request_Server
             var EventTeamGroup = new ETeam();
             var EventTemUser = new ETeamUser();
             var EventProject = new EProject();
+            var EventTeamProject = new ETeamProject();
         }
     }
 }
