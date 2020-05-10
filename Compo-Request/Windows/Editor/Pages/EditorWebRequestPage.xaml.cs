@@ -37,7 +37,7 @@ namespace Compo_Request.Windows.Editor.Pages
             this._EditorMainMenuWindow = _EditorMainMenuWindow;
             this.MProject = MProject;
 
-            TabControl_Requests.NewItemFactory += TabFactory;
+            //TabControl_Requests.NewItemFactory += TabFactory;
 
             TabControl_Requests.ItemsSource = TestCollection;
 
@@ -50,6 +50,7 @@ namespace Compo_Request.Windows.Editor.Pages
             }, new TimeSpan(0, 0, 3), false);
         }
 
+        /*
         public Func<TabItem> TabFactory
         {
             get
@@ -63,6 +64,7 @@ namespace Compo_Request.Windows.Editor.Pages
                 };
             }
         }
+        */
 
         public void ClosePage()
         {
