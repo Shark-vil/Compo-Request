@@ -1,4 +1,6 @@
-﻿using Compo_Shared_Data.Models;
+﻿using Compo_Request.Windows.Editor.Pages;
+using Compo_Shared_Data.Models;
+using Dragablz;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,6 +22,8 @@ namespace Compo_Request.Windows.Editor
     {
         private MainMenuWindow _MainMenuWindow;
         private Project MProject;
+
+        internal EditorWebRequestPage _EditorWebRequestPage;
 
         public EditorMainMenuWindow(MainMenuWindow _MainMenuWindow, Project MProject)
         {
@@ -45,6 +49,18 @@ namespace Compo_Request.Windows.Editor
             this.Button_OpenMenu.Click += Button_OpenMenu_Click;    // Событие при разворачивании бокового меню
             this.Button_CloseMenu.Click += Button_CloseMenu_Click;  // Событие при сворачивании бокового меню
             this.Button_Back.Click += Button_Back_Click;
+            this.Button_WebRequestConstructor.Click += Button_WebRequestConstructor_Click;
+        }
+
+        private void Button_WebRequestConstructor_Click(object sender, RoutedEventArgs e)
+        {
+            if (_EditorWebRequestPage != null)
+                _EditorWebRequestPage.ClosePage();
+
+            _EditorWebRequestPage = new EditorWebRequestPage(this, MProject);
+            _EditorWebRequestPage.OpenPage();
+
+            Frame_Main.Content = _EditorWebRequestPage;
         }
 
         private void Button_Back_Click(object sender, RoutedEventArgs e)

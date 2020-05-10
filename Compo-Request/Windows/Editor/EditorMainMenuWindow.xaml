@@ -77,7 +77,7 @@
                     </Button>
                 </Grid>
                 <StackPanel ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <Button x:Name="Button_WebRequests"
+                    <Button x:Name="Button_WebRequestConstructor"
                         Height="40" Background="{x:Null}" BorderBrush="{x:Null}"
                         HorizontalAlignment="Left">
                         <StackPanel Margin="-8" Orientation="Horizontal">
@@ -86,7 +86,7 @@
                             <TextBlock Text="Конструктор запросов" VerticalAlignment="Center" Margin="20, 0"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="Button_HistoryResponse"
+                    <Button x:Name="Button_HistoryWebResponse"
                         Height="40" Background="{x:Null}" BorderBrush="{x:Null}"
                         HorizontalAlignment="Left">
                         <StackPanel Margin="-8" Orientation="Horizontal">
