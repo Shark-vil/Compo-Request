@@ -28,8 +28,6 @@ namespace Compo_Request.Windows.Editor.Pages
         private EditorMainMenuWindow _EditorMainMenuWindow;
         private Project MProject;
 
-        private ObservableCollection<WTestTab> TestCollection = new ObservableCollection<WTestTab>();
-
         public EditorWebRequestPage(EditorMainMenuWindow _EditorMainMenuWindow, Project MProject)
         {
             InitializeComponent();
@@ -37,31 +35,13 @@ namespace Compo_Request.Windows.Editor.Pages
             this._EditorMainMenuWindow = _EditorMainMenuWindow;
             this.MProject = MProject;
 
-            TabControl_Requests.NewItemFactory += TabFactory;
-
-            TabControl_Requests.ItemsSource = TestCollection;
+            BoundModel BModel = (BoundModel)this.DataContext;
 
             CustomTimer.Create(delegate (object sender, EventArgs e)
             {
-                TestCollection.Add(new WTestTab
-                {
-                    Header = "Test"
-                });
-            }, new TimeSpan(0, 0, 3), false);
-        }
+                Debug.Log("Items count: " + BModel.Items.Count);
 
-        public Func<TabItem> TabFactory
-        {
-            get
-            {
-                return () =>
-                {
-                    return new TabItem()
-                    {
-                        Header = "Тест"
-                    };
-                };
-            }
+            }, new TimeSpan(0, 0, 1), false);
         }
 
         public void ClosePage()

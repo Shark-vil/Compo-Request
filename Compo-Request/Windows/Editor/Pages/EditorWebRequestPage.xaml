@@ -1,18 +1,53 @@
 ﻿<Page x:Class="Compo_Request.Windows.Editor.Pages.EditorWebRequestPage"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
+      xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+      xmlns:dockablz="http://dragablz.net/winfx/xaml/dockablz"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Compo_Request.Windows.Editor.Pages"
+      xmlns:Editor="clr-namespace:Compo_Request.Windows.Editor"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="EditorWebRequestPage">
+
+    <Page.DataContext>
+        <Editor:BoundModel/>
+    </Page.DataContext>
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <dragablz:DragablzIcon Width="24" Height="24" Margin="0 -8 0 0"
+                    x:Key="WindowIcon" x:Shared="True"
+                    ToolTip="Added via the HeaderPrefixContent property"/>
+
+            <Style TargetType="{x:Type dragablz:TabablzControl}" x:Key="TabablzControlStyle"
+                BasedOn="{StaticResource MaterialDesignTabablzControlStyle}">
+                <Setter Property="NewItemFactory" Value="{x:Static Editor:BoundNewItem.Factory}" />
+                <Setter Property="ItemsSource" Value="{Binding Items}" />
+                <Setter Property="ClosingItemCallback" Value="{Binding ClosingTabItemHandler}" />
+                <Setter Property="ShowDefaultAddButton" Value="True" />
+                <Setter Property="ShowDefaultCloseButton" Value="True" />
+                <Setter Property="AdjacentHeaderItemOffset" Value="-10" />
+                <Setter Property="HeaderMemberPath" Value="Header" />
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(dockablz:Layout.IsTopLeftItem)}" Value="True">
+                        <Setter Property="HeaderPrefixContent" Value="{StaticResource WindowIcon}" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
+
     <Grid>
-        <dragablz:TabablzControl x:Name="TabControl_Requests"
-                            ShowDefaultCloseButton="True" ShowDefaultAddButton="True"
-                            IsSynchronizedWithCurrentItem="True">
+
+        <dragablz:TabablzControl x:Name="TabControl_Requests" Style="{StaticResource TabablzControlStyle}"
+                                AddLocationHint="After">
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <Grid Margin="10">
@@ -37,7 +72,8 @@
                     </Grid>
                 </DataTemplate>
             </TabControl.ContentTemplate>
-            <!--<TabItem Header="Test"/>-->
+            <TabItem Header="Test"/>
         </dragablz:TabablzControl>
+
     </Grid>
 </Page>
