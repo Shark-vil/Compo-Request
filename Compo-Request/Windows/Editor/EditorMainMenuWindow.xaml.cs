@@ -1,4 +1,5 @@
-﻿using Compo_Request.Windows.Editor.Pages;
+﻿using Compo_Request.Models;
+using Compo_Request.Windows.Editor.Pages;
 using Compo_Shared_Data.Models;
 using Dragablz;
 using System;
@@ -21,7 +22,6 @@ namespace Compo_Request.Windows.Editor
     public partial class EditorMainMenuWindow : Window
     {
         private MainMenuWindow _MainMenuWindow;
-        private Project MProject;
 
         internal EditorWebRequestPage _EditorWebRequestPage;
 
@@ -34,7 +34,7 @@ namespace Compo_Request.Windows.Editor
 
         private void LoadWindowParent(MainMenuWindow _MainMenuWindow, Project MProject)
         {
-            this.MProject = MProject;
+            ProjectData.SelectedProject = MProject;
 
             this._MainMenuWindow = _MainMenuWindow;
             _MainMenuWindow.Hide();
@@ -57,7 +57,7 @@ namespace Compo_Request.Windows.Editor
             if (_EditorWebRequestPage != null)
                 _EditorWebRequestPage.ClosePage();
 
-            _EditorWebRequestPage = new EditorWebRequestPage(this, MProject);
+            _EditorWebRequestPage = new EditorWebRequestPage(this);
             _EditorWebRequestPage.OpenPage();
 
             Frame_Main.Content = _EditorWebRequestPage;

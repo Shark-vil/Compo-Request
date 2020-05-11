@@ -29,7 +29,7 @@ namespace Compo_Request.Models
             "PROPFIND",
             "VIEW"
         };
-        private string Link { get; set; }
+        private string Link = "";
 
         public DynamicModelEditorRequest() { }
         public DynamicModelEditorRequest(string Link)

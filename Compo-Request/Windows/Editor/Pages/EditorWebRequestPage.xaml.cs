@@ -27,29 +27,16 @@ namespace Compo_Request.Windows.Editor.Pages
     public partial class EditorWebRequestPage : Page, ICustomPage
     {
         private EditorMainMenuWindow _EditorMainMenuWindow;
-        private Project MProject;
 
-        public EditorWebRequestPage(EditorMainMenuWindow _EditorMainMenuWindow, Project MProject)
+        public EditorWebRequestPage(EditorMainMenuWindow _EditorMainMenuWindow)
         {
             InitializeComponent();
 
             this._EditorMainMenuWindow = _EditorMainMenuWindow;
-            this.MProject = MProject;
-
-            var BNewModel = new BoundModel(BoundNewItem.GetNewTabItem());
-
-            DataContext = BNewModel;
 
             var BModel = (BoundModel)DataContext;
 
-            /*
-            foreach (var ItemView in BModel.Items)
-            {
-                var MEditorRequest = (ModelEditorRequest)ItemView.Content;
-
-                Debug.Log(MEditorRequest.RequestTypes.Count);
-            }
-            */
+            BModel.Items.Add(BoundNewItem.GetNewTabItem());
         }
 
         public void ClosePage()
