@@ -1,5 +1,6 @@
 ﻿using Compo_Request.Network.Interfaces;
 using Compo_Request.Network.Utilities;
+using Compo_Request.Windows.Editor.Windows;
 using Compo_Shared_Data.Debugging;
 using Compo_Shared_Data.Models;
 using Compo_Shared_Data.WPF.Models;
@@ -35,13 +36,20 @@ namespace Compo_Request.Windows.Editor.Pages
             this._EditorMainMenuWindow = _EditorMainMenuWindow;
             this.MProject = MProject;
 
-            BoundModel BModel = (BoundModel)this.DataContext;
+            var BNewModel = new BoundModel(BoundNewItem.GetNewTabItem());
 
-            CustomTimer.Create(delegate (object sender, EventArgs e)
+            DataContext = BNewModel;
+
+            var BModel = (BoundModel)DataContext;
+
+            /*
+            foreach (var ItemView in BModel.Items)
             {
-                Debug.Log("Items count: " + BModel.Items.Count);
+                var MEditorRequest = (ModelEditorRequest)ItemView.Content;
 
-            }, new TimeSpan(0, 0, 1), false);
+                Debug.Log(MEditorRequest.RequestTypes.Count);
+            }
+            */
         }
 
         public void ClosePage()

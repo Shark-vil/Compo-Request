@@ -17,6 +17,11 @@ namespace Compo_Request.Windows.Editor
             _items = new ObservableCollection<HeaderedItemViewModel>();
         }
 
+        public BoundModel(params HeaderedItemViewModel[] items)
+        {
+            _items = new ObservableCollection<HeaderedItemViewModel>(items);
+        }
+
         public ObservableCollection<HeaderedItemViewModel> Items
         {
             get { return _items; }

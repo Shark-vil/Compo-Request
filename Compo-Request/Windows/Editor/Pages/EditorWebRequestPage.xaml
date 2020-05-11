@@ -21,10 +21,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
-
-            <dragablz:DragablzIcon Width="24" Height="24" Margin="0 -8 0 0"
-                    x:Key="WindowIcon" x:Shared="True"
-                    ToolTip="Added via the HeaderPrefixContent property"/>
+            <DataTemplate DataType="{x:Type dragablz:HeaderedItemViewModel}">
+                <ContentControl Content="{Binding Content}" Margin="4 4 4 4" FontSize="14" />
+            </DataTemplate>
 
             <Style TargetType="{x:Type dragablz:TabablzControl}" x:Key="TabablzControlStyle"
                 BasedOn="{StaticResource MaterialDesignTabablzControlStyle}">
@@ -35,45 +34,18 @@
                 <Setter Property="ShowDefaultCloseButton" Value="True" />
                 <Setter Property="AdjacentHeaderItemOffset" Value="-10" />
                 <Setter Property="HeaderMemberPath" Value="Header" />
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=(dockablz:Layout.IsTopLeftItem)}" Value="True">
-                        <Setter Property="HeaderPrefixContent" Value="{StaticResource WindowIcon}" />
-                    </DataTrigger>
-                </Style.Triggers>
             </Style>
         </ResourceDictionary>
     </Page.Resources>
 
     <Grid>
 
-        <dragablz:TabablzControl x:Name="TabControl_Requests" Style="{StaticResource TabablzControlStyle}"
-                                AddLocationHint="After">
-            <TabControl.ContentTemplate>
-                <DataTemplate>
-                    <Grid Margin="10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="3*"/>
-                            <ColumnDefinition Width="150*"/>
-                            <ColumnDefinition Width="3*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="5*"/>
-                            <RowDefinition Height="30*"/>
-                            <RowDefinition Height="90*"/>
-                        </Grid.RowDefinitions>
-
-                        <Grid Grid.Column="1" Grid.Row="1">
-                            <TextBlock Margin="10, 0, 0, 0" FontSize="24" Text="Запрос"/>
-                            <Grid Margin="0, 30, 0, 0">
-                                <ComboBox Height="40" Width="100" HorizontalAlignment="Left"/>
-                                <TextBox Margin="100, 0, 0, 0" Height="40" HorizontalAlignment="Stretch"/>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </DataTemplate>
-            </TabControl.ContentTemplate>
-            <TabItem Header="Test"/>
-        </dragablz:TabablzControl>
+        <dockablz:Layout FloatingItemHeaderMemberPath="Header" FloatingItemsContainerMargin="0 2 0 0"
+                         IsFloatDropZoneEnabled="False">
+            <dragablz:TabablzControl x:Name="TabControl_Requests" 
+                Style="{StaticResource TabablzControlStyle}" AddLocationHint="After">
+            </dragablz:TabablzControl>
+        </dockablz:Layout>
 
     </Grid>
 </Page>

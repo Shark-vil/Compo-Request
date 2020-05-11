@@ -1,4 +1,6 @@
-﻿using Dragablz;
+﻿using Compo_Request.Windows.Editor.Windows;
+using Compo_Shared_Data.WPF.Models;
+using Dragablz;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,14 +16,42 @@ namespace Compo_Request.Windows.Editor
                 return
                     () =>
                     {
-                        var dateTime = DateTime.Now;
-
-                        return new HeaderedItemViewModel()
+                        var TabItemView = new HeaderedItemViewModel()
                         {
-                            Header = dateTime.ToLongTimeString(),
-                            Content = dateTime.ToString("R")
+                            Header = "Новый запрос",
+                            Content = new EditorWebRequestControl()
                         };
+
+                        ((EditorWebRequestControl)TabItemView.Content).Construct(TabItemView);
+
+                        return TabItemView;
                     };
+            }
+        }
+
+        public static HeaderedItemViewModel GetNewTabItem(string Header = "Новый запрос", object Content = null)
+        {
+            if (Content == null)
+            {
+                Content = new EditorWebRequestControl();
+
+                var TabItemView = new HeaderedItemViewModel()
+                {
+                    Header = Header,
+                    Content = Content
+                };
+
+                ((EditorWebRequestControl)TabItemView.Content).Construct(TabItemView);
+
+                return TabItemView;
+            }
+            else
+            {
+                return new HeaderedItemViewModel()
+                {
+                    Header = Header,
+                    Content = Content
+                };
             }
         }
     }
