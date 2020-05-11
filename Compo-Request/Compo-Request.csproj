@@ -12,10 +12,7 @@
     <PackageReference Include="MaterialDesignColors" Version="1.2.4" />
     <PackageReference Include="MaterialDesignThemes" Version="3.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Utilities\" />
+    <PackageReference Include="RestSharp" Version="106.11.2" />
   </ItemGroup>
 
   <ItemGroup>

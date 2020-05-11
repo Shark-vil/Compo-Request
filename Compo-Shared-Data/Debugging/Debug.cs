@@ -8,20 +8,47 @@ namespace Compo_Shared_Data.Debugging
     {
         public static void Log(object DataObject, ConsoleColor color = ConsoleColor.White)
         {
-            Console.ForegroundColor = color;
-            Console.WriteLine("[LOG] " + Convert.ToString(DataObject), Console.ForegroundColor);
+            string Message = (DataObject != null) ? DataObject.ToString() : "NULL";
+
+            try
+            {
+                Console.ForegroundColor = color;
+                Console.WriteLine("[LOG] " + Message, Console.ForegroundColor);
+            }
+            catch
+            {
+                Console.WriteLine("[LOG] " + Message);
+            }
         }
 
         public static void LogWarning(object DataObject)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("[WARNING] " + Convert.ToString(DataObject), Console.ForegroundColor);
+            string Message = (DataObject != null) ? DataObject.ToString() : "NULL";
+
+            try
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("[WARNING] " + Message, Console.ForegroundColor);
+            }
+            catch
+            {
+                Console.WriteLine("[WARNING] " + Message);
+            }
         }
 
         public static void LogError(object DataObject)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("[ERROR] " + Convert.ToString(DataObject), Console.ForegroundColor);
+            string Message = (DataObject != null) ? DataObject.ToString() : "NULL";
+
+            try
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("[ERROR] " + Message, Console.ForegroundColor);
+            }
+            catch
+            {
+                Console.WriteLine("[ERROR] " + Message);
+            }
         }
     }
 }

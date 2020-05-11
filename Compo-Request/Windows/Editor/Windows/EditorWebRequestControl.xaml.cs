@@ -1,5 +1,6 @@
 ﻿using Compo_Request.Models;
 using Compo_Request.Network.Utilities;
+using Compo_Request.Utilities;
 using Compo_Shared_Data.Debugging;
 using Compo_Shared_Data.WPF.Models;
 using Dragablz;
@@ -43,8 +44,10 @@ namespace Compo_Request.Windows.Editor.Windows
             DataGrid_FormRequestData.Columns[0].Visibility = Visibility.Hidden;
 
             DataGrid_FormRequestData.AddingNewItem += DataGrid_FormRequestData_AddingNewItem;
+            DataGrid_FormRequestData.CurrentCellChanged += DataGrid_FormRequestData_CurrentCellChanged;
             ComboBox_RequestType.SelectionChanged += ComboBox_RequestType_SelectionChanged;
             FormRequestsData.CollectionChanged += FormRequestsData_CollectionChanged;
+            Button_SendRequest.Click += Button_SendRequest_Click;
         }
 
         public void Construct(HeaderedItemViewModel TabItemView)
@@ -58,7 +61,22 @@ namespace Compo_Request.Windows.Editor.Windows
             }, new TimeSpan(0, 0, 1));
         }
 
+        private void Button_SendRequest_Click(object sender, RoutedEventArgs e)
+        {
+            string Method = ComboBox_RequestType.SelectedItem.ToString();
+            string Link = EditorRequestData.RequestLink;
+
+            var Response = ToolWebRequest.RestRequest(Method, Link, FormRequestsData);
+
+            Debug.Log(Response);
+        }
+
         private void FormRequestsData_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            RequestLinkChanged();
+        }
+
+        private void DataGrid_FormRequestData_CurrentCellChanged(object sender, EventArgs e)
         {
             RequestLinkChanged();
         }
