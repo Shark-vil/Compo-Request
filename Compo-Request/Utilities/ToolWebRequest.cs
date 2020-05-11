@@ -7,6 +7,7 @@ using System.Dynamic;
 using System.Threading.Tasks;
 using Compo_Shared_Data.Debugging;
 using RestSharp;
+using Compo_Shared_Data.Models;
 
 namespace Compo_Request.Utilities
 {
@@ -85,7 +86,7 @@ namespace Compo_Request.Utilities
             return "";
         }
 
-        public static string RestRequest(string Method, string Link, ObservableCollection<ModelFormRequest> FormRequestsData = null)
+        public static string RestRequest(string Method, string Link, ObservableCollection<WebRequestItem> FormRequestsData = null)
         {
             var Client = new RestClient(GetFirstLink(Link));
             IRestResponse Response = null;

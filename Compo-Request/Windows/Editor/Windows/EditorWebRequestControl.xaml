@@ -6,6 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Compo_Request.Windows.Editor.Windows"
              xmlns:RequestModel="clr-namespace:Compo_Request.Models"
+             xmlns:json="clr-namespace:JsonViewerDemo.JsonViewer"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -67,6 +68,9 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
+        </Grid>
+        <Grid Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="2">
+            <json:JsonViewer x:Name="JsonViewer" DockPanel.Dock="Bottom"/>
         </Grid>
     </Grid>
 </UserControl>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,5 +12,7 @@ namespace Compo_Shared_Data.WPF.Models
         public string Key { get; set; }
         public string Value { get; set; }
         public string Description { get; set; }
+        public int ProjectId { get; set; }
     }
 }
+*/

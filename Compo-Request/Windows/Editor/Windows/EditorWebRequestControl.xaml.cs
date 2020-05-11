@@ -2,6 +2,7 @@
 using Compo_Request.Network.Utilities;
 using Compo_Request.Utilities;
 using Compo_Shared_Data.Debugging;
+using Compo_Shared_Data.Models;
 using Compo_Shared_Data.WPF.Models;
 using Dragablz;
 using System;
@@ -18,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Compo_Request.Windows.Editor.Windows
 {
@@ -26,10 +28,18 @@ namespace Compo_Request.Windows.Editor.Windows
     /// </summary>
     public partial class EditorWebRequestControl : UserControl
     {
-        private int UniqueFormIndex { get; set; }
-        private ObservableCollection<ModelFormRequest> FormRequestsData = new ObservableCollection<ModelFormRequest>();
+        private DispatcherTimer Timer_EditorRequestData_PropertyChanged = null;
+
+        private DispatcherTimer Timer_BlockEvent = null;
+        private bool IsBlock = false;
+
+        private ObservableCollection<WebRequestItem> WebRequestItems = new ObservableCollection<WebRequestItem>();
         private HeaderedItemViewModel TabItemView { get; set; }
         private string HeaderName { get; set; }
+
+        private string RequestMethod { get; set; }
+        private void RequestMethodUpdate() { RequestMethod = ComboBox_RequestType.SelectedItem.ToString(); }
+
         private string RequestLink { get; set; }
         public DynamicModelEditorRequest EditorRequestData { get; set; }
 
@@ -40,14 +50,75 @@ namespace Compo_Request.Windows.Editor.Windows
             EditorRequestData = new DynamicModelEditorRequest();
             DataContext = EditorRequestData;
 
-            DataGrid_FormRequestData.ItemsSource = FormRequestsData;
+            DataGrid_FormRequestData.ItemsSource = WebRequestItems;
             DataGrid_FormRequestData.Columns[0].Visibility = Visibility.Hidden;
 
-            DataGrid_FormRequestData.AddingNewItem += DataGrid_FormRequestData_AddingNewItem;
             DataGrid_FormRequestData.CurrentCellChanged += DataGrid_FormRequestData_CurrentCellChanged;
             ComboBox_RequestType.SelectionChanged += ComboBox_RequestType_SelectionChanged;
-            FormRequestsData.CollectionChanged += FormRequestsData_CollectionChanged;
+            WebRequestItems.CollectionChanged += FormRequestsData_CollectionChanged;
             Button_SendRequest.Click += Button_SendRequest_Click;
+            Button_SaveRequest.Click += Button_SaveRequest_Click;
+            EditorRequestData.PropertyChanged += EditorRequestData_PropertyChanged;
+        }
+
+        private void Button_SaveRequest_Click(object sender, RoutedEventArgs e)
+        {
+            // Удаление пустых строк
+            RemoveEmptyCollectionValues();
+        }
+
+        private void EditorRequestData_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (!IsBlock && e.PropertyName == "RequestLink" && RequestMethod == "GET")
+            {
+                if (Timer_EditorRequestData_PropertyChanged != null && Timer_EditorRequestData_PropertyChanged.IsEnabled)
+                    Timer_EditorRequestData_PropertyChanged.Stop();
+
+                Timer_EditorRequestData_PropertyChanged = CustomTimer.Create(delegate (object sender, EventArgs e)
+                {
+                    ObservableCollection<WebRequestItem> Collection = 
+                        GetLinkRequestToCollection.GetCollection(EditorRequestData.RequestLink);
+
+                    if (Collection != null)
+                    {
+                        WebRequestItem[] CollectionArray;
+
+                        CollectionArray = WebRequestItems.ToArray();
+                        foreach (var WebRequestItem in Collection)
+                        {
+                            if (WebRequestItem != null && WebRequestItem.Key != null)
+                            {
+                                WebRequestItem GWebRequestItem = Array.Find(CollectionArray, x => x.Key == WebRequestItem.Key);
+
+                                if (GWebRequestItem == null)
+                                    WebRequestItems.Add(WebRequestItem);
+                                else
+                                {
+                                    GWebRequestItem.Key = WebRequestItem.Key;
+                                    GWebRequestItem.Value = WebRequestItem.Value;
+
+                                    DataGrid_FormRequestData.Items.Refresh();
+                                }
+                            }
+                        }
+
+                        CollectionArray = Collection.ToArray();
+                        var RemoveIndexs = new List<int>();
+                        for (int i = 0; i < WebRequestItems.Count; i++)
+                        {
+                            WebRequestItem WebRequestItem = WebRequestItems[i];
+                            if (WebRequestItem != null && WebRequestItem.Key != null)
+                                if (!Array.Exists(CollectionArray, x => x.Key == WebRequestItem.Key))
+                                    WebRequestItems.RemoveAt(i);
+                        }
+                    }
+                    else
+                    {
+                        WebRequestItems.Clear();
+                    }
+
+                }, new TimeSpan(0, 0, 1));
+            }
         }
 
         public void Construct(HeaderedItemViewModel TabItemView)
@@ -57,28 +128,85 @@ namespace Compo_Request.Windows.Editor.Windows
 
             CustomTimer.Create(delegate (object sender, EventArgs e)
             {
+                RequestMethodUpdate();
                 SetHeaderName();
             }, new TimeSpan(0, 0, 1));
         }
 
         private void Button_SendRequest_Click(object sender, RoutedEventArgs e)
         {
-            string Method = ComboBox_RequestType.SelectedItem.ToString();
-            string Link = EditorRequestData.RequestLink;
+            try
+            {
+                string Method = ComboBox_RequestType.SelectedItem.ToString();
+                string Link = EditorRequestData.RequestLink;
 
-            var Response = ToolWebRequest.RestRequest(Method, Link, FormRequestsData);
+                var Response = ToolWebRequest.RestRequest(Method, Link, WebRequestItems);
 
-            Debug.Log(Response);
+                JsonViewer.Load(Response);
+            }
+            catch
+            {
+                JsonViewer.Load(@"{'APPLICATION': 'ERROR ##83421773'}");
+            }
         }
 
         private void FormRequestsData_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            RequestLinkChanged();
+            if (RequestMethod != "GET")
+            {
+                EnableBlock();
+                RequestLinkChanged();
+                EnableBlockTimer();
+            }
         }
 
         private void DataGrid_FormRequestData_CurrentCellChanged(object sender, EventArgs e)
         {
+            EnableBlock();
             RequestLinkChanged();
+            EnableBlockTimer();
+        }
+
+        private void EnableBlock()
+        {
+            if (Timer_BlockEvent != null && Timer_BlockEvent.IsEnabled)
+                Timer_BlockEvent.Stop();
+
+            IsBlock = true;
+        }
+
+        private void EnableBlockTimer()
+        {
+            Timer_BlockEvent = CustomTimer.Create(delegate (object sender, EventArgs e)
+            {
+                if (IsBlock)
+                    IsBlock = false;
+            }, new TimeSpan(0, 0, 1));
+        }
+
+        private void RemoveEmptyCollectionValues()
+        {
+            try
+            {
+                var RemoveIndexs = new List<int>();
+
+                for (int i = 0; i < WebRequestItems.Count; i++)
+                {
+                    WebRequestItem WebRequestItem = WebRequestItems[i];
+
+                    if (WebRequestItem != null && WebRequestItem.Key != null && WebRequestItem.Value != null)
+                    {
+                        if (WebRequestItem.Key.Trim() == string.Empty && WebRequestItem.Value.Trim() == string.Empty)
+                            RemoveIndexs.Add(i);
+                    }
+                    else
+                        RemoveIndexs.Add(i);
+                }
+
+                foreach(var ItemIndex in RemoveIndexs)
+                    WebRequestItems.RemoveAt(ItemIndex);
+
+            } catch { }
         }
 
         /// <summary>
@@ -140,13 +268,18 @@ namespace Compo_Request.Windows.Editor.Windows
             RequestLink = RequestLink.Trim();
             RequestLink += "?";
 
-            for(int i = 0; i < FormRequestsData.Count; i++)
+            for(int i = 0; i < WebRequestItems.Count; i++)
             {
-                var FormItem = FormRequestsData[i];
-                if (i != FormRequestsData.Count - 1)
+                var FormItem = WebRequestItems[i];
+                if (i != WebRequestItems.Count - 1)
                     RequestLink += $"{FormItem.Key}={FormItem.Value}&";
                 else
-                    RequestLink += $"{FormItem.Key}={FormItem.Value}";
+                {
+                    if (FormItem.Value != string.Empty)
+                        RequestLink += $"{FormItem.Key}={FormItem.Value}";
+                    else
+                        RequestLink += $"{FormItem.Key}";
+                }
             }
 
             return RequestLink;
@@ -154,31 +287,24 @@ namespace Compo_Request.Windows.Editor.Windows
 
         private void ComboBox_RequestType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            RequestMethodUpdate();
             RequestLinkChanged();
             SetHeaderName();
         }
 
         private void SetHeaderName()
         {
-            TabItemView.Header = HeaderName + " - " + ComboBox_RequestType.SelectedItem.ToString();
-        }
-
-        private void DataGrid_FormRequestData_AddingNewItem(object sender, AddingNewItemEventArgs e)
-        {
-            e.NewItem = new ModelFormRequest
-            {
-                Id = UniqueFormIndex++
-            };
+            TabItemView.Header = HeaderName + " - " + RequestMethod;
         }
 
         private void ButtonClick_DeleteProject(object sender, RoutedEventArgs e)
         {
-            var FormRequest = (sender as Button).DataContext as ModelFormRequest;
+            var FormRequest = (sender as Button).DataContext as WebRequestItem;
 
             if (FormRequest != null)
             {
-                var MFormRequest = FormRequestsData.FirstOrDefault(r => r.Id == FormRequest.Id);
-                FormRequestsData.Remove(MFormRequest);
+                var MFormRequest = WebRequestItems.FirstOrDefault(r => r.Id == FormRequest.Id);
+                WebRequestItems.Remove(MFormRequest);
             }
         }
     }
