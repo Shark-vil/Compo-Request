@@ -3,6 +3,7 @@ using Compo_Request.Network.Utilities;
 using Compo_Request.Utilities;
 using Compo_Shared_Data.Debugging;
 using Compo_Shared_Data.Models;
+using Compo_Shared_Data.Network.Models;
 using Compo_Shared_Data.WPF.Models;
 using Dragablz;
 using System;
@@ -10,6 +11,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -41,7 +44,11 @@ namespace Compo_Request.Windows.Editor.Windows
         private void RequestMethodUpdate() { RequestMethod = ComboBox_RequestType.SelectedItem.ToString(); }
 
         private string RequestLink { get; set; }
-        public DynamicModelEditorRequest EditorRequestData { get; set; }
+        private DynamicModelEditorRequest EditorRequestData { get; set; }
+
+        private ObservableCollection<ModelRequestDirectory> VirtualRequestDirs = new ObservableCollection<ModelRequestDirectory>();
+
+        private DispatcherTimer WebRequestWait = new DispatcherTimer();
 
         public EditorWebRequestControl()
         {
@@ -53,12 +60,50 @@ namespace Compo_Request.Windows.Editor.Windows
             DataGrid_FormRequestData.ItemsSource = WebRequestItems;
             DataGrid_FormRequestData.Columns[0].Visibility = Visibility.Hidden;
 
+            ListView_WebRequests.ItemsSource = VirtualRequestDirs;
+
+            CollectionView ViewCollection = (CollectionView)CollectionViewSource.GetDefaultView(ListView_WebRequests.ItemsSource);
+            PropertyGroupDescription gDescription = new PropertyGroupDescription("RequestDir");
+            ViewCollection.GroupDescriptions.Add(gDescription);
+
+            VirtualRequestDirs.Add(new ModelRequestDirectory
+            {
+                RequestDir = "Test category",
+                RequestMethod = "POST",
+                WebRequest ="http://google.ru"
+            });
+
+            VirtualRequestDirs.Add(new ModelRequestDirectory
+            {
+                RequestDir = "Test category",
+                RequestMethod = "POST",
+                WebRequest = "http://google.ru"
+            });
+
+            VirtualRequestDirs.Add(new ModelRequestDirectory
+            {
+                RequestDir = "Test category",
+                RequestMethod = "POST",
+                WebRequest = "http://google.ru"
+            });
+
+            ListView_WebRequests.Items.Refresh();
+
             DataGrid_FormRequestData.CurrentCellChanged += DataGrid_FormRequestData_CurrentCellChanged;
             ComboBox_RequestType.SelectionChanged += ComboBox_RequestType_SelectionChanged;
             WebRequestItems.CollectionChanged += FormRequestsData_CollectionChanged;
             Button_SendRequest.Click += Button_SendRequest_Click;
             Button_SaveRequest.Click += Button_SaveRequest_Click;
+            Button_RequestList.Click += Button_RequestList_Click;
             EditorRequestData.PropertyChanged += EditorRequestData_PropertyChanged;
+        }
+
+        private void Button_RequestList_Click(object sender, RoutedEventArgs e)
+        {
+            if (ListView_WebRequests.Visibility == Visibility.Collapsed)
+                ListView_WebRequests.Visibility = Visibility.Visible;
+            else
+                ListView_WebRequests.Visibility = Visibility.Collapsed;
         }
 
         private void Button_SaveRequest_Click(object sender, RoutedEventArgs e)
@@ -121,7 +166,7 @@ namespace Compo_Request.Windows.Editor.Windows
             }
         }
 
-        public void Construct(HeaderedItemViewModel TabItemView)
+        public void Construct(HeaderedItemViewModel TabItemView, MResponse ServerResponse = null)
         {
             this.TabItemView = TabItemView;
             HeaderName = TabItemView.Header.ToString();
@@ -135,19 +180,35 @@ namespace Compo_Request.Windows.Editor.Windows
 
         private void Button_SendRequest_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                string Method = ComboBox_RequestType.SelectedItem.ToString();
-                string Link = EditorRequestData.RequestLink;
+            var t = new Thread(new ThreadStart(WebRequestSend));
+            t.Start();
+        }
 
-                var Response = ToolWebRequest.RestRequest(Method, Link, WebRequestItems);
-
-                JsonViewer.Load(Response);
-            }
-            catch
+        private void WebRequestSend()
+        {
+            Dispatcher.Invoke(delegate ()
             {
-                JsonViewer.Load(@"{'APPLICATION': 'ERROR ##83421773'}");
-            }
+                try
+                {
+                    DataGrid_FormRequestData.IsEnabled = false;
+                    TextBox_RequestLink.IsEnabled = false;
+                    Button_SendRequest.IsEnabled = false;
+                    Button_SaveRequest.IsEnabled = false;
+
+                    string Method = ComboBox_RequestType.SelectedItem.ToString();
+                    string Link = EditorRequestData.RequestLink;
+
+                    var Response = ToolWebRequest.RestRequest(Method, Link, WebRequestItems);
+
+                    JsonViewer.Load(Response);
+                }
+                catch { }
+
+                DataGrid_FormRequestData.IsEnabled = true;
+                TextBox_RequestLink.IsEnabled = true;
+                Button_SendRequest.IsEnabled = true;
+                Button_SaveRequest.IsEnabled = true;
+            });
         }
 
         private void FormRequestsData_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

@@ -7,7 +7,7 @@ using System.Text;
 namespace Compo_Shared_Data.Models
 {
     [Serializable]
-    public class WebRequestItem
+    public class RequestDirs
     {
         [Key]
         [Required]
@@ -15,17 +15,9 @@ namespace Compo_Shared_Data.Models
         [Required]
         public string Title { get; set; }
         [Required]
-        public string Link { get; set; }
-        [Required]
-        public string Key { get; set; }
-        [Required]
-        public string Value { get; set; }
-        [Required]
-        public string Description { get; set; }
-        [Required]
-        public int ProjectId { get; set; }
-        [ForeignKey("ProjectId")]
+        public int WebRequestId { get; set; }
+        [ForeignKey("WebRequestId")]
         [System.Xml.Serialization.XmlIgnore]
-        public Project Projects { get; set; }
+        public WebRequestItem WebRequestItems { get; set; }
     }
 }

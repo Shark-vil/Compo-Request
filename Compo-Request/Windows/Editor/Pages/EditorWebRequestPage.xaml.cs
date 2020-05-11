@@ -34,9 +34,20 @@ namespace Compo_Request.Windows.Editor.Pages
 
             this._EditorMainMenuWindow = _EditorMainMenuWindow;
 
-            var BModel = (BoundModel)DataContext;
+            CreateEmptyTabIfNull();
+        }
 
-            BModel.Items.Add(BoundNewItem.GetNewTabItem());
+        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            CreateEmptyTabIfNull();
+        }
+
+        private void CreateEmptyTabIfNull()
+        {
+            var WebRequestPages = (BoundModel)DataContext;
+
+            if (WebRequestPages.Items.Count == 0)
+                WebRequestPages.Items.Add(BoundNewItem.AddTab());
         }
 
         public void ClosePage()
