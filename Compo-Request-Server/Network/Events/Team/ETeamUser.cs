@@ -40,18 +40,18 @@ namespace Compo_Request_Server.Network.Events.Team
                             TeamGroupId = User.TeamGroupId
                         };
 
-                        if (db.TeamUser.Where(tu =>
+                        if (db.TeamUsers.Where(tu =>
                             tu.TeamGroupId == DbTeamUser.TeamGroupId && tu.UserId == DbTeamUser.UserId)
                             .FirstOrDefault() != null)
                         {
                             continue;
                         }
 
-                        db.TeamUser.Attach(DbTeamUser);
+                        db.TeamUsers.Attach(DbTeamUser);
                         db.SaveChanges();
                     }
 
-                    var DbTeamUsers = db.TeamUser.Where(tu =>
+                    var DbTeamUsers = db.TeamUsers.Where(tu =>
                         tu.TeamGroupId == TeamUserTeamId.TeamGroupId).ToArray();
 
                     List<TeamUser> RemoveTeamUsers = new List<TeamUser>();
@@ -83,12 +83,12 @@ namespace Compo_Request_Server.Network.Events.Team
 
                     foreach (var DbTeamUser in RemoveTeamUsers)
                     {
-                        db.TeamUser.Remove(DbTeamUser);
+                        db.TeamUsers.Remove(DbTeamUser);
                         db.SaveChanges();
                     }
 
                     Sender.Broadcast("TeamUser.Save.Confirm", 
-                        db.TeamUser.Where(tu => tu.TeamGroupId == TeamUserTeamId.TeamGroupId).ToArray());
+                        db.TeamUsers.Where(tu => tu.TeamGroupId == TeamUserTeamId.TeamGroupId).ToArray());
                 }
             }
             catch(DbUpdateException ex)
@@ -110,7 +110,7 @@ namespace Compo_Request_Server.Network.Events.Team
                     Debug.Log($"Получен список пользователей из базы данных в количестве {UsersDb.Length} записей.", ConsoleColor.Magenta);
 
                     var TGroup = Package.Unpacking<TeamGroup>(ClientResponse.DataBytes);
-                    var TeamUsersDb = db.TeamUser.Where(t => t.TeamGroupId == TGroup.Id).ToArray();
+                    var TeamUsersDb = db.TeamUsers.Where(t => t.TeamGroupId == TGroup.Id).ToArray();
 
                     Debug.Log($"Получен список команд и пользователей из базы данных в количестве {TeamUsersDb.Length} записей.", ConsoleColor.Magenta);
 

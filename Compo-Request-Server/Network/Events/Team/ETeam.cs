@@ -113,8 +113,8 @@ namespace Compo_Request_Server.Network.Events.Team
                 {
                     var MTeamGroup = Package.Unpacking<TeamGroup>(ClientResponse.DataBytes);
 
-                    foreach (var TeamUser in db.TeamUser.Where(tu => tu.TeamGroupId == MTeamGroup.Id).ToArray())
-                        db.TeamUser.Remove(TeamUser);
+                    foreach (var TeamUser in db.TeamUsers.Where(tu => tu.TeamGroupId == MTeamGroup.Id).ToArray())
+                        db.TeamUsers.Remove(TeamUser);
 
                     db.TeamGroups.Attach(MTeamGroup);
                     db.TeamGroups.Remove(MTeamGroup);

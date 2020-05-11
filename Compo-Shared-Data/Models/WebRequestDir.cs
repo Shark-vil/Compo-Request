@@ -7,7 +7,7 @@ using System.Text;
 namespace Compo_Shared_Data.Models
 {
     [Serializable]
-    public class RequestDirs
+    public class WebRequestDir
     {
         [Key]
         [Required]
