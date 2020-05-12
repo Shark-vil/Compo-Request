@@ -18,32 +18,49 @@ namespace Compo_Request.Windows.Editor.Windows
     /// </summary>
     public partial class EditorRequestSaverWindow : Window
     {
-        internal DynamicEditorRequestSaver DC_EditorRequestSaver;
+        private bool IsSaveClick = false;
+        private EventEditorRequestSaver SaveClick;
+        private EventEditorRequestSaver CancelClick;
 
-        public EditorRequestSaverWindow(string RequestName, string RequestDirectoryName)
+        public delegate void EventEditorRequestSaver();
+        public DynamicEditorRequestSaver DC_EditorRequestSaver;
+
+        public EditorRequestSaverWindow(string RequestName, string RequestDirectoryName,
+            EventEditorRequestSaver SaveClick = null, EventEditorRequestSaver CancelClick = null)
         {
             InitializeComponent();
             WindowActions();
 
             DC_EditorRequestSaver = new DynamicEditorRequestSaver(RequestName, RequestDirectoryName);
-
             DataContext = DC_EditorRequestSaver;
+
+            this.SaveClick = SaveClick;
+            this.CancelClick = CancelClick;
         }
 
         private void WindowActions()
         {
+            this.Closed += EditorRequestSaverWindow_Closed;
             Button_Cancel.Click += Button_Cancel_Click;
             Button_Save.Click += Button_Save_Click;
         }
 
         private void Button_Save_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            IsSaveClick = true;
+            SaveClick?.Invoke();
+            this.Close();
         }
 
         private void Button_Cancel_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            this.Close();
+        }
+
+        private void EditorRequestSaverWindow_Closed(object sender, EventArgs e)
+        {
+            if (!IsSaveClick)
+                CancelClick?.Invoke();
         }
     }
 }
