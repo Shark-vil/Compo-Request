@@ -42,6 +42,7 @@ namespace Compo_Request_Server.Network.Utilities
                 try
                 {
                     NetworkClient.ClientNetwork.Send(WriteDataBytes);
+                    Debug.Log("Данные успешно отправлены клиенту.");
                 }
                 catch (SocketException ex)
                 {

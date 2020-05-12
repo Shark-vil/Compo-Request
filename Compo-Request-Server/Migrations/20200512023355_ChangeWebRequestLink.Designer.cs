@@ -2,14 +2,16 @@
 using Compo_Request_Server.Network.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Compo_Request_Server.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20200512023355_ChangeWebRequestLink")]
+    partial class ChangeWebRequestLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,12 +161,12 @@ namespace Compo_Request_Server.Migrations
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("WebRequestItemId")
+                    b.Property<int>("WebRequestId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WebRequestItemId");
+                    b.HasIndex("WebRequestId");
 
                     b.ToTable("WebRequestDirs");
                 });
@@ -176,10 +178,6 @@ namespace Compo_Request_Server.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Link")
-                        .IsRequired()
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
-
-                    b.Property<string>("Method")
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
@@ -277,7 +275,7 @@ namespace Compo_Request_Server.Migrations
                 {
                     b.HasOne("Compo_Shared_Data.Models.WebRequestItem", "WebRequestItems")
                         .WithMany()
-                        .HasForeignKey("WebRequestItemId")
+                        .HasForeignKey("WebRequestId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

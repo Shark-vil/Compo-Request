@@ -8,6 +8,7 @@ using Compo_Request_Server.Network.Events.Auth;
 using Compo_Request_Server.Network.Events.Projects;
 using Compo_Request_Server.Network.Events.Register;
 using Compo_Request_Server.Network.Events.Team;
+using Compo_Request_Server.Network.Events.WebRequestActions;
 using Compo_Request_Server.Network.Models;
 using Compo_Request_Server.Network.Server;
 using Compo_Shared_Data.Debugging;
@@ -48,6 +49,8 @@ namespace Compo_Request_Server
             var EventTemUser = new ETeamUser();
             var EventProject = new EProject();
             var EventTeamProject = new ETeamProject();
+            var EventWebRequestItem = new EWebRequestItem();
+            var EventWebRequestDir = new EWebRequestDir();
         }
     }
 }

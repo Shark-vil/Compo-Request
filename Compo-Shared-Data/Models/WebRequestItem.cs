@@ -15,6 +15,10 @@ namespace Compo_Shared_Data.Models
         [Required]
         public string Title { get; set; }
         [Required]
+        public string Link { get; set; }
+        [Required]
+        public string Method { get; set; }
+        [Required]
         public int ProjectId { get; set; }
         [ForeignKey("ProjectId")]
         [System.Xml.Serialization.XmlIgnore]

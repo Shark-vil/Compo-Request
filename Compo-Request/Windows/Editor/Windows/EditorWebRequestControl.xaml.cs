@@ -24,6 +24,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using Compo_Request.WindowsLogic.EditorLogic;
+using Compo_Request.Network.Client;
+using Compo_Shared_Data.Network;
 
 namespace Compo_Request.Windows.Editor.Windows
 {
@@ -33,7 +35,6 @@ namespace Compo_Request.Windows.Editor.Windows
     public partial class EditorWebRequestControl : UserControl
     {
         private DispatcherTimer Timer_EditorRequestData_PropertyChanged = null;
-
         private DispatcherTimer Timer_BlockEvent = null;
         private bool IsBlock = false;
 
@@ -51,10 +52,18 @@ namespace Compo_Request.Windows.Editor.Windows
 
         private DispatcherTimer WebRequestWait = new DispatcherTimer();
 
+        private CollectionView ListViewCollection { get; set; }
+
         public EditorWebRequestControl()
         {
             InitializeComponent();
+            Start();
+            WindowActions();
+            NetworkActions();
+        }
 
+        private void Start()
+        {
             EditorRequestData = new DynamicModelEditorRequest();
             DataContext = EditorRequestData;
 
@@ -63,41 +72,40 @@ namespace Compo_Request.Windows.Editor.Windows
 
             ListView_WebRequests.ItemsSource = VirtualRequestDirs;
 
-            CollectionView ViewCollection = (CollectionView)CollectionViewSource.GetDefaultView(ListView_WebRequests.ItemsSource);
-            PropertyGroupDescription gDescription = new PropertyGroupDescription("RequestDir");
-            ViewCollection.GroupDescriptions.Add(gDescription);
+            ListViewCollection = (CollectionView)CollectionViewSource.GetDefaultView(ListView_WebRequests.ItemsSource);
+            var gDescription = new PropertyGroupDescription("Title");
+            ListViewCollection.GroupDescriptions.Add(gDescription);
 
-            VirtualRequestDirs.Add(new ModelRequestDirectory
+            Sender.SendToServer("WebRequestItem.MBinding_WebRequest.Get", ProjectData.SelectedProject.Id, 85537);
+        }
+
+        private void NetworkActions()
+        {
+            NetworkDelegates.Add(delegate (MResponse ServerResponse)
             {
-                RequestDir = "Test category",
-                RequestMethod = "POST",
-                WebRequest ="http://google.ru"
-            });
+                var MB_WebRequests = Package.Unpacking<MBinding_WebRequest[]>(ServerResponse.DataBytes);
 
-            VirtualRequestDirs.Add(new ModelRequestDirectory
-            {
-                RequestDir = "Test category",
-                RequestMethod = "POST",
-                WebRequest = "http://google.ru"
-            });
+                foreach(var MB_WebRequest in MB_WebRequests)
+                {
+                    VirtualRequestDirs.Add(new ModelRequestDirectory
+                    {
+                        Id = MB_WebRequest.Directory.Id,
+                        RequestTitle = MB_WebRequest.Item.Title,
+                        Title = MB_WebRequest.Directory.Title,
+                        RequestMethod = MB_WebRequest.Item.Method,
+                        WebRequest = MB_WebRequest.Item.Link,
+                        WebRequestId = MB_WebRequest.Item.Id
+                    });
+                }
 
-            VirtualRequestDirs.Add(new ModelRequestDirectory
-            {
-                RequestDir = "Test category",
-                RequestMethod = "POST",
-                WebRequest = "http://google.ru"
-            });
+                ListViewCollection.Refresh();
+                ListView_WebRequests.Items.Refresh();
 
-            //ListView_WebRequests.ItemsSource = null;
-            //ListView_WebRequests.Items.Clear();
+            }, Dispatcher, 85537, "WebRequestItem.MBinding_WebRequest.Get", "EditorWebRequestControl");
+        }
 
-            for (int i = 0; i < VirtualRequestDirs.Count; i++)
-                VirtualRequestDirs[i].RequestDir = "LOL";
-
-            //DataGrid_FormRequestData.ItemsSource = WebRequestItems;
-            ListView_WebRequests.Items.Refresh();
-            ViewCollection.Refresh();
-
+        private void WindowActions()
+        {
             DataGrid_FormRequestData.CurrentCellChanged += DataGrid_FormRequestData_CurrentCellChanged;
             ComboBox_RequestType.SelectionChanged += ComboBox_RequestType_SelectionChanged;
             WebRequestItems.CollectionChanged += FormRequestsData_CollectionChanged;
@@ -119,6 +127,8 @@ namespace Compo_Request.Windows.Editor.Windows
         {
             // Удаление пустых строк
             RemoveEmptyCollectionValues();
+
+            LEditorNetwork.SaveRequest(RequestLink, RequestMethod, WebRequestItems.ToArray());
         }
 
         private void EditorRequestData_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -195,7 +205,7 @@ namespace Compo_Request.Windows.Editor.Windows
                 "Создать новый запрос?",
                 delegate ()
                 {
-                    //LEditorNetwork.SaveRequest();
+                    LEditorNetwork.SaveRequest(RequestLink, RequestMethod, WebRequestItems.ToArray());
                 },
                 delegate()
                 {

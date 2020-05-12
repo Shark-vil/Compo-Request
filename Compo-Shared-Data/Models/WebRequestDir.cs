@@ -15,8 +15,8 @@ namespace Compo_Shared_Data.Models
         [Required]
         public string Title { get; set; }
         [Required]
-        public int WebRequestId { get; set; }
-        [ForeignKey("WebRequestId")]
+        public int WebRequestItemId { get; set; }
+        [ForeignKey("WebRequestItemId")]
         [System.Xml.Serialization.XmlIgnore]
         public WebRequestItem WebRequestItems { get; set; }
     }

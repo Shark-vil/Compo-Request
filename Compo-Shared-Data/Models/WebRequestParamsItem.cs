@@ -13,8 +13,6 @@ namespace Compo_Shared_Data.Models
         [Required]
         public int Id { get; set; }
         [Required]
-        public string Link { get; set; }
-        [Required]
         public string Key { get; set; }
         [Required]
         public string Value { get; set; }

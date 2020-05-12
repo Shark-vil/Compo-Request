@@ -49,7 +49,7 @@
         <Grid Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="2">
             <StackPanel Orientation="Horizontal">
                 <ListView x:Name="ListView_WebRequests"
-                          Visibility="Collapsed">
+                          Visibility="Visible">
                     <ListView.View>
                         <GridView>
                             <GridView.ColumnHeaderContainerStyle>
@@ -58,8 +58,9 @@
                                 </Style>
                             </GridView.ColumnHeaderContainerStyle>
 
-                            <GridViewColumn Header="Метод" Width="200" DisplayMemberBinding="{Binding Path=RequestMethod}" />
-                            <GridViewColumn Header="Запрос" Width="200" DisplayMemberBinding="{Binding Path=WebRequest}" />
+                            <GridViewColumn Header="Метод" Width="90" DisplayMemberBinding="{Binding Path=RequestMethod}" />
+                            <GridViewColumn Header="Название" Width="150" DisplayMemberBinding="{Binding Path=RequestTitle}" />
+                            <GridViewColumn Header="Запрос" Width="100" DisplayMemberBinding="{Binding Path=WebRequest}" />
                             <GridViewColumn Header="Действия" Width="200">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
