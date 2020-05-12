@@ -10,7 +10,7 @@ namespace Compo_Request.Utilities
 {
     public class GetLinkRequestToCollection
     {
-        public static ObservableCollection<WebRequestItem> GetCollection(string WebLink)
+        public static ObservableCollection<WebRequestParamsItem> GetCollection(string WebLink)
         {
             try
             {
@@ -20,7 +20,7 @@ namespace Compo_Request.Utilities
                     string[] Nbsps = CutNbspMark(WebLink, QuestionMark);
                     if (Nbsps != null)
                     {
-                        ObservableCollection<WebRequestItem> WebRequestItems = CutEqualMark(Nbsps);
+                        ObservableCollection<WebRequestParamsItem> WebRequestItems = CutEqualMark(Nbsps);
                         if (WebRequestItems != null)
                             return WebRequestItems;
                     }
@@ -63,9 +63,9 @@ namespace Compo_Request.Utilities
             return null;
         }
 
-        private static ObservableCollection<WebRequestItem> CutEqualMark(string[] NbspArrayCut)
+        private static ObservableCollection<WebRequestParamsItem> CutEqualMark(string[] NbspArrayCut)
         {
-            ObservableCollection<WebRequestItem> WebRequestItems = new ObservableCollection<WebRequestItem>();
+            ObservableCollection<WebRequestParamsItem> WebRequestItems = new ObservableCollection<WebRequestParamsItem>();
 
             for (int i = 0; i < NbspArrayCut.Length; i++)
             {
@@ -78,7 +78,7 @@ namespace Compo_Request.Utilities
                     {
                         string[] Cuts = EqualItem.Split('=');
 
-                        WebRequestItem WebRequestItem = new WebRequestItem();
+                        var WebRequestItem = new WebRequestParamsItem();
 
                         if (Cuts[0].Trim() != string.Empty)
                         {
@@ -90,7 +90,7 @@ namespace Compo_Request.Utilities
                     }
                     else
                     {
-                        WebRequestItem WebRequestItem = new WebRequestItem();
+                        var WebRequestItem = new WebRequestParamsItem();
                         WebRequestItem.Key = EqualItem;
                         WebRequestItem.Value = "";
 

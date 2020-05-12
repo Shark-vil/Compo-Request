@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Compo_Request.Windows"
         mc:Ignorable="d"
-         ResizeMode="NoResize"
+        ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         Title="ConfirmWindow" Height="230" Width="400">
     <Grid>

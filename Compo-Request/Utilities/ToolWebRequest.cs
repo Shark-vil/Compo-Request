@@ -86,7 +86,7 @@ namespace Compo_Request.Utilities
             return "";
         }
 
-        public static string RestRequest(string Method, string Link, ObservableCollection<WebRequestItem> FormRequestsData = null)
+        public static string RestRequest(string Method, string Link, ObservableCollection<WebRequestParamsItem> FormRequestsData = null)
         {
             var Client = new RestClient(GetFirstLink(Link));
             IRestResponse Response = null;

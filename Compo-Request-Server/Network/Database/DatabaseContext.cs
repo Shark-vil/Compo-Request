@@ -18,6 +18,7 @@ namespace Compo_Request_Server.Network.Database
         public DbSet<TeamUser> TeamUsers { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<TeamProject> TeamProjects { get; set; }
+        public DbSet<WebRequestParamsItem> WebRequestParamsItems { get; set; }
         public DbSet<WebRequestItem> WebRequestItems { get; set; }
         public DbSet<WebRequestDir> WebRequestDirs { get; set; }
 

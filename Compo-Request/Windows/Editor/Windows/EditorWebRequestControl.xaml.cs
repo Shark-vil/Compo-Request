@@ -23,6 +23,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Compo_Request.WindowsLogic.EditorLogic;
 
 namespace Compo_Request.Windows.Editor.Windows
 {
@@ -36,7 +37,7 @@ namespace Compo_Request.Windows.Editor.Windows
         private DispatcherTimer Timer_BlockEvent = null;
         private bool IsBlock = false;
 
-        private ObservableCollection<WebRequestItem> WebRequestItems = new ObservableCollection<WebRequestItem>();
+        private ObservableCollection<WebRequestParamsItem> WebRequestItems = new ObservableCollection<WebRequestParamsItem>();
         private HeaderedItemViewModel TabItemView { get; set; }
         private string HeaderName { get; set; }
 
@@ -87,7 +88,15 @@ namespace Compo_Request.Windows.Editor.Windows
                 WebRequest = "http://google.ru"
             });
 
+            //ListView_WebRequests.ItemsSource = null;
+            //ListView_WebRequests.Items.Clear();
+
+            for (int i = 0; i < VirtualRequestDirs.Count; i++)
+                VirtualRequestDirs[i].RequestDir = "LOL";
+
+            //DataGrid_FormRequestData.ItemsSource = WebRequestItems;
             ListView_WebRequests.Items.Refresh();
+            ViewCollection.Refresh();
 
             DataGrid_FormRequestData.CurrentCellChanged += DataGrid_FormRequestData_CurrentCellChanged;
             ComboBox_RequestType.SelectionChanged += ComboBox_RequestType_SelectionChanged;
@@ -116,24 +125,26 @@ namespace Compo_Request.Windows.Editor.Windows
         {
             if (!IsBlock && e.PropertyName == "RequestLink" && RequestMethod == "GET")
             {
+                RequestLink = EditorRequestData.RequestLink;
+
                 if (Timer_EditorRequestData_PropertyChanged != null && Timer_EditorRequestData_PropertyChanged.IsEnabled)
                     Timer_EditorRequestData_PropertyChanged.Stop();
 
                 Timer_EditorRequestData_PropertyChanged = CustomTimer.Create(delegate (object sender, EventArgs e)
                 {
-                    ObservableCollection<WebRequestItem> Collection = 
+                    ObservableCollection<WebRequestParamsItem> Collection = 
                         GetLinkRequestToCollection.GetCollection(EditorRequestData.RequestLink);
 
                     if (Collection != null)
                     {
-                        WebRequestItem[] CollectionArray;
+                        WebRequestParamsItem[] CollectionArray;
 
                         CollectionArray = WebRequestItems.ToArray();
                         foreach (var WebRequestItem in Collection)
                         {
                             if (WebRequestItem != null && WebRequestItem.Key != null)
                             {
-                                WebRequestItem GWebRequestItem = Array.Find(CollectionArray, x => x.Key == WebRequestItem.Key);
+                                WebRequestParamsItem GWebRequestItem = Array.Find(CollectionArray, x => x.Key == WebRequestItem.Key);
 
                                 if (GWebRequestItem == null)
                                     WebRequestItems.Add(WebRequestItem);
@@ -151,7 +162,7 @@ namespace Compo_Request.Windows.Editor.Windows
                         var RemoveIndexs = new List<int>();
                         for (int i = 0; i < WebRequestItems.Count; i++)
                         {
-                            WebRequestItem WebRequestItem = WebRequestItems[i];
+                            WebRequestParamsItem WebRequestItem = WebRequestItems[i];
                             if (WebRequestItem != null && WebRequestItem.Key != null)
                                 if (!Array.Exists(CollectionArray, x => x.Key == WebRequestItem.Key))
                                     WebRequestItems.RemoveAt(i);
@@ -180,35 +191,44 @@ namespace Compo_Request.Windows.Editor.Windows
 
         private void Button_SendRequest_Click(object sender, RoutedEventArgs e)
         {
-            var t = new Thread(new ThreadStart(WebRequestSend));
-            t.Start();
+            new ConfirmWindow("Предупреждение", "Если вы хотите сохранить всю историю для запроса, вам следует сохранить запрос. " +
+                "Создать новый запрос?",
+                delegate ()
+                {
+                    //LEditorNetwork.SaveRequest();
+                },
+                delegate()
+                {
+                    WebRequestSend();
+                });
         }
 
         private void WebRequestSend()
         {
-            Dispatcher.Invoke(delegate ()
+            var t = new Thread(new ThreadStart(delegate()
             {
-                try
+                Dispatcher.Invoke(delegate ()
                 {
-                    DataGrid_FormRequestData.IsEnabled = false;
-                    TextBox_RequestLink.IsEnabled = false;
-                    Button_SendRequest.IsEnabled = false;
-                    Button_SaveRequest.IsEnabled = false;
+                    try
+                    {
+                        DataGrid_FormRequestData.IsEnabled = false;
+                        TextBox_RequestLink.IsEnabled = false;
+                        Button_SendRequest.IsEnabled = false;
+                        Button_SaveRequest.IsEnabled = false;
 
-                    string Method = ComboBox_RequestType.SelectedItem.ToString();
-                    string Link = EditorRequestData.RequestLink;
+                        var Response = ToolWebRequest.RestRequest(RequestMethod, RequestLink, WebRequestItems);
 
-                    var Response = ToolWebRequest.RestRequest(Method, Link, WebRequestItems);
+                        JsonViewer.Load(Response);
+                    }
+                    catch { }
 
-                    JsonViewer.Load(Response);
-                }
-                catch { }
-
-                DataGrid_FormRequestData.IsEnabled = true;
-                TextBox_RequestLink.IsEnabled = true;
-                Button_SendRequest.IsEnabled = true;
-                Button_SaveRequest.IsEnabled = true;
-            });
+                    DataGrid_FormRequestData.IsEnabled = true;
+                    TextBox_RequestLink.IsEnabled = true;
+                    Button_SendRequest.IsEnabled = true;
+                    Button_SaveRequest.IsEnabled = true;
+                });
+            }));
+            t.Start();
         }
 
         private void FormRequestsData_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -253,7 +273,7 @@ namespace Compo_Request.Windows.Editor.Windows
 
                 for (int i = 0; i < WebRequestItems.Count; i++)
                 {
-                    WebRequestItem WebRequestItem = WebRequestItems[i];
+                    WebRequestParamsItem WebRequestItem = WebRequestItems[i];
 
                     if (WebRequestItem != null && WebRequestItem.Key != null && WebRequestItem.Value != null)
                     {
@@ -327,18 +347,23 @@ namespace Compo_Request.Windows.Editor.Windows
         private string ConstructGetRequest(string RequestLink)
         {
             RequestLink = RequestLink.Trim();
-            RequestLink += "?";
+
+            if (RequestLink.IndexOf('?') == -1)
+                RequestLink += "?";
 
             for(int i = 0; i < WebRequestItems.Count; i++)
             {
                 var FormItem = WebRequestItems[i];
-                if (i != WebRequestItems.Count - 1)
+                if (i != WebRequestItems.Count - 1 
+                    && (FormItem.Key != null && FormItem.Key.Trim() != string.Empty)
+                    && (FormItem.Value != null && FormItem.Value.Trim() != string.Empty))
                     RequestLink += $"{FormItem.Key}={FormItem.Value}&";
                 else
                 {
-                    if (FormItem.Value != string.Empty)
+                    if ((FormItem.Key != null && FormItem.Key.Trim() != string.Empty)
+                        && (FormItem.Value != null && FormItem.Value.Trim() != string.Empty))
                         RequestLink += $"{FormItem.Key}={FormItem.Value}";
-                    else
+                    else if ((FormItem.Key != null && FormItem.Key.Trim() != string.Empty))
                         RequestLink += $"{FormItem.Key}";
                 }
             }
@@ -360,7 +385,7 @@ namespace Compo_Request.Windows.Editor.Windows
 
         private void ButtonClick_DeleteProject(object sender, RoutedEventArgs e)
         {
-            var FormRequest = (sender as Button).DataContext as WebRequestItem;
+            var FormRequest = (sender as Button).DataContext as WebRequestParamsItem;
 
             if (FormRequest != null)
             {
