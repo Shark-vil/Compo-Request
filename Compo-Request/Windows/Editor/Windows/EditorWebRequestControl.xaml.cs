@@ -137,9 +137,15 @@ namespace Compo_Request.Windows.Editor.Windows
         private void Button_RequestList_Click(object sender, RoutedEventArgs e)
         {
             if (ListView_WebRequests.Visibility == Visibility.Collapsed)
+            {
                 ListView_WebRequests.Visibility = Visibility.Visible;
+                DataGrid_FormRequestData.Visibility = Visibility.Collapsed;
+            }
             else
+            {
                 ListView_WebRequests.Visibility = Visibility.Collapsed;
+                DataGrid_FormRequestData.Visibility = Visibility.Visible;
+            }
         }
 
         private void Button_SaveRequest_Click(object sender, RoutedEventArgs e)
