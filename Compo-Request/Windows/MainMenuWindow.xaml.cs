@@ -1,6 +1,9 @@
-﻿using Compo_Request.Windows.Projects;
+﻿using Compo_Request.Network.Client;
+using Compo_Request.Network.Utilities;
+using Compo_Request.Windows.Projects;
 using Compo_Request.Windows.Teams;
 using Compo_Request.WindowsLogic;
+using Compo_Shared_Data.Debugging;
 using System.Windows;
 
 namespace Compo_Request.Windows
@@ -105,6 +108,8 @@ namespace Compo_Request.Windows
         /// <param name="e"></param>
         private void MainMenuWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            Sender.SendToServer("User.Disconnected");
+
             _MainWindow.Show();
         }
     }

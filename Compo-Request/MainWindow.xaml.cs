@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows;
+using Compo_Request.Network.Client;
 using Compo_Request.Network.Utilities;
 using Compo_Request.Windows;
 using Compo_Request.Windows.UserRegister;
 using Compo_Request.WindowsLogic;
 using Compo_Shared_Data.Debugging;
+using Compo_Shared_Data.Network.Models;
 
 namespace Compo_Request
 {
@@ -43,6 +45,28 @@ namespace Compo_Request
             WindowLogic = new LMain(this);
             WindowLogic.NetworkEventsLoad();
             WindowLogic.AutomaticAuthorizate();
+
+            ConnectService.ConnectBrokenEvents += 
+            () => {
+                Dispatcher.Invoke(() =>
+                {
+                    SelfUserDisconnected();
+                    _MainMenuWindow.Close();
+                });
+            };
+
+            NetworkDelegates.Add((MResponse ServerResponse) =>
+            {
+                SelfUserDisconnected();
+            }, Dispatcher, -1, "User.Disconnected.Confirm");
+        }
+
+        private void SelfUserDisconnected()
+        {
+            UserInfo.NetworkSelf = null;
+            UserInfo.NetworkUsers.Clear();
+
+            Debug.LogWarning("Списки пользователей были системно очищены.");
         }
 
         /// <summary>

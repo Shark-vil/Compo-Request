@@ -2,9 +2,12 @@
 using Compo_Request.Network.Utilities;
 using Compo_Request.Network.Utilities.Validators;
 using Compo_Request.Windows;
+using Compo_Shared_Data.Debugging;
 using Compo_Shared_Data.Network;
 using Compo_Shared_Data.Network.Models;
 using System;
+using System.Collections.Generic;
+using System.Windows.Documents;
 using System.Windows.Threading;
 
 namespace Compo_Request.WindowsLogic
@@ -81,6 +84,54 @@ namespace Compo_Request.WindowsLogic
                     Data.Windows.AutomaticAuthorizate.Save(UserData);
 
             }, _Dispatcher, 2, "User.Auth.Confirm", "MainWindow");
+
+            NetworkDelegates.Add(delegate (MResponse ServerResponse)
+            {
+                var NetUsers = Package.Unpacking<MUserNetwork[]>(ServerResponse.DataBytes);
+
+                Debug.Log($"Получен список пользователей в количестве {NetUsers.Length} записей");
+
+                var NewUsers = new List<MUserNetwork>();
+                foreach (var NetUser in NetUsers)
+                    if (!Array.Exists(UserInfo.NetworkUsers.ToArray(), x => x.NetworkId == NetUser.NetworkId))
+                    {
+                        UserInfo.NetworkUsers.Add(NetUser);
+                        Debug.Log($"Пользователь {NetUser.NetworkId} был добавлен в список.");
+                    }
+
+            }, _Dispatcher, -1, "Users.Update", "MainWindow");
+
+            NetworkDelegates.Add(delegate (MResponse ServerResponse)
+            {
+                var NetUser = Package.Unpacking<MUserNetwork>(ServerResponse.DataBytes);
+
+                if (!Array.Exists(UserInfo.NetworkUsers.ToArray(), x => x.NetworkId == NetUser.NetworkId))
+                {
+                    UserInfo.NetworkUsers.Add(NetUser);
+                    Debug.Log($"Пользователь {NetUser.NetworkId} был добавлен в список.");
+                }
+
+            }, _Dispatcher, -1, "Users.Add", "MainWindow");
+
+            NetworkDelegates.Add(delegate (MResponse ServerResponse)
+            {
+                var NetworkId = Package.Unpacking<string>(ServerResponse.DataBytes);
+
+                MUserNetwork UserNetwork = UserInfo.NetworkUsers.Find(x => x.NetworkId == NetworkId);
+
+                if (UserNetwork != null)
+                {
+                    if (UserNetwork.NetworkId == UserInfo.NetworkSelf.NetworkId)
+                    {
+                        UserInfo.NetworkSelf = null;
+                        Debug.Log("Собственный компонент пользователя был удалён.");
+                    }
+
+                    UserInfo.NetworkUsers.Remove(UserNetwork);
+                    Debug.Log($"Пользователь {NetworkId} был удалён из списка.");
+                }
+
+            }, _Dispatcher, -1, "Users.Remove", "MainWindow");
 
             /**
              * Вызывается при неудачной авторизации в системе.

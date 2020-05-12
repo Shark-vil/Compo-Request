@@ -1,4 +1,5 @@
 ﻿using Compo_Request.Network.Models;
+using Compo_Request.Network.Utilities;
 using Compo_Shared_Data.Debugging;
 using Compo_Shared_Data.Network;
 using Compo_Shared_Data.Network.Models;
@@ -65,6 +66,8 @@ namespace Compo_Request.Network.Client
                     foreach (var DataDelegate in NetworkDelegates.NetworkActions)
                         if (DataDelegate.KeyNetwork == "Server.Disconnect")
                             DispatcherExec(DataDelegate);
+
+                    ConnectService.ConnectBrokenEvents.Invoke();
 
                     Disconnect();
 

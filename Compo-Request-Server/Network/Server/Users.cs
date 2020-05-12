@@ -32,7 +32,7 @@ namespace Compo_Request_Server.Network.Server
             Debug.Log("Пользователь добавлен в системный список");
 
             Sender.Send(NetworkClient, "Users.Update", ActiveUsers.ToArray());
-            Sender.SendOmit(NetworkClient, "Users.Add", NetworkClient);
+            Sender.SendOmit(NetworkClient, "Users.Add", NetworkUser);
         }
 
         public static UserStructure GetUserStructureById(string NetworkId)
@@ -61,7 +61,7 @@ namespace Compo_Request_Server.Network.Server
 
                 Debug.Log("Пользователь удалён из системного списка");
 
-                Sender.SendOmit(NetworkClient, "Users.Remove", NetworkId);
+                Sender.Broadcast("Users.Remove", NetworkId);
             }
         }
     }
