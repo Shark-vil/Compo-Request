@@ -16,16 +16,19 @@ using System.Text;
 
 namespace Compo_Request_Server.Network.Events.Auth
 {
-    public class EAuth : IEvent
+    public class EAuth
     {
         public EAuth()
         {
             NetworkDelegates.Add(AuthUser, "User.Auth", 1);
+            NetworkDelegates.Add(UserDisconnected, "User.Disconnected");
         }
 
-        public void Destruct()
+        private void UserDisconnected(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
-            throw new NotImplementedException();
+            Users.Remove(NetworkClient);
+
+            Sender.Send(NetworkClient, "User.Disconnected.Confirm");
         }
 
         private void AuthUser(MResponse ClientResponse, MNetworkClient NetworkClient)
@@ -44,8 +47,15 @@ namespace Compo_Request_Server.Network.Events.Auth
                     {
                         if (Crypter.CheckPassword(UserData[1], user.Password))
                         {
+                            if (Users.ActiveUsers.Exists(x => x.Login == user.Login))
+                            {
+                                Sender.Send(NetworkClient, "User.Auth.Error", default, 2);
+                                return;
+                            }
+
                             var UserNetwork = new MUserNetwork();
-                            UserNetwork.Id = NetworkClient.Id;
+                            UserNetwork.Id = user.Id;
+                            UserNetwork.NetworkId = NetworkClient.Id;
                             UserNetwork.Login = user.Login;
                             UserNetwork.Email = user.Email;
                             UserNetwork.Name = user.Name;

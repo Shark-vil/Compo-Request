@@ -10,6 +10,9 @@ namespace Compo_Request.Network.Utilities
         private static Thread ServiceThread = null;
         public static Thread ClientThread = null;
 
+        public delegate void ConnectBrokenDelegate();
+        public static ConnectBrokenDelegate ConnectBrokenEvents;
+
         public static void Start()
         {
             if (ServiceThread == null)

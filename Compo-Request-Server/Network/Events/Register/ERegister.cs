@@ -34,7 +34,7 @@ namespace Compo_Request_Server.Network.Events.Register
             {
                 using (var db = new DatabaseContext())
                 {
-                    var user = Package.Unpacking<User>(ClientResponse.DataBytes);
+                    var user = Package.Unpacking<Compo_Shared_Data.Models.User>(ClientResponse.DataBytes);
 
                     if (db.Users.Where(u => u.Email == user.Email).FirstOrDefault() == null 
                         && db.Users.Where(u => u.Login == user.Login).FirstOrDefault() == null)
@@ -42,16 +42,14 @@ namespace Compo_Request_Server.Network.Events.Register
                         user.Password = Crypter.Blowfish.Crypt(user.Password);
                         db.Users.Add(user);
                         db.SaveChanges();
-                    }
-                    else
-                    {
-                        Sender.Send(NetworkClient, "User.Register.Error", default, 2);
+
+                        Debug.Log("В базу данных добавлен новый пользователь", ConsoleColor.Magenta);
+                        Sender.Send(NetworkClient, "User.Register.Confirm", default, 2);
                         return;
                     }
 
-                    Debug.Log("В базу данных добавлен новый пользователь", ConsoleColor.Magenta);
-
-                    Sender.Send(NetworkClient, "User.Register.Confirm", default, 2);
+                    Sender.Send(NetworkClient, "User.Register.Error", default, 2);
+                    return;
                 }
             }
             catch(DbUpdateException ex)

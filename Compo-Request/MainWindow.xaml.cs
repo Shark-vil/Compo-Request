@@ -1,29 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
-using Compo_Request.Network;
 using Compo_Request.Network.Client;
 using Compo_Request.Network.Utilities;
-using Compo_Request.Network.Utilities.Validators;
 using Compo_Request.Windows;
-using Compo_Request.Windows.Projects;
 using Compo_Request.Windows.UserRegister;
+using Compo_Request.WindowsLogic;
 using Compo_Shared_Data.Debugging;
-using Compo_Shared_Data.Network;
 using Compo_Shared_Data.Network.Models;
 
 namespace Compo_Request
@@ -33,157 +16,119 @@ namespace Compo_Request
     /// </summary>
     public partial class MainWindow : Window
     {
-        private RegisterWindow _RegisterWindow;
-        private ProjectsWindow _ProjectsWindow;
-        private DispatcherTimer MainWindowElementsUnblockTimer;
-        private string[] UserData;
-
+        // Основная логика текущего окна
+        private LMain WindowLogic;
+        // Окно регистрации
+        internal RegisterWindow _RegisterWindow;
+        // Главное меню после входа
+        internal MainMenuWindow _MainMenuWindow;
+        // Консоль разработчика
         [DllImport("Kernel32")]
         public static extern void AllocConsole();
 
+        /// <summary>
+        /// Конструктор главного окна.
+        /// </summary>
         public MainWindow()
         {
 #if DEBUG
+            // Запускает консоль разработчика, если билд является DEBUG
             AllocConsole();
-            Debug.Log("Запущена консоль отладки", ConsoleColor.Green);
+            Debug.Log("Запущена консоль разработчика", ConsoleColor.Green);
 #endif
             InitializeComponent();
             EventsInitialize();
 
             ConnectService.Start();
 
-            NetworkDelegates.Add(delegate (MResponse ServerResponse)
-            {
-                var NetUser = Package.Unpacking<MUserNetwork>(ServerResponse.DataBytes);
+            // Создание сущности логики главного окна.
+            WindowLogic = new LMain(this);
+            WindowLogic.NetworkEventsLoad();
+            WindowLogic.AutomaticAuthorizate();
 
-                _ProjectsWindow = new ProjectsWindow(this);
-                this.Hide();
-                _ProjectsWindow.Show();
-
-                MainWindowElements_Unblock();
-
-                if ((bool)CheckBox_AutoAuth.IsChecked)
-                    Data.Windows.AutomaticAuthorizate.Save(UserData);
-
-            }, Dispatcher, 2, "User.Auth.Confirm", "MainWindow");
-
-            NetworkDelegates.Add(delegate (MResponse ServerResponse)
-            {
-                if (StringValid.IsValidEmail(TextBox_LoginOrEmail.Text))
+            ConnectService.ConnectBrokenEvents += 
+            () => {
+                Dispatcher.Invoke(() =>
                 {
-                    var Alert = new AlertWindow("Ошибка", "Не верно указана почта или пароль!");
-                }
-                else
-                {
-                    var Alert = new AlertWindow("Ошибка", "Не верно указан логин или пароль!");
-                }
+                    SelfUserDisconnected();
+                    _MainMenuWindow.Close();
+                });
+            };
 
-                MainWindowElements_Unblock();
-
-            }, Dispatcher, 2, "User.Auth.Error", "MainWindow");
-
-            if (Data.Windows.AutomaticAuthorizate.Exists())
+            NetworkDelegates.Add((MResponse ServerResponse) =>
             {
-                Console.WriteLine("Файл есть");
-                CheckBox_AutoAuth.IsChecked = true;
+                SelfUserDisconnected();
+            }, Dispatcher, -1, "User.Disconnected.Confirm");
+        }
 
-                UserData = Data.Windows.AutomaticAuthorizate.Read();
-                TextBox_LoginOrEmail.Text = UserData[0];
-                PasswordBox_Password.Password = UserData[1];
+        private void SelfUserDisconnected()
+        {
+            UserInfo.NetworkSelf = null;
+            UserInfo.NetworkUsers.Clear();
 
-                UserAuthorization(UserData);
-            }
+            Debug.LogWarning("Списки пользователей были системно очищены.");
         }
 
         /// <summary>
-        /// Иницализация событий элементов.
+        /// Регистрация событий элементов.
         /// </summary>
         private void EventsInitialize()
         {
-            // Регистрация события нажатия на кнопку регистрации
-            Button_Register.Click += Button_Register_Click;
-            Button_Login.Click += Button_Login_Click;
+            Button_Register.Click += Button_Register_Click;     // Вызывается при нажатии на кнопку регистрации
+            Button_Login.Click += Button_Login_Click;           // Вызывается при нажатии на кнопку авторизации
         }
 
+        /// <summary>
+        /// Осуществляет вход в систему.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Login_Click(object sender, RoutedEventArgs e)
         {
-            UserData = new string[]
+            // Сохраняет данные из поля логина и пароля
+            WindowLogic.UserData = new string[]
             {
                 TextBox_LoginOrEmail.Text,
                 PasswordBox_Password.Password
             };
 
-            UserAuthorization(UserData);
-        }
-
-        private bool UserAuthorization(string[] UserData)
-        {
-            if (Sender.SendToServer("User.Auth", UserData, 1))
-            {
-                MainWindowElementsUnblockTimer = new DispatcherTimer();
-                MainWindowElementsUnblockTimer.Tick += new EventHandler(MainWindowElements_UnblockTimer);
-                MainWindowElementsUnblockTimer.Interval = new TimeSpan(0, 0, 5);
-                MainWindowElementsUnblockTimer.Start();
-
-                MainWindowElements_Block();
-
-                return true;
-            }
-            else
-            {
-                var Alert = new AlertWindow("Ошибка", "Не удалось соединиться с сервером.\n" +
-                    "Возможно сервер выключен или присутствуют неполадки в вашем интернет-соединении.",
-                    MainWindowElements_Unblock);
-            }
-
-            return false;
-        }
-
-        private void MainWindowElements_UnblockTimer(object sender, EventArgs e)
-        {
-            MainWindowElementsTimer_Destroy();
-
-            var Alert = new AlertWindow("Ошибка", "Время ожидания ответа от сервера истекло.\n" +
-                "Возможно введены некорректные данные.",
-                MainWindowElements_Unblock);
-        }
-
-        private void MainWindowElementsTimer_Destroy()
-        {
-            if (MainWindowElementsUnblockTimer != null && MainWindowElementsUnblockTimer.IsEnabled)
-                MainWindowElementsUnblockTimer.Stop();
+            WindowLogic.UserAuthorization(WindowLogic.UserData);
         }
 
         /// <summary>
-        /// Действие происходящее при нажатии кнопки регистрации.
+        /// Создаёт окно регистрации и скрывает окно авторизации.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Button_Register_Click(object sender, RoutedEventArgs e)
         {
-            _RegisterWindow = new RegisterWindow(this);
-            this.Hide();
-            _RegisterWindow.Show();
+            _RegisterWindow = new RegisterWindow(this);     // Создание окна регистрации
+            this.Hide();                                    // Скрытие окна авторизации
+            _RegisterWindow.Show();                         // Показ окна регистрации
         }
 
-        private void MainWindowElements_Block()
+        /// <summary>
+        /// Блокирует элементы авторизации.
+        /// </summary>
+        internal void AuthElements_Block()
         {
-            CheckBox_AutoAuth.IsEnabled = false;
-            TextBox_LoginOrEmail.IsEnabled = false;
-            PasswordBox_Password.IsEnabled = false;
-            Button_Login.IsEnabled = false;
-            Button_Register.IsEnabled = false;
+            CheckBox_AutoAuth.IsEnabled = false;            // Отключение галочки для автовхода
+            TextBox_LoginOrEmail.IsEnabled = false;         // Отключение поля ввода Email / Логина
+            PasswordBox_Password.IsEnabled = false;         // Отключение поля ввода пароля
+            Button_Login.IsEnabled = false;                 // Отключение кнопки входа
+            Button_Register.IsEnabled = false;              // Отключение кнопки регистрации
         }
 
-        private void MainWindowElements_Unblock()
+        /// <summary>
+        /// Снимает блокировку с элементов авторизации.
+        /// </summary>
+        internal void AuthElements_Unblock()
         {
-            CheckBox_AutoAuth.IsEnabled = true;
-            TextBox_LoginOrEmail.IsEnabled = true;
-            PasswordBox_Password.IsEnabled = true;
-            Button_Login.IsEnabled = true;
-            Button_Register.IsEnabled = true;
-
-            MainWindowElementsTimer_Destroy();
+            CheckBox_AutoAuth.IsEnabled = true;             // Включение галочки для автовхода
+            TextBox_LoginOrEmail.IsEnabled = true;          // Включение поля ввода Email / Логина
+            PasswordBox_Password.IsEnabled = true;          // Включение поля ввода пароля
+            Button_Login.IsEnabled = true;                  // Включение кнопки входа
+            Button_Register.IsEnabled = true;               // Включение кнопки регистрации
         }
     }
 }

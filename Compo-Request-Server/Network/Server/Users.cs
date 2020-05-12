@@ -32,17 +32,17 @@ namespace Compo_Request_Server.Network.Server
             Debug.Log("Пользователь добавлен в системный список");
 
             Sender.Send(NetworkClient, "Users.Update", ActiveUsers.ToArray());
-            Sender.SendOmit(NetworkClient, "Users.Add", NetworkClient);
+            Sender.SendOmit(NetworkClient, "Users.Add", NetworkUser);
         }
 
-        public static UserStructure GetUsById(string ClientId)
+        public static UserStructure GetUserStructureById(string NetworkId)
         {
-            return ActiveUsersMoreInfo.Find(x => x.NetworkClient.Id == ClientId);
+            return ActiveUsersMoreInfo.Find(x => x.NetworkClient.Id == NetworkId);
         }
 
-        public static MUserNetwork GetById(string ClientId)
+        public static MUserNetwork GetUserById(string NetworkId)
         {
-            return ActiveUsers.Find(x => x.Id == ClientId);
+            return ActiveUsers.Find(x => x.NetworkId == NetworkId);
         }
 
         public static void Remove(MNetworkClient NetworkClient)
@@ -50,18 +50,18 @@ namespace Compo_Request_Server.Network.Server
             RemoveById(NetworkClient.Id);
         }
 
-        public static void RemoveById(string ClientId)
+        public static void RemoveById(string NetworkId)
         {
-            if (ActiveUsersMoreInfo.Exists(x => x.NetworkClient.Id == ClientId))
+            if (ActiveUsersMoreInfo.Exists(x => x.NetworkClient.Id == NetworkId))
             {
-                MNetworkClient NetworkClient = ActiveUsersMoreInfo.Find(x => x.NetworkClient.Id == ClientId).NetworkClient;
+                MNetworkClient NetworkClient = ActiveUsersMoreInfo.Find(x => x.NetworkClient.Id == NetworkId).NetworkClient;
 
                 ActiveUsersMoreInfo.RemoveAll(x => x.NetworkClient == NetworkClient);
-                ActiveUsers.RemoveAll(x => x.Id == ClientId);
+                ActiveUsers.RemoveAll(x => x.NetworkId == NetworkId);
 
                 Debug.Log("Пользователь удалён из системного списка");
 
-                Sender.SendOmit(NetworkClient, "Users.Remove", ClientId);
+                Sender.Broadcast("Users.Remove", NetworkId);
             }
         }
     }

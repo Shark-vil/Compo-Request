@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Compo_Request_Server.Network.Models
 {
-    public delegate void NetworkDelegateTemplate(MResponse ReceiverData, MNetworkClient NetworkClient = null);
+    public delegate void NetworkDelegateTemplate(MResponse ClientResponse, MNetworkClient NetworkClient = null);
 
     public class MNetworkAction
     {

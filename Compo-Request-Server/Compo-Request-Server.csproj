@@ -7,8 +7,53 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200501012757_test-migration.cs" />
+    <Compile Remove="Migrations\20200501012757_test-migration.Designer.cs" />
+    <Compile Remove="Migrations\20200501014245_InitialDb.cs" />
+    <Compile Remove="Migrations\20200501014245_InitialDb.Designer.cs" />
+    <Compile Remove="Migrations\20200501014642_InitialDb.cs" />
+    <Compile Remove="Migrations\20200501014642_InitialDb.Designer.cs" />
+    <Compile Remove="Migrations\20200501015014_InitialDb.cs" />
+    <Compile Remove="Migrations\20200501015014_InitialDb.Designer.cs" />
+    <Compile Remove="Migrations\20200501015107_InitialDb.cs" />
+    <Compile Remove="Migrations\20200501015107_InitialDb.Designer.cs" />
+    <Compile Remove="Migrations\20200501015340_InitialDb.cs" />
+    <Compile Remove="Migrations\20200501015340_InitialDb.Designer.cs" />
+    <Compile Remove="Migrations\20200501015447_InitialDb.cs" />
+    <Compile Remove="Migrations\20200501015447_InitialDb.Designer.cs" />
+    <Compile Remove="Migrations\20200501015629_InitialDb.cs" />
+    <Compile Remove="Migrations\20200501015629_InitialDb.Designer.cs" />
+    <Compile Remove="Migrations\20200501015834_InitialDb.cs" />
+    <Compile Remove="Migrations\20200501015834_InitialDb.Designer.cs" />
+    <Compile Remove="Migrations\20200501020125_InitialDb.cs" />
+    <Compile Remove="Migrations\20200501020125_InitialDb.Designer.cs" />
+    <Compile Remove="Migrations\20200501020221_InitialDb-2.cs" />
+    <Compile Remove="Migrations\20200501020221_InitialDb-2.Designer.cs" />
+    <Compile Remove="Migrations\20200501020322_InitialDb.cs" />
+    <Compile Remove="Migrations\20200501020322_InitialDb.Designer.cs" />
+    <Compile Remove="Migrations\20200501020503_InitialDb.cs" />
+    <Compile Remove="Migrations\20200501020503_InitialDb.Designer.cs" />
+    <Compile Remove="Migrations\20200501020609_InitialDb.cs" />
+    <Compile Remove="Migrations\20200501020609_InitialDb.Designer.cs" />
+    <Compile Remove="Migrations\20200501020709_InitialDb.cs" />
+    <Compile Remove="Migrations\20200501020709_InitialDb.Designer.cs" />
+    <Compile Remove="Migrations\20200509003832_UpdateTeamGroup_UserId.cs" />
+    <Compile Remove="Migrations\20200509003832_UpdateTeamGroup_UserId.Designer.cs" />
+    <Compile Remove="Migrations\20200509004051_UpdateTeamGroup_UserId.cs" />
+    <Compile Remove="Migrations\20200509004051_UpdateTeamGroup_UserId.Designer.cs" />
+    <Compile Remove="Migrations\20200509004200_UpdateTeamGroup_UserId.cs" />
+    <Compile Remove="Migrations\20200509004200_UpdateTeamGroup_UserId.Designer.cs" />
+    <Compile Remove="Migrations\20200509004249_UpdateTeamGroup_UserId.cs" />
+    <Compile Remove="Migrations\20200509004249_UpdateTeamGroup_UserId.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CryptSharpOfficial" Version="2.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
   </ItemGroup>
 

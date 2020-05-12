@@ -17,10 +17,25 @@ namespace Compo_Request.Windows
     /// </summary>
     public partial class AlertWindow : Window
     {
+        // Шаблон делегата
         public delegate void CloseEventDelegate();
-
+        // Событие выполняющееся после закрытия окна
         private CloseEventDelegate CloseEvent;
 
+        public enum AlertCode
+        {
+            SendToServer = 0,
+            AddConfirm = 1,
+            UpdateConfirm = 2,
+            DeleteConfirm = 3,
+        }
+
+        /// <summary>
+        /// Конструктор оповещения.
+        /// </summary>
+        /// <param name="WindowName">Название окна</param>
+        /// <param name="Message">Текст оповещения</param>
+        /// <param name="CloseEvent">Событие при закрытии окна</param>
         public AlertWindow(string WindowName, string Message, CloseEventDelegate CloseEvent = null)
         {
             InitializeComponent();
@@ -34,18 +49,55 @@ namespace Compo_Request.Windows
             this.Show();
         }
 
+        public AlertWindow(string WindowName, AlertCode NAlertCode, CloseEventDelegate CloseEvent = null)
+        {
+            InitializeComponent();
+            EventsInitialize();
+
+            this.CloseEvent = CloseEvent;
+
+            this.Title = WindowName;
+
+
+            if (NAlertCode == AlertCode.SendToServer)
+                TextBlock_Message.Text = "Не удалось установить соединение с сервером. " +
+                    "Возможно сервер выключен, или у вас проблемы с интернет-соединением.";
+            else if (NAlertCode == AlertCode.AddConfirm)
+                TextBlock_Message.Text = "Данные успешно добавлены.";
+            else if (NAlertCode == AlertCode.UpdateConfirm)
+                TextBlock_Message.Text = "Данные успешно обновлены.";
+            else if (NAlertCode == AlertCode.DeleteConfirm)
+                TextBlock_Message.Text = "Данные успешно удалены.";
+
+            this.Show();
+        }
+
         /// <summary>
-        /// Иницализация событий элементов.
+        /// Регистрация событий элементов.
         /// </summary>
         private void EventsInitialize()
         {
-            this.Button_Close.Click += Button_Close_Click;
+            this.Button_Close.Click += Button_Close_Click;  // Событие зарытия окна по нажатию кнопки.
+            this.Closing += AlertWindow_Closing;
         }
 
-        private void Button_Close_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Вызывается при закрытии окна оповещения.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AlertWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             CloseEvent?.Invoke();
+        }
 
+        /// <summary>
+        /// Закрывает окно оповещения и вызывает событие при его наличии.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Button_Close_Click(object sender, RoutedEventArgs e)
+        {
             this.Close();
         }
     }
