@@ -16,14 +16,16 @@ namespace Compo_Request.Network.Models
         public NetworkDelegateTemplate DataDelegate;
         public Dispatcher Dispatcher;
         public string UniqueDelegateName;
+        public bool NotSingle;
 
-        public MNetworkAction(int WindowUid, NetworkDelegateTemplate DataDelegate, Dispatcher Dispatcher = null, string KeyNetwork = null, string UniqueDelegateName = null)
+        public MNetworkAction(int WindowUid, NetworkDelegateTemplate DataDelegate, Dispatcher Dispatcher = null, string KeyNetwork = null, string UniqueDelegateName = null, bool NotSingle = false)
         {
             this.UniqueDelegateName = UniqueDelegateName;
             this.WindowUid = WindowUid;
             this.KeyNetwork = KeyNetwork;
             this.DataDelegate = DataDelegate;
             this.Dispatcher = Dispatcher;
+            this.NotSingle = NotSingle;
         }
     }
 }

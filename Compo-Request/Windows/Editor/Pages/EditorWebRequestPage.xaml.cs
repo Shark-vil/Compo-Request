@@ -39,6 +39,19 @@ namespace Compo_Request.Windows.Editor.Pages
             DataContext = ProjectData.TabCollecton;
 
             this._EditorMainMenuWindow = _EditorMainMenuWindow;
+            TabControl_Requests.SelectionChanged += TabControl_Requests_SelectionChanged;
+        }
+
+        private void TabControl_Requests_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int Index = this.TabControl_Requests.SelectedIndex;
+
+            if (Index != -1)
+            {
+               ProjectData.RequestDirectory = (
+                    (EditorWebRequestControl)ProjectData.TabCollecton.Items[Index].Content
+                ).RequestDirectory;
+            }
         }
 
         public void ClosePage()

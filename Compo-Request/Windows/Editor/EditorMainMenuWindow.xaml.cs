@@ -92,7 +92,11 @@ namespace Compo_Request.Windows.Editor
 
         private void EditorMainMenuWindow_Closing(object sender, EventArgs e)
         {
-            _MainMenuWindow.Show();
+            if (_EditorWebRequestPage != null)
+                _EditorWebRequestPage.ClosePage();
+
+            if (_MainMenuWindow != null)
+                _MainMenuWindow.Show();
         }
     }
 }

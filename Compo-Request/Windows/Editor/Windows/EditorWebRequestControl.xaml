@@ -30,7 +30,7 @@
                 <ComboBox x:Name="ComboBox_RequestType"
                     ItemsSource="{Binding RequestTypes}" SelectedIndex="0"
                     Height="40" Width="100" HorizontalAlignment="Left"/>
-                <TextBox x:Name="TextBox_RequestLink"
+                <TextBox x:Name="TextBox_RequestLink" Focusable="True"
                     Text="{Binding RequestLink, UpdateSourceTrigger=PropertyChanged}"
                     Margin="130, 0, 260, 0" Height="40" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
 
@@ -58,6 +58,9 @@
                                 </Style>
                             </GridView.ColumnHeaderContainerStyle>
 
+                            <GridViewColumn Width="{Binding ColumnWidth, Mode=OneWay}" DisplayMemberBinding="{Binding Path=Id}">
+                                <GridViewColumnHeader Content="Id" IsEnabled="False"/>
+                            </GridViewColumn>
                             <GridViewColumn Header="Метод" Width="90" DisplayMemberBinding="{Binding Path=RequestMethod}" />
                             <GridViewColumn Header="Название" Width="150" DisplayMemberBinding="{Binding Path=RequestTitle}" />
                             <GridViewColumn Header="Запрос" Width="100" DisplayMemberBinding="{Binding Path=WebRequest}" />
