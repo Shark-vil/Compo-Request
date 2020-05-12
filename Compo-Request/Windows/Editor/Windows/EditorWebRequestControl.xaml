@@ -49,7 +49,7 @@
         <Grid Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="2">
             <StackPanel Orientation="Horizontal">
                 <ListView x:Name="ListView_WebRequests"
-                          Visibility="Visible">
+                          Visibility="Collapsed">
                     <ListView.View>
                         <GridView>
                             <GridView.ColumnHeaderContainerStyle>
@@ -65,8 +65,8 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Vertical">
-                                            <Button Width="150" Height="25" Content="Открыть"/>
-                                            <Button Margin="5" Width="150" Height="25" Content="Удалить"/>
+                                            <Button Click="ButtonClick_OpenWebRequest" Width="150" Height="25" Content="Открыть"/>
+                                            <Button Click="ButtonClick_DeleteWebRequest" Margin="5" Width="150" Height="25" Content="Удалить"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

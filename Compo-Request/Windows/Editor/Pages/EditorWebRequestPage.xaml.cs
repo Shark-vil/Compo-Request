@@ -1,4 +1,5 @@
-﻿using Compo_Request.Network.Interfaces;
+﻿using Compo_Request.Models;
+using Compo_Request.Network.Interfaces;
 using Compo_Request.Network.Utilities;
 using Compo_Request.Windows.Editor.Windows;
 using Compo_Shared_Data.Debugging;
@@ -27,27 +28,17 @@ namespace Compo_Request.Windows.Editor.Pages
     public partial class EditorWebRequestPage : Page, ICustomPage
     {
         private EditorMainMenuWindow _EditorMainMenuWindow;
+        //public BoundModel TabCollecton;
 
         public EditorWebRequestPage(EditorMainMenuWindow _EditorMainMenuWindow)
         {
             InitializeComponent();
 
+            //TabCollecton = new BoundModel();
+            ProjectData.TabCollecton = new BoundModel();
+            DataContext = ProjectData.TabCollecton;
+
             this._EditorMainMenuWindow = _EditorMainMenuWindow;
-
-            CreateEmptyTabIfNull();
-        }
-
-        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            CreateEmptyTabIfNull();
-        }
-
-        private void CreateEmptyTabIfNull()
-        {
-            var WebRequestPages = (BoundModel)DataContext;
-
-            if (WebRequestPages.Items.Count == 0)
-                WebRequestPages.Items.Add(BoundNewItem.AddTab());
         }
 
         public void ClosePage()

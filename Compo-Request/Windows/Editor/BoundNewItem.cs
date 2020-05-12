@@ -1,4 +1,5 @@
-﻿using Compo_Request.Windows.Editor.Windows;
+﻿using Compo_Request.Windows.Editor.Pages;
+using Compo_Request.Windows.Editor.Windows;
 using Compo_Shared_Data.Network.Models;
 using Compo_Shared_Data.WPF.Models;
 using Dragablz;
@@ -30,7 +31,7 @@ namespace Compo_Request.Windows.Editor
             }
         }
 
-        public static HeaderedItemViewModel AddTab(string Header = "Новый запрос", MResponse ServerResponse = null)
+        public static HeaderedItemViewModel AddTab(string Header = "Новый запрос", ModelRequestDirectory RequestDirectory = null)
         {
             var Content = new EditorWebRequestControl();
 
@@ -40,7 +41,7 @@ namespace Compo_Request.Windows.Editor
                 Content = Content
             };
 
-            Content.Construct(TabItemView, ServerResponse);
+            Content.Construct(TabItemView, RequestDirectory);
 
             return TabItemView;
         }

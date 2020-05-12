@@ -26,6 +26,7 @@ using System.Windows.Threading;
 using Compo_Request.WindowsLogic.EditorLogic;
 using Compo_Request.Network.Client;
 using Compo_Shared_Data.Network;
+using Compo_Request.Windows.Editor.Pages;
 
 namespace Compo_Request.Windows.Editor.Windows
 {
@@ -36,23 +37,19 @@ namespace Compo_Request.Windows.Editor.Windows
     {
         private DispatcherTimer Timer_EditorRequestData_PropertyChanged = null;
         private DispatcherTimer Timer_BlockEvent = null;
-        private bool IsBlock = false;
+
+        private HeaderedItemViewModel TabItemView { get; set; }
+        private DynamicModelEditorRequest EditorRequestData { get; set; }
+        private ModelRequestDirectory RequestDirectory { get; set; }
 
         private ObservableCollection<WebRequestParamsItem> WebRequestItems = new ObservableCollection<WebRequestParamsItem>();
-        private HeaderedItemViewModel TabItemView { get; set; }
-        private string HeaderName { get; set; }
-
-        private string RequestMethod { get; set; }
-        private void RequestMethodUpdate() { RequestMethod = ComboBox_RequestType.SelectedItem.ToString(); }
-
-        private string RequestLink { get; set; }
-        private DynamicModelEditorRequest EditorRequestData { get; set; }
-
         private ObservableCollection<ModelRequestDirectory> VirtualRequestDirs = new ObservableCollection<ModelRequestDirectory>();
-
-        private DispatcherTimer WebRequestWait = new DispatcherTimer();
-
         private CollectionView ListViewCollection { get; set; }
+
+        private bool IsBlock = false;
+        private string HeaderName { get; set; }
+        private string RequestMethod { get; set; }
+        private string RequestLink { get; set; }
 
         public EditorWebRequestControl()
         {
@@ -60,6 +57,23 @@ namespace Compo_Request.Windows.Editor.Windows
             Start();
             WindowActions();
             NetworkActions();
+        }
+
+        public void Construct(HeaderedItemViewModel TabItemView, ModelRequestDirectory RequestDirectory = null)
+        {
+            this.TabItemView = TabItemView;
+            HeaderName = TabItemView.Header.ToString();
+
+            this.RequestDirectory = RequestDirectory;
+
+            CustomTimer.Create(delegate (object sender, EventArgs e)
+            {
+                RequestMethodUpdate();
+                if (RequestDirectory != null)
+                    LoadRequestDirectory();
+                else
+                    SetHeaderName();
+            }, new TimeSpan(0, 0, 0, 0, 500));
         }
 
         private void Start()
@@ -115,6 +129,11 @@ namespace Compo_Request.Windows.Editor.Windows
             EditorRequestData.PropertyChanged += EditorRequestData_PropertyChanged;
         }
 
+        private void RequestMethodUpdate()
+        { 
+            RequestMethod = ComboBox_RequestType.SelectedItem.ToString();
+        }
+
         private void Button_RequestList_Click(object sender, RoutedEventArgs e)
         {
             if (ListView_WebRequests.Visibility == Visibility.Collapsed)
@@ -133,15 +152,18 @@ namespace Compo_Request.Windows.Editor.Windows
 
         private void EditorRequestData_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            RequestLink = EditorRequestData.RequestLink;
+
             if (!IsBlock && e.PropertyName == "RequestLink" && RequestMethod == "GET")
             {
-                RequestLink = EditorRequestData.RequestLink;
-
                 if (Timer_EditorRequestData_PropertyChanged != null && Timer_EditorRequestData_PropertyChanged.IsEnabled)
                     Timer_EditorRequestData_PropertyChanged.Stop();
 
                 Timer_EditorRequestData_PropertyChanged = CustomTimer.Create(delegate (object sender, EventArgs e)
                 {
+                    if (RequestMethod != "GET")
+                        return;
+
                     ObservableCollection<WebRequestParamsItem> Collection = 
                         GetLinkRequestToCollection.GetCollection(EditorRequestData.RequestLink);
 
@@ -187,18 +209,6 @@ namespace Compo_Request.Windows.Editor.Windows
             }
         }
 
-        public void Construct(HeaderedItemViewModel TabItemView, MResponse ServerResponse = null)
-        {
-            this.TabItemView = TabItemView;
-            HeaderName = TabItemView.Header.ToString();
-
-            CustomTimer.Create(delegate (object sender, EventArgs e)
-            {
-                RequestMethodUpdate();
-                SetHeaderName();
-            }, new TimeSpan(0, 0, 1));
-        }
-
         private void Button_SendRequest_Click(object sender, RoutedEventArgs e)
         {
             new ConfirmWindow("Предупреждение", "Если вы хотите сохранить всю историю для запроса, вам следует сохранить запрос. " +
@@ -215,25 +225,25 @@ namespace Compo_Request.Windows.Editor.Windows
 
         private void WebRequestSend()
         {
+            DataGrid_FormRequestData.IsReadOnly = false;
+            TextBox_RequestLink.IsReadOnly = false;
+            Button_SendRequest.IsEnabled = false;
+            Button_SaveRequest.IsEnabled = false;
+
             var t = new Thread(new ThreadStart(delegate()
             {
-                Dispatcher.Invoke(delegate ()
+                Dispatcher.BeginInvoke(delegate ()
                 {
                     try
                     {
-                        DataGrid_FormRequestData.IsEnabled = false;
-                        TextBox_RequestLink.IsEnabled = false;
-                        Button_SendRequest.IsEnabled = false;
-                        Button_SaveRequest.IsEnabled = false;
-
                         var Response = ToolWebRequest.RestRequest(RequestMethod, RequestLink, WebRequestItems);
 
                         JsonViewer.Load(Response);
                     }
                     catch { }
 
-                    DataGrid_FormRequestData.IsEnabled = true;
-                    TextBox_RequestLink.IsEnabled = true;
+                    DataGrid_FormRequestData.IsReadOnly = true;
+                    TextBox_RequestLink.IsReadOnly = true;
                     Button_SendRequest.IsEnabled = true;
                     Button_SaveRequest.IsEnabled = true;
                 });
@@ -393,6 +403,42 @@ namespace Compo_Request.Windows.Editor.Windows
             TabItemView.Header = HeaderName + " - " + RequestMethod;
         }
 
+        private void LoadRequestDirectory()
+        {
+            if (RequestDirectory != null)
+            {
+                HeaderName = RequestDirectory.RequestTitle;
+                RequestMethod = RequestDirectory.RequestMethod;
+                SetHeaderName();
+
+                int Index = ComboBox_RequestType.Items.IndexOf(RequestMethod);
+                if (Index != -1)
+                    ComboBox_RequestType.SelectedIndex = Index;
+
+                TextBox_RequestLink.Text = RequestDirectory.WebRequest;
+
+                int NetworkUid = Guid.NewGuid().GetHashCode();
+
+                NetworkDelegates.Add(delegate (MResponse ServerResponse)
+                {
+                    var RequestParams = Package.Unpacking<WebRequestParamsItem[]>(ServerResponse.DataBytes);
+
+                    foreach (var RequestParam in RequestParams)
+                    {
+                        if (!Array.Exists(WebRequestItems.ToArray(), x => x.Id == RequestParam.Id))
+                            if (RequestParam.WebRequestItemId == RequestDirectory.WebRequestId)
+                                WebRequestItems.Add(RequestParam);
+                    }
+
+                    Debug.Log("Данные с сервера получены!");
+
+                }, Dispatcher, NetworkUid, "WebRequestParamsItem.Get.Confirm", "EditorWebRequestControl");
+
+                EnableBlockTimer();
+                Sender.SendToServer("WebRequestParamsItem.Get", RequestDirectory.WebRequestId, NetworkUid);
+            }
+        }
+
         private void ButtonClick_DeleteProject(object sender, RoutedEventArgs e)
         {
             var FormRequest = (sender as Button).DataContext as WebRequestParamsItem;
@@ -402,6 +448,24 @@ namespace Compo_Request.Windows.Editor.Windows
                 var MFormRequest = WebRequestItems.FirstOrDefault(r => r.Id == FormRequest.Id);
                 WebRequestItems.Remove(MFormRequest);
             }
+        }
+
+        private void ButtonClick_OpenWebRequest(object sender, RoutedEventArgs e)
+        {
+            var RowRequestDirectory = (sender as Button).DataContext as ModelRequestDirectory;
+
+            //Debug.Log(RowRequestDirectory);
+            //Debug.Log(ProjectData.TabCollecton);
+
+            if (ProjectData.TabCollecton != null)
+            {
+                ProjectData.TabCollecton.Items.Add(BoundNewItem.AddTab(RowRequestDirectory.RequestTitle, RowRequestDirectory));
+            }
+        }
+
+        private void ButtonClick_DeleteWebRequest(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

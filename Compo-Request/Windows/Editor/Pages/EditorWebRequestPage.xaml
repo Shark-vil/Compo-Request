@@ -12,9 +12,9 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="EditorWebRequestPage">
 
-    <Page.DataContext>
+    <!--<Page.DataContext>
         <Editor:BoundModel/>
-    </Page.DataContext>
+    </Page.DataContext>-->
 
     <Page.Resources>
         <ResourceDictionary>

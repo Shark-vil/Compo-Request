@@ -51,6 +51,7 @@ namespace Compo_Request_Server
             var EventTeamProject = new ETeamProject();
             var EventWebRequestItem = new EWebRequestItem();
             var EventWebRequestDir = new EWebRequestDir();
+            var EventWebRequestParamsItem = new EWebRequestParamsItem();
         }
     }
 }
