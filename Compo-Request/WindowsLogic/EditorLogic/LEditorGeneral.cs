@@ -77,6 +77,16 @@ namespace Compo_Request.WindowsLogic.EditorLogic
                             Debug.LogError("Возникло исключение при попытке загрузить " +
                                 "ответ в виде JSON строки. Код ошибки:\n" + ex);
                         }
+
+                        try
+                        {
+                            u.HtmlViewer.NavigateToString(WebResponce.Response);
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.LogError("Возникло исключение при попытке загрузить " +
+                                "ответ в виде HTML страницы. Код ошибки:\n" + ex);
+                        }
                     }
 
                     Debug.Log("\n" + WebResponce.Info + "\n");

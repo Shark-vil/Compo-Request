@@ -10,8 +10,9 @@ namespace Compo_Request.Utilities
 {
     public class WebResponseTemplate
     {
-        public string Response;
-        public string Info;
+        public string Response = "";
+        public string JsonResponse = "";
+        public string Info = "";
     }
 
     public class CustomWebRequest

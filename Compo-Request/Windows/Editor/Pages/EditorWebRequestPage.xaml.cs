@@ -38,6 +38,8 @@ namespace Compo_Request.Windows.Editor.Pages
             ProjectData.TabCollecton = new BoundModel();
             DataContext = ProjectData.TabCollecton;
 
+            ProjectData.TabCollecton.Items.Add(BoundNewItem.AddTab());
+
             this._EditorMainMenuWindow = _EditorMainMenuWindow;
             TabControl_Requests.SelectionChanged += TabControl_Requests_SelectionChanged;
         }

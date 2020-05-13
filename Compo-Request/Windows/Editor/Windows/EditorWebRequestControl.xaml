@@ -7,8 +7,30 @@
              xmlns:local="clr-namespace:Compo_Request.Windows.Editor.Windows"
              xmlns:RequestModel="clr-namespace:Compo_Request.Models"
              xmlns:json="clr-namespace:JsonViewerDemo.JsonViewer"
+             xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+             xmlns:dockablz="http://dragablz.net/winfx/xaml/dockablz"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <DataTemplate DataType="{x:Type dragablz:HeaderedItemViewModel}">
+                <ContentControl Content="{Binding Content}" Margin="4 4 4 4" FontSize="14" />
+            </DataTemplate>
+
+            <Style TargetType="{x:Type dragablz:TabablzControl}" x:Key="TabablzControlStyle"
+                BasedOn="{StaticResource MaterialDesignTabablzControlStyle}">
+                <Setter Property="ClosingItemCallback" Value="{Binding ClosingTabItemHandler}" />
+                <Setter Property="ShowDefaultAddButton" Value="False" />
+                <Setter Property="ShowDefaultCloseButton" Value="False" />
+                <Setter Property="AdjacentHeaderItemOffset" Value="-10" />
+                <Setter Property="HeaderMemberPath" Value="Header" />
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
 
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -138,7 +160,34 @@
             </StackPanel>
         </Grid>
         <Grid Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="2">
-            <json:JsonViewer x:Name="JsonViewer" DockPanel.Dock="Bottom"/>
+            <!--<json:JsonViewer x:Name="JsonViewer" DockPanel.Dock="Bottom"/>-->
+
+            <dockablz:Layout FloatingItemHeaderMemberPath="Header" FloatingItemsContainerMargin="0 2 0 0"
+                             IsFloatDropZoneEnabled="False">
+                <dragablz:TabablzControl x:Name="TabControl_Response" Focusable="True"
+                Style="{StaticResource TabablzControlStyle}" AddLocationHint="After">
+                    <TabItem x:Name="TabItem_TextViewer"
+                             Header="Text" IsSelected="True">
+                        <TextBox x:Name="TextViewer" DockPanel.Dock="Bottom"/>
+                    </TabItem>
+                    <TabItem x:Name="TabItem_Raw"
+                             Header="RAW" IsSelected="True">
+                        <TextBox x:Name="RawViewer" DockPanel.Dock="Bottom"/>
+                    </TabItem>
+                    <TabItem x:Name="TabItem_Json"
+                             Header="JSON" IsSelected="True">
+                        <json:JsonViewer x:Name="JsonViewer" DockPanel.Dock="Bottom"/>
+                    </TabItem>
+                    <TabItem x:Name="TabItem_Xml"
+                             Header="XML" IsSelected="True">
+                        <TextBox x:Name="XmlViewer" DockPanel.Dock="Bottom"/>
+                    </TabItem>
+                    <TabItem x:Name="TabItem_Html"
+                             Header="HTML" IsSelected="True">
+                        <WebBrowser x:Name="HtmlViewer" DockPanel.Dock="Bottom"/>
+                    </TabItem>
+                </dragablz:TabablzControl>
+            </dockablz:Layout>
         </Grid>
         <Grid Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3">
             <Button x:Name="Button_RequestList"
