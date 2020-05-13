@@ -262,20 +262,27 @@ namespace Compo_Request.Windows.Editor.Windows
 
         private void Button_SendRequest_Click(object sender, RoutedEventArgs e)
         {
-            new ConfirmWindow("Предупреждение", "Если вы хотите сохранить всю историю для запроса, вам следует сохранить запрос. " +
-                "Создать новый запрос?",
-                delegate ()
-                {
-                    LEditorNetwork.SaveRequest(
-                        GeneralLogic.RequestLink,
-                        GeneralLogic.RequestMethod,
-                        WebRequestItems.ToArray()
-                    );
-                },
-                delegate()
-                {
-                    GeneralLogic.WebRequestSend();
-                });
+            if (RequestDirectory == null)
+            {
+                new ConfirmWindow("Предупреждение", "Если вы хотите сохранить всю историю для запроса, вам следует сохранить запрос. " +
+                    "Создать новый запрос?",
+                    delegate ()
+                    {
+                        LEditorNetwork.SaveRequest(
+                            GeneralLogic.RequestLink,
+                            GeneralLogic.RequestMethod,
+                            WebRequestItems.ToArray()
+                        );
+                    },
+                    delegate ()
+                    {
+                        GeneralLogic.WebRequestSend();
+                    });
+            }
+            else
+            {
+                GeneralLogic.WebRequestSend();
+            }
         }
 
         private void FormRequestsData_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

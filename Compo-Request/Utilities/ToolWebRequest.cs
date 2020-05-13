@@ -86,9 +86,10 @@ namespace Compo_Request.Utilities
             return "";
         }
 
-        public static string RestRequest(string Method, string Link, ObservableCollection<WebRequestParamsItem> FormRequestsData = null)
+        public static WebResponseTemplate RestRequest(string Method, string Link, ObservableCollection<WebRequestParamsItem> FormRequestsData = null)
         {
             var Client = new RestClient(GetFirstLink(Link));
+            var FinalResponse = new WebResponseTemplate();
             IRestResponse Response = null;
 
             try
@@ -98,13 +99,75 @@ namespace Compo_Request.Utilities
                     var Request = new RestRequest(GetSecondLink(Link), RestSharp.Method.GET);
                     Response = Client.Execute(Request);
                 }
-                else
+                else if(Method == "POST")
                 {
-                    if (Method == "POST")
-                    {
-                        var Request = new RestRequest(GetSecondLink(Link), RestSharp.Method.POST);
-                        Response = Client.Execute(Request);
-                    }
+                    var Request = new RestRequest(GetSecondLink(Link), RestSharp.Method.POST);
+                    Response = Client.Execute(Request);
+                }
+                else if (Method == "PUT")
+                {
+                    var Request = new RestRequest(GetSecondLink(Link), RestSharp.Method.PUT);
+                    Response = Client.Execute(Request);
+                }
+                else if (Method == "PATHCH")
+                {
+                    var Request = new RestRequest(GetSecondLink(Link), RestSharp.Method.PATCH);
+                    Response = Client.Execute(Request);
+                }
+                else if (Method == "DELETE")
+                {
+                    var Request = new RestRequest(GetSecondLink(Link), RestSharp.Method.DELETE);
+                    Response = Client.Execute(Request);
+                }
+                else if (Method == "COPY")
+                {
+                    var Request = new RestRequest(GetSecondLink(Link), RestSharp.Method.COPY);
+                    Response = Client.Execute(Request);
+                }
+                else if (Method == "HEAD")
+                {
+                    var Request = new RestRequest(GetSecondLink(Link), RestSharp.Method.HEAD);
+                    Response = Client.Execute(Request);
+                }
+                else if (Method == "OPTIONS")
+                {
+                    var Request = new RestRequest(GetSecondLink(Link), RestSharp.Method.OPTIONS);
+                    Response = Client.Execute(Request);
+                }
+                else if (Method == "LINK")
+                {
+                    var Request = CustomWebRequest.Send(Method, Link);
+                    FinalResponse = Request;
+                }
+                else if (Method == "UNLINK")
+                {
+                    var Request = CustomWebRequest.Send(Method, Link);
+                    FinalResponse = Request;
+                }
+                else if (Method == "PURGE")
+                {
+                    var Request = CustomWebRequest.Send(Method, Link);
+                    FinalResponse = Request;
+                }
+                else if (Method == "LOCK")
+                {
+                    var Request = CustomWebRequest.Send(Method, Link);
+                    FinalResponse = Request;
+                }
+                else if (Method == "UNLOCK")
+                {
+                    var Request = CustomWebRequest.Send(Method, Link);
+                    FinalResponse = Request;
+                }
+                else if (Method == "PROPFIND")
+                {
+                    var Request = CustomWebRequest.Send(Method, Link);
+                    FinalResponse = Request;
+                }
+                else if (Method == "VIEW")
+                {
+                    var Request = CustomWebRequest.Send(Method, Link);
+                    FinalResponse = Request;
                 }
 
                 if (Response.ErrorException != null)
@@ -116,10 +179,19 @@ namespace Compo_Request.Utilities
             }
             catch(Exception ex)
             {
-                Debug.LogError($"Возникло исключение при отправке WEB-запроса на сайт {Link}. Код ошибки:\n" + ex);
+                Debug.LogError($"Возникло исключение при отправке WEB-запроса на адрес {Link}. Код ошибки:\n" + ex);
             }
 
-            return (Response != null) ? Response.Content : null;
+            if (Response != null)
+            {
+                FinalResponse.Response = Response.Content;
+                FinalResponse.Info = CustomWebRequest.GetResponseInfo(Link, Method, Response);
+                return FinalResponse;
+            }
+            else
+            {
+                return FinalResponse;
+            }
         }
     }
 }

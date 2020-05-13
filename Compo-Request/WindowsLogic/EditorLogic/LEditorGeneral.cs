@@ -10,6 +10,7 @@ using Compo_Request.Network.Utilities;
 using System.Linq;
 using Compo_Shared_Data.Models;
 using Compo_Shared_Data.Network.Models;
+using Compo_Shared_Data.Debugging;
 
 namespace Compo_Request.WindowsLogic.EditorLogic
 {
@@ -41,34 +42,65 @@ namespace Compo_Request.WindowsLogic.EditorLogic
 
         public void WebRequestSend()
         {
-            u.DataGrid_FormRequestData.IsEnabled = false;
-            u.TextBox_RequestLink.IsEnabled = false;
-            u.Button_SendRequest.IsEnabled = false;
-            u.Button_SaveRequest.IsEnabled = false;
+            RequestElements_Block();
 
             var t = new Thread(new ThreadStart(delegate ()
             {
                 u.Dispatcher.Invoke(delegate ()
                 {
+                    WebResponseTemplate WebResponce;
+
                     try
                     {
-                        var Response = ToolWebRequest.RestRequest(
+                        WebResponce = ToolWebRequest.RestRequest(
                             u.GeneralLogic.RequestMethod,
                             u.GeneralLogic.RequestLink,
                             u.WebRequestItems
                         );
-
-                        u.JsonViewer.Load(Response);
                     }
-                    catch { }
+                    catch(Exception ex)
+                    {
+                        Debug.LogError("Возникло исключение при отправке запроса. Код ошибки:\n" + ex);
 
-                    u.DataGrid_FormRequestData.IsEnabled = true;
-                    u.TextBox_RequestLink.IsEnabled = true;
-                    u.Button_SendRequest.IsEnabled = true;
-                    u.Button_SaveRequest.IsEnabled = true;
+                        RequestElements_Unblock();
+                        return; 
+                    }
+
+                    if (WebResponce != null && WebResponce.Response != null)
+                    {
+                        try
+                        {
+                            u.JsonViewer.Load(WebResponce.Response);
+                        }
+                        catch(Exception ex)
+                        {
+                            Debug.LogError("Возникло исключение при попытке загрузить " +
+                                "ответ в виде JSON строки. Код ошибки:\n" + ex);
+                        }
+                    }
+
+                    Debug.Log("\n" + WebResponce.Info + "\n");
+
+                    RequestElements_Unblock();
                 });
             }));
             t.Start();
+        }
+
+        private void RequestElements_Block()
+        {
+            u.DataGrid_FormRequestData.IsEnabled = false;
+            u.TextBox_RequestLink.IsEnabled = false;
+            u.Button_SendRequest.IsEnabled = false;
+            u.Button_SaveRequest.IsEnabled = false;
+        }
+
+        private void RequestElements_Unblock()
+        {
+            u.DataGrid_FormRequestData.IsEnabled = true;
+            u.TextBox_RequestLink.IsEnabled = true;
+            u.Button_SendRequest.IsEnabled = true;
+            u.Button_SaveRequest.IsEnabled = true;
         }
 
         public void LoadRequestDirectory(EditorWebRequestControl UC, int NetworkUid)
