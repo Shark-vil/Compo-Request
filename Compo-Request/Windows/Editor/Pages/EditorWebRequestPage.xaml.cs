@@ -51,6 +51,10 @@ namespace Compo_Request.Windows.Editor.Pages
                ProjectData.RequestDirectory = (
                     (EditorWebRequestControl)ProjectData.TabCollecton.Items[Index].Content
                 ).RequestDirectory;
+
+                //ProjectData.WebRequestParamsItems = (
+                //    (EditorWebRequestControl)ProjectData.TabCollecton.Items[Index].Content
+                //).WebRequestItems;
             }
         }
 

@@ -126,7 +126,7 @@
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                        <Button Click="ButtonClick_DeleteProject" Width="70" Height="30">
+                                        <Button Click="ButtonClick_DeleteParamsItem" Width="70" Height="30">
                                             <materialDesign:PackIcon Kind="Delete"/>
                                         </Button>
                                     </StackPanel>

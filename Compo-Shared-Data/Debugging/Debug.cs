@@ -13,11 +13,11 @@ namespace Compo_Shared_Data.Debugging
             try
             {
                 Console.ForegroundColor = color;
-                Console.WriteLine("[LOG] " + Message, Console.ForegroundColor);
+                Console.WriteLine($"[{DateTime.Now}][LOG] " + Message, Console.ForegroundColor);
             }
             catch
             {
-                Console.WriteLine("[LOG] " + Message);
+                Console.WriteLine($"[{DateTime.Now}][LOG] " + Message);
             }
         }
 
@@ -28,11 +28,11 @@ namespace Compo_Shared_Data.Debugging
             try
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("[WARNING] " + Message, Console.ForegroundColor);
+                Console.WriteLine($"[{DateTime.Now}][WARNING] " + Message, Console.ForegroundColor);
             }
             catch
             {
-                Console.WriteLine("[WARNING] " + Message);
+                Console.WriteLine($"[{DateTime.Now}][WARNING] " + Message);
             }
         }
 
@@ -43,11 +43,11 @@ namespace Compo_Shared_Data.Debugging
             try
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("[ERROR] " + Message, Console.ForegroundColor);
+                Console.WriteLine($"[{DateTime.Now}][ERROR] " + Message, Console.ForegroundColor);
             }
             catch
             {
-                Console.WriteLine("[ERROR] " + Message);
+                Console.WriteLine($"[{DateTime.Now}][ERROR] " + Message);
             }
         }
     }

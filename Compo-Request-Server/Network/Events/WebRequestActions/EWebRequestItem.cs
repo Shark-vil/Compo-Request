@@ -19,6 +19,21 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
             NetworkDelegates.Add(WebRequestSaver, "WebRequestItem.MBinding_WebRequestSaver.Save");
             NetworkDelegates.Add(WebRequestBindingGet, "WebRequestItem.MBinding_WebRequest.Get");
             NetworkDelegates.Add(WebRequestLinkUpdate, "WebRequestItem.Update.Link");
+            NetworkDelegates.Add(WebRequestMethodUpdate, "WebRequestItem.Update.Method");
+        }
+
+        private void WebRequestMethodUpdate(MResponse ClientResponse, MNetworkClient NetworkClient)
+        {
+            using (var db = new DatabaseContext())
+            {
+                var RequestItem = Package.Unpacking<WebRequestItem>(ClientResponse.DataBytes);
+
+                WebRequestItem DbRequestItem = db.WebRequestItems.FirstOrDefault(x => x.Id == RequestItem.Id);
+                DbRequestItem.Method = RequestItem.Method;
+                db.SaveChanges();
+
+                Sender.SendOmit(NetworkClient, "WebRequestItem.Update.Method.Confirm", DbRequestItem, ClientResponse.WindowUid);
+            }
         }
 
         private void WebRequestLinkUpdate(MResponse ClientResponse, MNetworkClient NetworkClient)
@@ -29,7 +44,6 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
 
                 WebRequestItem DbRequestItem = db.WebRequestItems.FirstOrDefault(x => x.Id == RequestItem.Id);
                 DbRequestItem.Link = RequestItem.Link;
-                DbRequestItem.Method = RequestItem.Method;
                 db.SaveChanges();
 
                 Sender.SendOmit(NetworkClient, "WebRequestItem.Update.Link.Confirm", DbRequestItem, ClientResponse.WindowUid);
