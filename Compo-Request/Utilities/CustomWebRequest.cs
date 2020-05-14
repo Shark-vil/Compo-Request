@@ -1,40 +1,80 @@
-﻿using RestSharp;
+﻿using Compo_Shared_Data.Models;
+using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
+using System.Web;
+using System.Text.Encodings;
+using System.Text.Encodings.Web;
 
 namespace Compo_Request.Utilities
 {
     public class WebResponseTemplate
     {
         public string Response = "";
-        public string JsonResponse = "";
         public string Info = "";
     }
 
     public class CustomWebRequest
     {
-        public static WebResponseTemplate Send(string Method, string Link)
+        public static WebResponseTemplate Send(string Method, string Link, 
+            ObservableCollection<WebRequestParamsItem> FormRequestsData = null)
         {
             var WebResponse = new WebResponseTemplate();
 
             // Создать объект запроса
-            WebRequest request = WebRequest.Create(Link);
+            //var request = WebRequest.Create(Link);
+            var request = (HttpWebRequest)WebRequest.Create(Link);
             request.Method = Method;
-
-            // Получить ответ с сервера
-            WebResponse response = request.GetResponse();
-
-            // Получаем поток данных из ответа
-            using (StreamReader stream = new StreamReader(response.GetResponseStream()))
+            if (Method != "GET")
             {
-                WebResponse.Response = stream.ReadToEnd();
+                request.ContentType = "application/x-www-form-urlencoded; charset=UTF-8";
+                if (FormRequestsData != null)
+                {
+                    string RequestParams = "";
+
+                    for (int i = 0; i < FormRequestsData.Count; i++)
+                    {
+                        WebRequestParamsItem ParamsItem = FormRequestsData[i];
+                        if (i == FormRequestsData.Count - 1)
+                            RequestParams += $"{ParamsItem.Key}={ParamsItem.Value}";
+                        else
+                            RequestParams += $"{ParamsItem.Key}={ParamsItem.Value}&";
+                    }
+
+                    byte[] DataStream = Encoding.UTF8.GetBytes(RequestParams);
+                    request.ContentLength = DataStream.Length;
+
+                    using (var stream = request.GetRequestStream())
+                        stream.Write(DataStream, 0, DataStream.Length);
+                }
             }
 
-            WebResponse.Info = GetResponseInfo(request, response);
+            try
+            {
+                // Получить ответ с сервера
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+                // Получаем поток данных из ответа
+                using (var reader = new StreamReader(response.GetResponseStream()))
+                    WebResponse.Response = reader.ReadToEnd();
+
+                WebResponse.Info = GetResponseInfo(request, response);
+            }
+            catch(WebException ex)
+            {
+                if (ex.Response != null)
+                    using (StreamReader stream = new StreamReader(ex.Response.GetResponseStream()))
+                        WebResponse.Response = stream.ReadToEnd();
+
+                WebResponse.Info = GetResponseInfo(request, ex.Response);
+            }
 
             return WebResponse;
         }

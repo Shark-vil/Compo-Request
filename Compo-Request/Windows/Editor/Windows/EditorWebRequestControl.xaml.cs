@@ -27,6 +27,7 @@ using Compo_Request.WindowsLogic.EditorLogic;
 using Compo_Request.Network.Client;
 using Compo_Shared_Data.Network;
 using Compo_Request.Windows.Editor.Pages;
+using System.Reflection;
 
 namespace Compo_Request.Windows.Editor.Windows
 {
@@ -149,6 +150,21 @@ namespace Compo_Request.Windows.Editor.Windows
             Button_RequestList.Click += Button_RequestList_Click;
             EditorRequestData.PropertyChanged += EditorRequestData_PropertyChanged;
             TextBox_RequestLink.TextChanged += TextBox_RequestLink_TextChanged;
+            HtmlViewer.Navigated += HtmlViewer_Navigated;
+        }
+
+        private void HtmlViewer_Navigated(object sender, NavigationEventArgs e)
+        {
+            HideScriptErrors(HtmlViewer, true);
+        }
+
+        public void HideScriptErrors(WebBrowser wb, bool Hide)
+        {
+            FieldInfo fiComWebBrowser = typeof(WebBrowser).GetField("_axIWebBrowser2", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (fiComWebBrowser == null) return;
+            object objComWebBrowser = fiComWebBrowser.GetValue(wb);
+            if (objComWebBrowser == null) return;
+            objComWebBrowser.GetType().InvokeMember("Silent", BindingFlags.SetProperty, null, objComWebBrowser, new object[] { Hide });
         }
 
         private void TextBox_RequestLink_TextChanged(object sender, TextChangedEventArgs e)

@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Compo_Shared_Data.Debugging;
 using Newtonsoft.Json.Linq;
 
 namespace JsonViewerDemo.JsonViewer
@@ -42,7 +43,8 @@ namespace JsonViewerDemo.JsonViewer
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Could not open the JSON string:\r\n" + ex.Message);
+                //MessageBox.Show("Could not open the JSON string:\r\n" + ex.Message);
+                Debug.LogError("Could not open the JSON string:\r\n" + ex.Message);
             }
         }
 

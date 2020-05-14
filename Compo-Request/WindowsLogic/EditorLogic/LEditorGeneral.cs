@@ -11,6 +11,9 @@ using System.Linq;
 using Compo_Shared_Data.Models;
 using Compo_Shared_Data.Network.Models;
 using Compo_Shared_Data.Debugging;
+using System.Windows.Documents;
+using System.Windows;
+using System.IO;
 
 namespace Compo_Request.WindowsLogic.EditorLogic
 {
@@ -70,12 +73,35 @@ namespace Compo_Request.WindowsLogic.EditorLogic
                     {
                         try
                         {
+                            //u.TextViewer.Text = WebResponce.Response;
+
+                            u.TextViewer.Document.Blocks.Clear();
+                            u.TextViewer.Document.Blocks.Add(new Paragraph(new Run(WebResponce.Response)));
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.LogError("Возникло исключение при попытке загрузить " +
+                                "ответ в виде JSON строки. Код ошибки:\n" + ex);
+                        }
+
+                        try
+                        {
                             u.JsonViewer.Load(WebResponce.Response);
                         }
                         catch(Exception ex)
                         {
                             Debug.LogError("Возникло исключение при попытке загрузить " +
                                 "ответ в виде JSON строки. Код ошибки:\n" + ex);
+                        }
+
+                        try
+                        {
+                            u.XmlViewer.Load(WebResponce.Response);
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.LogError("Возникло исключение при попытке загрузить " +
+                                "ответ в виде XML файла. Код ошибки:\n" + ex);
                         }
 
                         try
@@ -155,10 +181,12 @@ namespace Compo_Request.WindowsLogic.EditorLogic
                         SelectRequestLink = DestructGetRequest(SelectRequestLink);
                         SelectRequestLink = ConstructGetRequest(SelectRequestLink);
                     }
+                    /*
                     else
                     {
                         SelectRequestLink = ConstructGetRequest(SelectRequestLink);
                     }
+                    */
                 }
             }
             else

@@ -9,6 +9,7 @@
              xmlns:json="clr-namespace:JsonViewerDemo.JsonViewer"
              xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
              xmlns:dockablz="http://dragablz.net/winfx/xaml/dockablz"
+             xmlns:XMLViewer="clr-namespace:Compo_Request.XMLViewer"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -168,11 +169,11 @@
                 Style="{StaticResource TabablzControlStyle}" AddLocationHint="After">
                     <TabItem x:Name="TabItem_TextViewer"
                              Header="Text" IsSelected="True">
-                        <TextBox x:Name="TextViewer" DockPanel.Dock="Bottom"/>
-                    </TabItem>
-                    <TabItem x:Name="TabItem_Raw"
-                             Header="RAW" IsSelected="True">
-                        <TextBox x:Name="RawViewer" DockPanel.Dock="Bottom"/>
+                        <RichTextBox x:Name="TextViewer"
+                                Background="Transparent" BorderThickness="0"
+                                IsDocumentEnabled="True"
+                                IsReadOnly="True" DockPanel.Dock="Bottom"
+                                AcceptsReturn="True"/>
                     </TabItem>
                     <TabItem x:Name="TabItem_Json"
                              Header="JSON" IsSelected="True">
@@ -180,7 +181,8 @@
                     </TabItem>
                     <TabItem x:Name="TabItem_Xml"
                              Header="XML" IsSelected="True">
-                        <TextBox x:Name="XmlViewer" DockPanel.Dock="Bottom"/>
+                        <!--<TextBox x:Name="XmlViewer" DockPanel.Dock="Bottom"/>-->
+                        <XMLViewer:Viewer x:Name="XmlViewer" Grid.Row="2" />
                     </TabItem>
                     <TabItem x:Name="TabItem_Html"
                              Header="HTML" IsSelected="True">

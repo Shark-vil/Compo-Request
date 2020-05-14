@@ -88,18 +88,19 @@ namespace Compo_Request.Utilities
 
         public static WebResponseTemplate RestRequest(string Method, string Link, ObservableCollection<WebRequestParamsItem> FormRequestsData = null)
         {
-            var Client = new RestClient(GetFirstLink(Link));
+            //var Client = new RestClient(GetFirstLink(Link));
             var FinalResponse = new WebResponseTemplate();
-            IRestResponse Response = null;
+            //IRestResponse Response = null;
 
             try
             {
+                /*
                 if (Method == "GET")
                 {
                     var Request = new RestRequest(GetSecondLink(Link), RestSharp.Method.GET);
                     Response = Client.Execute(Request);
                 }
-                else if(Method == "POST")
+                else if (Method == "POST")
                 {
                     var Request = new RestRequest(GetSecondLink(Link), RestSharp.Method.POST);
                     Response = Client.Execute(Request);
@@ -170,18 +171,22 @@ namespace Compo_Request.Utilities
                     FinalResponse = Request;
                 }
 
-                if (Response.ErrorException != null)
+                if (Response != null && Response.ErrorException != null)
                 {
                     const string ErrorMessage = "Возникла ошибка при получении ответа на WEB-запрос. Ознакомьтесь с деталями в консоли.";
                     var Exeption = new Exception(ErrorMessage, Response.ErrorException);
-                    throw Exeption;
-                }
+                    //throw Exeption;
+                }*/
+
+                var Request = CustomWebRequest.Send(Method, Link, FormRequestsData);
+                FinalResponse = Request;
             }
             catch(Exception ex)
             {
                 Debug.LogError($"Возникло исключение при отправке WEB-запроса на адрес {Link}. Код ошибки:\n" + ex);
             }
 
+            /*
             if (Response != null)
             {
                 FinalResponse.Response = Response.Content;
@@ -192,6 +197,9 @@ namespace Compo_Request.Utilities
             {
                 return FinalResponse;
             }
+            */
+
+            return FinalResponse;
         }
     }
 }
