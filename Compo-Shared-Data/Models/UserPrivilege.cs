@@ -7,23 +7,13 @@ using System.Text;
 namespace Compo_Shared_Data.Models
 {
     [Serializable]
-    public class TeamProject
+    public class UserPrivilege
     {
         [Key]
         [Required]
         public int Id { get; set; }
-
         [Required]
-        public int TeamGroupId { get; set; }
-        [ForeignKey("TeamGroupId")]
-        [System.Xml.Serialization.XmlIgnore]
-        public TeamGroup TeamGroups { get; set; }
-
-        [Required]
-        public int ProjectId { get; set; }
-        [ForeignKey("ProjectId")]
-        [System.Xml.Serialization.XmlIgnore]
-        public Project Projects { get; set; }
+        public string Privilege { get; set; }
 
         [Required]
         public int UserId { get; set; }

@@ -52,6 +52,7 @@ namespace Compo_Request_Server
             var EventWebRequestItem = new EWebRequestItem();
             var EventWebRequestDir = new EWebRequestDir();
             var EventWebRequestParamsItem = new EWebRequestParamsItem();
+            var EventWebRequestHistory = new EWebRequestHistory();
         }
     }
 }

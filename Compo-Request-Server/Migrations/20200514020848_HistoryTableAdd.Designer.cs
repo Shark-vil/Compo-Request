@@ -3,14 +3,16 @@ using System;
 using Compo_Request_Server.Network.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Compo_Request_Server.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20200514020848_HistoryTableAdd")]
+    partial class HistoryTableAdd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,9 +235,6 @@ namespace Compo_Request_Server.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("ProjectId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("ResponseDate")
                         .HasColumnType("datetime");
 
@@ -247,9 +246,12 @@ namespace Compo_Request_Server.Migrations
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
+                    b.Property<int>("WebRequestItemId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("WebRequestItemId");
 
                     b.ToTable("WebRequestsHistory");
                 });
@@ -393,9 +395,9 @@ namespace Compo_Request_Server.Migrations
 
             modelBuilder.Entity("Compo_Shared_Data.Models.WebRequestHistory", b =>
                 {
-                    b.HasOne("Compo_Shared_Data.Models.Project", "Projects")
+                    b.HasOne("Compo_Shared_Data.Models.WebRequestItem", "WebRequestItem")
                         .WithMany()
-                        .HasForeignKey("ProjectId")
+                        .HasForeignKey("WebRequestItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

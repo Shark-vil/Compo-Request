@@ -14,6 +14,8 @@ using Compo_Shared_Data.Debugging;
 using System.Windows.Documents;
 using System.Windows;
 using System.IO;
+using Compo_Request.Models;
+using Newtonsoft.Json;
 
 namespace Compo_Request.WindowsLogic.EditorLogic
 {
@@ -71,6 +73,21 @@ namespace Compo_Request.WindowsLogic.EditorLogic
 
                     if (WebResponce != null && WebResponce.Response != null)
                     {
+                        if (u.RequestDirectory != null)
+                        {
+                            var HistoryItem = new WebRequestHistory();
+                            HistoryItem.Title = HeaderName;
+                            HistoryItem.Link = RequestLink;
+                            HistoryItem.Method = RequestMethod;
+                            HistoryItem.ProjectId = ProjectData.SelectedProject.Id;
+                            HistoryItem.ResponseDate = DateTime.Now;
+                            HistoryItem.ResponseResult = WebResponce.Response;
+                            HistoryItem.ParametrsInJson = JsonConvert.SerializeObject(
+                                u.WebRequestItems.ToArray(), Formatting.Indented);
+
+                            Sender.SendToServer("RequestsHistory.Add", HistoryItem);
+                        }
+
                         try
                         {
                             //u.TextViewer.Text = WebResponce.Response;
