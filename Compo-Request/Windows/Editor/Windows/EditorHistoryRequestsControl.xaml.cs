@@ -2,9 +2,11 @@
 using Compo_Request.Network.Client;
 using Compo_Request.Network.Interfaces;
 using Compo_Request.Network.Utilities;
+using Compo_Request.Windows.Editor.Pages;
 using Compo_Shared_Data.Models;
 using Compo_Shared_Data.Network;
 using Compo_Shared_Data.Network.Models;
+using Compo_Shared_Data.WPF.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,11 +29,13 @@ namespace Compo_Request.Windows.Editor.Windows
     /// </summary>
     public partial class EditorHistoryRequestsControl : UserControl, ICustomPage
     {
+        private EditorMainMenuWindow _EditorMainMenuWindow;
         private ObservableCollection<WebRequestHistory> WebRequestsHistory;
 
-        public EditorHistoryRequestsControl()
+        public EditorHistoryRequestsControl(EditorMainMenuWindow _EditorMainMenuWindow)
         {
             InitializeComponent();
+            WindowsRegister(_EditorMainMenuWindow);
             NetworkActions();
 
             WebRequestsHistory = new ObservableCollection<WebRequestHistory>();
@@ -39,6 +43,11 @@ namespace Compo_Request.Windows.Editor.Windows
             DataGrid_History.ItemsSource = WebRequestsHistory;
 
             Sender.SendToServer("RequestsHistory.GetAll", ProjectData.SelectedProject.Id);
+        }
+
+        private void WindowsRegister(EditorMainMenuWindow _EditorMainMenuWindow)
+        {
+            this._EditorMainMenuWindow = _EditorMainMenuWindow;
         }
 
         private void NetworkActions()
@@ -72,7 +81,34 @@ namespace Compo_Request.Windows.Editor.Windows
 
         private void ButtonClick_RequestOpen(object sender, RoutedEventArgs e)
         {
+            var HistoryItem = ((sender as Button).DataContext as WebRequestHistory);
 
+            /*
+            var RequestDirectory = new ModelRequestDirectory();
+            RequestDirectory.RequestMethod = HistoryItem.Method;
+            RequestDirectory.RequestTitle = HistoryItem.Title;
+            RequestDirectory.WebRequestId = HistoryItem.WebRequestItemId;
+            */
+
+            /**
+             * Открытие списка запросов. Копипаста с _EditorMainMenuWindow.
+             * Хочу сдохнуть уже...
+             */
+
+            if (_EditorMainMenuWindow._EditorWebRequestPage != null)
+                _EditorMainMenuWindow._EditorWebRequestPage.ClosePage();
+
+            _EditorMainMenuWindow._EditorWebRequestPage = new EditorWebRequestPage(_EditorMainMenuWindow);
+            _EditorMainMenuWindow._EditorWebRequestPage.OpenPage();
+
+            _EditorMainMenuWindow.Frame_Main.Content = _EditorMainMenuWindow._EditorWebRequestPage;
+
+            /**
+             * Конец копипасты
+             */
+
+            ProjectData.TabCollecton.Items.Add(BoundNewItem.AddHistoryTab(
+                HistoryItem.Title, HistoryItem));
         }
 
         private void ButtonClick_RequestEdit(object sender, RoutedEventArgs e)

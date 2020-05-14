@@ -28,6 +28,8 @@ using Compo_Request.Network.Client;
 using Compo_Shared_Data.Network;
 using Compo_Request.Windows.Editor.Pages;
 using System.Reflection;
+using RestSharp.Serialization.Json;
+using Newtonsoft.Json;
 
 namespace Compo_Request.Windows.Editor.Windows
 {
@@ -83,6 +85,26 @@ namespace Compo_Request.Windows.Editor.Windows
                 else
                     GeneralLogic.SetHeaderName(TabItemView);
             }, new TimeSpan(0, 0, 0, 0, 500));
+        }
+
+        public void SetHistory(WebRequestHistory HistoryItem)
+        {
+            CustomTimer.Create(delegate (object sender, EventArgs e)
+            {
+                GeneralLogic.IsCopy = true;
+
+                EditorRequestData.RequestLink = HistoryItem.Link;
+                ComboBox_RequestType.SelectedIndex = ComboBox_RequestType.Items.IndexOf(HistoryItem.Method);
+
+                GeneralLogic.SetViews(HistoryItem.ResponseResult);
+
+                var RequestParams = JsonConvert.DeserializeObject<WebRequestParamsItem[]>(HistoryItem.ParametrsInJson);
+
+                Debug.Log("RequestParams - " + RequestParams.Length);
+
+                foreach (var ItemParam in RequestParams)
+                    WebRequestItems.Add(ItemParam);
+            }, new TimeSpan(0, 0, 0, 0, 300));
         }
 
         public void Destruct()

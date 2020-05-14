@@ -23,6 +23,7 @@ namespace Compo_Request.WindowsLogic.EditorLogic
     {
         private EditorWebRequestControl u;
 
+        public bool IsCopy { get; set; }
         public string HeaderName { get; set; }
         public string RequestMethod { get; set; }
         public string RequestLink { get; set; }
@@ -42,7 +43,10 @@ namespace Compo_Request.WindowsLogic.EditorLogic
 
         public void SetHeaderName(HeaderedItemViewModel TabItemView)
         {
-            TabItemView.Header = HeaderName + " - " + RequestMethod;
+            if (IsCopy)
+                TabItemView.Header = "[Copy] " + HeaderName + " - " + RequestMethod;
+            else
+                TabItemView.Header = HeaderName + " - " + RequestMethod;
         }
 
         public void WebRequestSend()
@@ -80,6 +84,7 @@ namespace Compo_Request.WindowsLogic.EditorLogic
                             HistoryItem.Link = RequestLink;
                             HistoryItem.Method = RequestMethod;
                             HistoryItem.ProjectId = ProjectData.SelectedProject.Id;
+                            HistoryItem.WebRequestItemId = u.RequestDirectory.WebRequestId;
                             HistoryItem.ResponseDate = DateTime.Now;
                             HistoryItem.ResponseResult = WebResponce.Response;
                             HistoryItem.ParametrsInJson = JsonConvert.SerializeObject(
@@ -88,48 +93,7 @@ namespace Compo_Request.WindowsLogic.EditorLogic
                             Sender.SendToServer("RequestsHistory.Add", HistoryItem);
                         }
 
-                        try
-                        {
-                            //u.TextViewer.Text = WebResponce.Response;
-
-                            u.TextViewer.Document.Blocks.Clear();
-                            u.TextViewer.Document.Blocks.Add(new Paragraph(new Run(WebResponce.Response)));
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.LogError("Возникло исключение при попытке загрузить " +
-                                "ответ в виде JSON строки. Код ошибки:\n" + ex);
-                        }
-
-                        try
-                        {
-                            u.JsonViewer.Load(WebResponce.Response);
-                        }
-                        catch(Exception ex)
-                        {
-                            Debug.LogError("Возникло исключение при попытке загрузить " +
-                                "ответ в виде JSON строки. Код ошибки:\n" + ex);
-                        }
-
-                        try
-                        {
-                            u.XmlViewer.Load(WebResponce.Response);
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.LogError("Возникло исключение при попытке загрузить " +
-                                "ответ в виде XML файла. Код ошибки:\n" + ex);
-                        }
-
-                        try
-                        {
-                            u.HtmlViewer.NavigateToString(WebResponce.Response);
-                        }
-                        catch (Exception ex)
-                        {
-                            Debug.LogError("Возникло исключение при попытке загрузить " +
-                                "ответ в виде HTML страницы. Код ошибки:\n" + ex);
-                        }
+                        SetViews(WebResponce.Response);
                     }
 
                     Debug.Log("\n" + WebResponce.Info + "\n");
@@ -138,6 +102,50 @@ namespace Compo_Request.WindowsLogic.EditorLogic
                 });
             }));
             t.Start();
+        }
+
+        public void SetViews(string WebContent)
+        {
+            try
+            {
+                u.TextViewer.Document.Blocks.Clear();
+                u.TextViewer.Document.Blocks.Add(new Paragraph(new Run(WebContent)));
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Возникло исключение при попытке загрузить " +
+                    "ответ в виде JSON строки. Код ошибки:\n" + ex);
+            }
+
+            try
+            {
+                u.JsonViewer.Load(WebContent);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Возникло исключение при попытке загрузить " +
+                    "ответ в виде JSON строки. Код ошибки:\n" + ex);
+            }
+
+            try
+            {
+                u.XmlViewer.Load(WebContent);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Возникло исключение при попытке загрузить " +
+                    "ответ в виде XML файла. Код ошибки:\n" + ex);
+            }
+
+            try
+            {
+                u.HtmlViewer.NavigateToString(WebContent);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError("Возникло исключение при попытке загрузить " +
+                    "ответ в виде HTML страницы. Код ошибки:\n" + ex);
+            }
         }
 
         private void RequestElements_Block()

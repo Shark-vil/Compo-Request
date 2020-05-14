@@ -11,33 +11,32 @@
         <DataGrid x:Name="DataGrid_History"
                         CanUserAddRows="False" AutoGenerateColumns="False" IsReadOnly="True"
                         HorizontalGridLinesBrush="DarkGray" RowBackground="LightGray" AlternatingRowBackground="White">
-            <DataGrid.ColumnHeaderStyle>
-                <Style TargetType="DataGridColumnHeader">
-                    <Setter Property="FontSize" Value="10"/>
-                </Style>
-            </DataGrid.ColumnHeaderStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Path=Id}" Header="Id" Width="20"/>
-                <DataGridTextColumn Binding="{Binding Path=ResponseDate}" Header="Дата записи" Width="70"/>
-                <DataGridTextColumn Binding="{Binding Path=Method}" Header="Метод" Width="70"/>
-                <DataGridTextColumn Binding="{Binding Path=Title}" Header="Название" Width="100"/>
-                <DataGridTextColumn Binding="{Binding Path=Link}" Header="Ссылка" Width="130"/>
-                <DataGridTemplateColumn Width="100" Header="Действия">
+                <DataGridTextColumn Binding="{Binding Path=Id}" Header="Id" Width="60"/>
+                <DataGridTextColumn Binding="{Binding Path=ResponseDate}" Header="Дата записи" Width="150"/>
+                <DataGridTextColumn Binding="{Binding Path=Method}" Header="Метод" Width="100"/>
+                <DataGridTextColumn Binding="{Binding Path=Title}" Header="Название" Width="150"/>
+                <DataGridTextColumn Binding="{Binding Path=Link}" Header="Ссылка" Width="200"/>
+                <DataGridTemplateColumn Width="250" Header="Действия">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                <Button Click="ButtonClick_RequestOpen" 
-                                        HorizontalAlignment="Center"
-                                        Width="70" Height="30">
-                                    <materialDesign:PackIcon Kind="Openid"/>
-                                </Button>
-                                <TextBlock Text="Открыть копию"/>
-                                <Button Click="ButtonClick_RequestEdit" 
-                                        HorizontalAlignment="Center"
-                                        Width="70" Height="30">
-                                    <materialDesign:PackIcon Kind="Edit"/>
-                                </Button>
-                                <TextBlock Text="Перезаписать"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Click="ButtonClick_RequestOpen" 
+                                            HorizontalAlignment="Center"
+                                            Width="100" Height="30">
+                                        <materialDesign:PackIcon Kind="Openid"/>
+                                    </Button>
+                                    <TextBlock Text="Открыть копию" Width="100" Margin="10" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Click="ButtonClick_RequestEdit" 
+                                            HorizontalAlignment="Center"
+                                            Width="100" Height="30">
+                                        <materialDesign:PackIcon Kind="Edit"/>
+                                    </Button>
+                                    <TextBlock Text="Перезаписать" Width="100" Margin="10" HorizontalAlignment="Center"/>
+                                </StackPanel>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

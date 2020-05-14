@@ -33,5 +33,11 @@ namespace Compo_Shared_Data.Models
         [ForeignKey("ProjectId")]
         [System.Xml.Serialization.XmlIgnore]
         public Project Projects { get; set; }
+
+        [Required]
+        public int WebRequestItemId { get; set; }
+        [ForeignKey("WebRequestItemId")]
+        [System.Xml.Serialization.XmlIgnore]
+        public WebRequestItem WebRequestItems { get; set; }
     }
 }

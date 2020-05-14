@@ -60,7 +60,7 @@ namespace Compo_Request.Windows.Editor
             if (_EditorHistoryRequestsControl != null)
                 _EditorHistoryRequestsControl.ClosePage();
 
-            _EditorHistoryRequestsControl = new EditorHistoryRequestsControl();
+            _EditorHistoryRequestsControl = new EditorHistoryRequestsControl(this);
             _EditorHistoryRequestsControl.OpenPage();
 
             Frame_Main.Content = _EditorHistoryRequestsControl;

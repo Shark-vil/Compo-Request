@@ -1,6 +1,7 @@
 ﻿using Compo_Request.Windows.Editor.Pages;
 using Compo_Request.Windows.Editor.Windows;
 using Compo_Shared_Data.Debugging;
+using Compo_Shared_Data.Models;
 using Compo_Shared_Data.Network.Models;
 using Compo_Shared_Data.WPF.Models;
 using Dragablz;
@@ -44,6 +45,27 @@ namespace Compo_Request.Windows.Editor
             };
 
             //Content.Construct(TabItemView, RequestDirectory);
+
+            ((EditorWebRequestControl)TabItemView.Content)
+                .Construct(TabItemView);
+
+            return TabItemView;
+        }
+
+        public static HeaderedItemViewModel AddHistoryTab(string Header, WebRequestHistory HistoryItem)
+        {
+            var Content = new EditorWebRequestControl();
+
+            var TabItemView = new HeaderedItemViewModel()
+            {
+                Header = Header,
+                Content = Content
+            };
+
+            //Content.Construct(TabItemView, RequestDirectory);
+
+            ((EditorWebRequestControl)TabItemView.Content)
+                .SetHistory(HistoryItem);
 
             ((EditorWebRequestControl)TabItemView.Content)
                 .Construct(TabItemView);
