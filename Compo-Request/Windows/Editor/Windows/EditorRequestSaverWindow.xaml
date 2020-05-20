@@ -7,10 +7,10 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        Title="EditorRequestSaverWindow" Height="230" Width="400">
+        Title="Сохранение запроса" Height="250" Width="400">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="199*"/>
+            <RowDefinition Height="300*"/>
             <RowDefinition Height="15*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.RowSpan="2">

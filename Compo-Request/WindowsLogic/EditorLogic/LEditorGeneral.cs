@@ -206,12 +206,10 @@ namespace Compo_Request.WindowsLogic.EditorLogic
                         SelectRequestLink = DestructGetRequest(SelectRequestLink);
                         SelectRequestLink = ConstructGetRequest(SelectRequestLink);
                     }
-                    /*
                     else
                     {
                         SelectRequestLink = ConstructGetRequest(SelectRequestLink);
                     }
-                    */
                 }
             }
             else
@@ -248,7 +246,7 @@ namespace Compo_Request.WindowsLogic.EditorLogic
         {
             RequestLink = RequestLink.Trim();
 
-            if (RequestLink.IndexOf('?') == -1)
+            //if (RequestLink.IndexOf('?') == -1)
                 RequestLink += "?";
 
             for (int i = 0; i < u.WebRequestItems.Count; i++)
