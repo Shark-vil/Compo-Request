@@ -60,6 +60,10 @@ namespace Compo_Request_Server.Network.Database
             MBuilder.Entity<WebRequestHistory>().
                 Property(p => p.ResponseDate)
                 .HasColumnType("datetime");
+
+            MBuilder.Entity<Chat>().
+                Property(p => p.Date)
+                .HasColumnType("datetime");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder DbBuilder)
