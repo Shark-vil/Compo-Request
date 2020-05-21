@@ -2,6 +2,7 @@
 using Compo_Request_Server.Network.Models;
 using Compo_Request_Server.Network.Server;
 using Compo_Request_Server.Network.Utilities;
+using Compo_Shared_Data.Debugging;
 using Compo_Shared_Data.Models;
 using Compo_Shared_Data.Network;
 using Compo_Shared_Data.Network.Models;
@@ -33,11 +34,17 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
                 ModelRequestDirectory RequestDir = new ModelRequestDirectory();
                 RequestDir.RequestMethod = RequestHistory.Method;
                 RequestDir.RequestTitle = RequestHistory.Title;
-                RequestDir.WebRequestId = RequestHistory.Id;
+                RequestDir.WebRequestId = RequestHistory.WebRequestItemId;
 
                 WebRequestDir WebDir = db.WebRequestDirs.FirstOrDefault(x => x.WebRequestItemId == RequestHistory.WebRequestItemId);
                 RequestDir.Id = WebDir.Id;
                 RequestDir.Title = WebDir.Title;
+
+                Debug.Log($"\r\nId - {RequestDir.Id}\n" +
+                    $"RequestMethod - {RequestDir.RequestMethod}\n" +
+                    $"RequestTitle - {RequestDir.RequestTitle}\n" +
+                    $"Title - {RequestDir.Title}\n" +
+                    $"WebRequestId - {RequestDir.WebRequestId}\r\n");
 
                 Sender.Broadcast("WebRequestDir.History.Edit.Confirm",
                     RequestDir, ClientResponse.WindowUid);

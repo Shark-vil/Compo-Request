@@ -29,6 +29,7 @@
                                     </Button>
                                     <TextBlock Text="Открыть копию" Width="100" Margin="10" HorizontalAlignment="Center"/>
                                 </StackPanel>
+                                <!--
                                 <StackPanel Orientation="Horizontal">
                                     <Button Click="ButtonClick_RequestEdit" 
                                             HorizontalAlignment="Center"
@@ -37,6 +38,7 @@
                                     </Button>
                                     <TextBlock Text="Перезаписать" Width="100" Margin="10" HorizontalAlignment="Center"/>
                                 </StackPanel>
+                                -->
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
