@@ -26,6 +26,7 @@ namespace Compo_Request.Windows.Editor
 
         internal EditorWebRequestPage _EditorWebRequestPage;
         internal EditorHistoryRequestsControl _EditorHistoryRequestsControl;
+        internal EditorProjectChatPage _EditorProjectChatPage;
 
         public EditorMainMenuWindow(MainMenuWindow _MainMenuWindow, Project MProject)
         {
@@ -75,6 +76,17 @@ namespace Compo_Request.Windows.Editor
             _EditorWebRequestPage.OpenPage();
 
             Frame_Main.Content = _EditorWebRequestPage;
+        }
+
+        private void Button_ProjectChat_Click(object sender, RoutedEventArgs e)
+        {
+            if (_EditorProjectChatPage != null)
+                _EditorProjectChatPage.ClosePage();
+
+            _EditorProjectChatPage = new EditorProjectChatPage(this);
+            _EditorProjectChatPage.OpenPage();
+
+            Frame_Main.Content = _EditorProjectChatPage;
         }
 
         private void Button_Back_Click(object sender, RoutedEventArgs e)

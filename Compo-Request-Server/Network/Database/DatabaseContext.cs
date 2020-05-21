@@ -24,6 +24,7 @@ namespace Compo_Request_Server.Network.Database
         public DbSet<UserPrivilege> UserPrivileges { get; set; }
         public DbSet<TeamPrivilege> TeamPrivileges { get; set; }
         public DbSet<WebRequestHistory> WebRequestsHistory { get; set; }
+        public DbSet<Chat> Chats { get; set; }
 
         public static void Setup(string DbHost, string DbUser, string DbPassword, string DbDatabase)
         {
