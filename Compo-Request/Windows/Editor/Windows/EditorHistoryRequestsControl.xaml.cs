@@ -6,6 +6,7 @@ using Compo_Request.Windows.Editor.Pages;
 using Compo_Shared_Data.Models;
 using Compo_Shared_Data.Network;
 using Compo_Shared_Data.Network.Models;
+using Compo_Shared_Data.WPF.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -67,6 +68,27 @@ namespace Compo_Request.Windows.Editor.Windows
                 }
 
             }, Dispatcher, -1, "RequestsHistory.Add.Confirm", "EditorHistoryRequestsControl");
+
+            NetworkDelegates.Add(delegate (MResponse ServerResponse)
+            {
+                var RequestDirectory = Package.Unpacking<ModelRequestDirectory>(ServerResponse.DataBytes);
+
+                if (_EditorMainMenuWindow._EditorWebRequestPage != null)
+                    _EditorMainMenuWindow._EditorWebRequestPage.ClosePage();
+
+                _EditorMainMenuWindow._EditorWebRequestPage = new EditorWebRequestPage(_EditorMainMenuWindow);
+                _EditorMainMenuWindow._EditorWebRequestPage.OpenPage();
+
+                _EditorMainMenuWindow.Frame_Main.Content = _EditorMainMenuWindow._EditorWebRequestPage;
+
+                ProjectData.TabCollecton.Items.Add(
+                    BoundNewItem.AddTab(
+                        RequestDirectory.RequestTitle,
+                        RequestDirectory
+                    )
+                );
+
+            }, Dispatcher, -1, "WebRequestDir.History.Edit.Confirm", "EditorHistoryRequestsControl");
         }
 
         private void ButtonClick_RequestOpen(object sender, RoutedEventArgs e)
@@ -103,7 +125,12 @@ namespace Compo_Request.Windows.Editor.Windows
 
         private void ButtonClick_RequestEdit(object sender, RoutedEventArgs e)
         {
+            var HistoryItem = ((sender as Button).DataContext as WebRequestHistory);
 
+            if (!Sender.SendToServer("WebRequestDir.History.Edit", HistoryItem))
+            {
+                new AlertWindow("Ошибка", AlertWindow.AlertCode.SendToServer);
+            }
         }
 
         public void OpenPage()

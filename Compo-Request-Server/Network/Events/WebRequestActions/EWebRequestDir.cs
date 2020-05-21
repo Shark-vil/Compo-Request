@@ -21,6 +21,27 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
             NetworkDelegates.Add(WebRequestDirSaver, "WebRequestDir.Save", 1337);
             NetworkDelegates.Add(WebRequestDirUpdate, "WebRequestDir.RequestDirectory.Update", 1337);
             NetworkDelegates.Add(WebRequestDirDelete, "WebRequestDir.Delete");
+            NetworkDelegates.Add(WebRequestDirHistoryEdit, "WebRequestDir.History.Edit");
+        }
+
+        private void WebRequestDirHistoryEdit(MResponse ClientResponse, MNetworkClient NetworkClient)
+        {
+            var RequestHistory = Package.Unpacking<WebRequestHistory>(ClientResponse.DataBytes);
+
+            using (var db = new DatabaseContext())
+            {
+                ModelRequestDirectory RequestDir = new ModelRequestDirectory();
+                RequestDir.RequestMethod = RequestHistory.Method;
+                RequestDir.RequestTitle = RequestHistory.Title;
+                RequestDir.WebRequestId = RequestHistory.Id;
+
+                WebRequestDir WebDir = db.WebRequestDirs.FirstOrDefault(x => x.WebRequestItemId == RequestHistory.WebRequestItemId);
+                RequestDir.Id = WebDir.Id;
+                RequestDir.Title = WebDir.Title;
+
+                Sender.Broadcast("WebRequestDir.History.Edit.Confirm",
+                    RequestDir, ClientResponse.WindowUid);
+            }
         }
 
         private void WebRequestDirUpdate(MResponse ClientResponse, MNetworkClient NetworkClient)
