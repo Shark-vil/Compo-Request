@@ -1,5 +1,6 @@
 ﻿using Compo_Request.Models;
 using Compo_Request.Windows.Editor.Pages;
+using Compo_Request.Windows.Editor.Windows;
 using Compo_Shared_Data.Models;
 using Dragablz;
 using System;
@@ -24,6 +25,8 @@ namespace Compo_Request.Windows.Editor
         private MainMenuWindow _MainMenuWindow;
 
         internal EditorWebRequestPage _EditorWebRequestPage;
+        internal EditorHistoryRequestsControl _EditorHistoryRequestsControl;
+        internal EditorProjectChatPage _EditorProjectChatPage;
 
         public EditorMainMenuWindow(MainMenuWindow _MainMenuWindow, Project MProject)
         {
@@ -50,6 +53,19 @@ namespace Compo_Request.Windows.Editor
             this.Button_CloseMenu.Click += Button_CloseMenu_Click;  // Событие при сворачивании бокового меню
             this.Button_Back.Click += Button_Back_Click;
             this.Button_WebRequestConstructor.Click += Button_WebRequestConstructor_Click;
+            this.Button_HistoryWebResponse.Click += Button_HistoryWebResponse_Click;
+            this.Button_ProjectChat.Click += Button_ProjectChat_Click;
+        }
+
+        private void Button_HistoryWebResponse_Click(object sender, RoutedEventArgs e)
+        {
+            if (_EditorHistoryRequestsControl != null)
+                _EditorHistoryRequestsControl.ClosePage();
+
+            _EditorHistoryRequestsControl = new EditorHistoryRequestsControl(this);
+            _EditorHistoryRequestsControl.OpenPage();
+
+            Frame_Main.Content = _EditorHistoryRequestsControl;
         }
 
         private void Button_WebRequestConstructor_Click(object sender, RoutedEventArgs e)
@@ -61,6 +77,17 @@ namespace Compo_Request.Windows.Editor
             _EditorWebRequestPage.OpenPage();
 
             Frame_Main.Content = _EditorWebRequestPage;
+        }
+
+        private void Button_ProjectChat_Click(object sender, RoutedEventArgs e)
+        {
+            if (_EditorProjectChatPage != null)
+                _EditorProjectChatPage.ClosePage();
+
+            _EditorProjectChatPage = new EditorProjectChatPage(this);
+            _EditorProjectChatPage.OpenPage();
+
+            Frame_Main.Content = _EditorProjectChatPage;
         }
 
         private void Button_Back_Click(object sender, RoutedEventArgs e)
@@ -92,7 +119,11 @@ namespace Compo_Request.Windows.Editor
 
         private void EditorMainMenuWindow_Closing(object sender, EventArgs e)
         {
-            _MainMenuWindow.Show();
+            if (_EditorWebRequestPage != null)
+                _EditorWebRequestPage.ClosePage();
+
+            if (_MainMenuWindow != null)
+                _MainMenuWindow.Show();
         }
     }
 }

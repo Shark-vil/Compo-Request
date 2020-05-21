@@ -2,22 +2,11 @@
 using Compo_Request.Models.Windows;
 using Compo_Request.Network.Client;
 using Compo_Request.Network.Utilities;
-using Compo_Shared_Data.Debugging;
 using Compo_Shared_Data.Models;
 using Compo_Shared_Data.Network;
 using Compo_Shared_Data.Network.Models;
-using Compo_Shared_Data.WPF.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Compo_Request.Windows.Editor.Windows
 {
@@ -83,7 +72,11 @@ namespace Compo_Request.Windows.Editor.Windows
 
             if (!Sender.SendToServer("WebRequestItem.MBinding_WebRequestSaver.Save", WebRequestBinding, 1337))
             {
-                new AlertWindow("Ошибка", AlertWindow.AlertCode.SendToServer);
+                new AlertWindow("Ошибка", AlertWindow.AlertCode.SendToServer, () =>
+                {
+                    TextBox_WebRequest.IsEnabled = true;
+                    TextBox_WebRequestDirectory.IsEnabled = true;
+                });
             }
             else
             {
@@ -98,8 +91,10 @@ namespace Compo_Request.Windows.Editor.Windows
             {
                 var WebRequestDirectory = Package.Unpacking<WebRequestDir>(ServerResponse.DataBytes);
 
-                TextBox_WebRequest.IsEnabled = true;
-                TextBox_WebRequestDirectory.IsEnabled = true;
+                new AlertWindow("Оповещение", "Запись успешно сохранена", () =>
+                {
+                    this.Close();
+                });
 
             }, Dispatcher, -1, "WebRequestDir.Save.Confirm", "EditorRequestSaverWindow");
 

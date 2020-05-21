@@ -21,6 +21,10 @@ namespace Compo_Request_Server.Network.Database
         public DbSet<WebRequestParamsItem> WebRequestParamsItems { get; set; }
         public DbSet<WebRequestItem> WebRequestItems { get; set; }
         public DbSet<WebRequestDir> WebRequestDirs { get; set; }
+        public DbSet<UserPrivilege> UserPrivileges { get; set; }
+        public DbSet<TeamPrivilege> TeamPrivileges { get; set; }
+        public DbSet<WebRequestHistory> WebRequestsHistory { get; set; }
+        public DbSet<Chat> Chats { get; set; }
 
         public static void Setup(string DbHost, string DbUser, string DbPassword, string DbDatabase)
         {
@@ -48,6 +52,18 @@ namespace Compo_Request_Server.Network.Database
             MBuilder.Entity<Project>()
                 .HasIndex(u => new { u.Uid })
                 .IsUnique();
+
+            MBuilder.Entity<WebRequestHistory>()
+                .Property(e => e.ParametrsInJson)
+                .HasColumnType("text");
+
+            MBuilder.Entity<WebRequestHistory>().
+                Property(p => p.ResponseDate)
+                .HasColumnType("datetime");
+
+            MBuilder.Entity<Chat>().
+                Property(p => p.Date)
+                .HasColumnType("datetime");
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder DbBuilder)

@@ -41,7 +41,9 @@ namespace Compo_Request.Network.Client
                                 {
                                     DispatcherExec(DataDelegate, ServerResponse);
                                     IsCorrectKey = true;
-                                    break;
+
+                                    if (!DataDelegate.NotSingle)
+                                        break;
                                 }
                             }
                         }
@@ -51,7 +53,9 @@ namespace Compo_Request.Network.Client
                             {
                                 DispatcherExec(DataDelegate, ServerResponse);
                                 IsCorrectKey = true;
-                                break;
+
+                                if (!DataDelegate.NotSingle)
+                                    break;
                             }
                         }
                     }

@@ -16,8 +16,38 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
     {
         public EWebRequestItem()
         {
-            NetworkDelegates.Add(WebRequestSaver, "WebRequestItem.MBinding_WebRequestSaver.Save", 1337);
-            NetworkDelegates.Add(WebRequestBindingGet, "WebRequestItem.MBinding_WebRequest.Get", 85537);
+            NetworkDelegates.Add(WebRequestSaver, "WebRequestItem.MBinding_WebRequestSaver.Save");
+            NetworkDelegates.Add(WebRequestBindingGet, "WebRequestItem.MBinding_WebRequest.Get");
+            NetworkDelegates.Add(WebRequestLinkUpdate, "WebRequestItem.Update.Link");
+            NetworkDelegates.Add(WebRequestMethodUpdate, "WebRequestItem.Update.Method");
+        }
+
+        private void WebRequestMethodUpdate(MResponse ClientResponse, MNetworkClient NetworkClient)
+        {
+            using (var db = new DatabaseContext())
+            {
+                var RequestItem = Package.Unpacking<WebRequestItem>(ClientResponse.DataBytes);
+
+                WebRequestItem DbRequestItem = db.WebRequestItems.FirstOrDefault(x => x.Id == RequestItem.Id);
+                DbRequestItem.Method = RequestItem.Method;
+                db.SaveChanges();
+
+                Sender.SendOmit(NetworkClient, "WebRequestItem.Update.Method.Confirm", DbRequestItem, ClientResponse.WindowUid);
+            }
+        }
+
+        private void WebRequestLinkUpdate(MResponse ClientResponse, MNetworkClient NetworkClient)
+        {
+            using (var db = new DatabaseContext())
+            {
+                var RequestItem = Package.Unpacking<WebRequestItem>(ClientResponse.DataBytes);
+
+                WebRequestItem DbRequestItem = db.WebRequestItems.FirstOrDefault(x => x.Id == RequestItem.Id);
+                DbRequestItem.Link = RequestItem.Link;
+                db.SaveChanges();
+
+                Sender.SendOmit(NetworkClient, "WebRequestItem.Update.Link.Confirm", DbRequestItem, ClientResponse.WindowUid);
+            }
         }
 
         private void WebRequestBindingGet(MResponse ClientResponse, MNetworkClient NetworkClient)
@@ -41,7 +71,8 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
                     MB_WebRequests.Add(ListItem);
                 }
 
-                Sender.Broadcast("WebRequestItem.MBinding_WebRequest.Get", MB_WebRequests.ToArray(), ClientResponse.WindowUid);
+                Sender.Send(NetworkClient, "WebRequestItem.MBinding_WebRequest.Get", 
+                    MB_WebRequests.ToArray(), ClientResponse.WindowUid);
             }
         }
 

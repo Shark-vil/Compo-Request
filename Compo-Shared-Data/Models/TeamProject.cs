@@ -24,5 +24,11 @@ namespace Compo_Shared_Data.Models
         [ForeignKey("ProjectId")]
         [System.Xml.Serialization.XmlIgnore]
         public Project Projects { get; set; }
+
+        [Required]
+        public int UserId { get; set; }
+        [ForeignKey("UserId")]
+        [System.Xml.Serialization.XmlIgnore]
+        public User User { get; set; }
     }
 }

@@ -48,6 +48,8 @@ namespace Compo_Request_Server.Network.Events.Projects
                             continue;
                         }
 
+                        DbTeamProject.UserId = Users.ActiveUsers.Find(x => x.NetworkId == NetworkClient.Id).Id;
+
                         db.TeamProjects.Attach(DbTeamProject);
                         db.SaveChanges();
                     }

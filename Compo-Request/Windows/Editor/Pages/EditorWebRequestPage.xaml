@@ -42,7 +42,7 @@
 
         <dockablz:Layout FloatingItemHeaderMemberPath="Header" FloatingItemsContainerMargin="0 2 0 0"
                          IsFloatDropZoneEnabled="False">
-            <dragablz:TabablzControl x:Name="TabControl_Requests" 
+            <dragablz:TabablzControl x:Name="TabControl_Requests" Focusable="True"
                 Style="{StaticResource TabablzControlStyle}" AddLocationHint="After">
             </dragablz:TabablzControl>
         </dockablz:Layout>

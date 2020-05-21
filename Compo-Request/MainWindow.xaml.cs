@@ -51,7 +51,8 @@ namespace Compo_Request
                 Dispatcher.Invoke(() =>
                 {
                     SelfUserDisconnected();
-                    _MainMenuWindow.Close();
+                    if (_MainMenuWindow != null)
+                        _MainMenuWindow.Close();
                 });
             };
 

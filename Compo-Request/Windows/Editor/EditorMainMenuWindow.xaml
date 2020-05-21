@@ -95,6 +95,15 @@
                             <TextBlock Text="История запросов" VerticalAlignment="Center" Margin="20, 0"/>
                         </StackPanel>
                     </Button>
+                    <Button x:Name="Button_ProjectChat"
+                        Height="40" Background="{x:Null}" BorderBrush="{x:Null}"
+                        HorizontalAlignment="Left">
+                        <StackPanel Margin="-8" Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Chat" Foreground="White" Margin="2"
+                                                    Height="30" Width="30" VerticalAlignment="Center"/>
+                            <TextBlock Text="Чат проекта" VerticalAlignment="Center" Margin="20, 0"/>
+                        </StackPanel>
+                    </Button>
                     <Button x:Name="Button_Back"
                         Height="40" Background="{x:Null}" BorderBrush="{x:Null}"
                         HorizontalAlignment="Left">
