@@ -7,6 +7,7 @@ using Compo_Shared_Data.Network;
 using Compo_Shared_Data.Network.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Compo_Request_Server.Network.Events.WebRequestActions
@@ -28,6 +29,16 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
                 db.SaveChanges();
 
                 Sender.Broadcast("WebRequestDir.Save.Confirm", WebRequestDirItem, ClientResponse.WindowUid);
+
+                WebRequestItem WebRequestItem =
+                    db.WebRequestItems.FirstOrDefault(x => x.Id == WebRequestDirItem.WebRequestItemId);
+
+                MBinding_WebRequest MBinding = new MBinding_WebRequest();
+                MBinding.Item = WebRequestItem;
+                MBinding.Params = db.WebRequestParamsItems.Where(x => x.WebRequestItemId == WebRequestItem.Id).ToArray();
+                MBinding.Directory = WebRequestDirItem;
+
+                Sender.Broadcast("WebRequestItem.MBinding_WebRequest.Add", MBinding);
             }
         }
     }

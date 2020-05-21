@@ -18,6 +18,9 @@ using Compo_Request.WindowsLogic.EditorLogic;
 using Compo_Request.Network.Client;
 using System.Reflection;
 using Newtonsoft.Json;
+using Compo_Shared_Data.Network.Models;
+using Compo_Shared_Data.Network;
+using System.ComponentModel;
 
 namespace Compo_Request.Windows.Editor.Windows
 {
@@ -147,6 +150,24 @@ namespace Compo_Request.Windows.Editor.Windows
 
             LEditorNetworkActions.RequestParamsDelete_Confirm(this);
             LEditorNetworkActions.RequestParamsDeleteAll_Confirm(this);
+
+            NetworkDelegates.Add(delegate (MResponse ServerResponse)
+            {
+                var MBinding = Package.Unpacking<MBinding_WebRequest>(ServerResponse.DataBytes);
+
+                VirtualRequestDirs.Add(new ModelRequestDirectory
+                {
+                    Id = MBinding.Directory.Id,
+                    RequestTitle = MBinding.Item.Title,
+                    Title = MBinding.Directory.Title,
+                    RequestMethod = MBinding.Item.Method,
+                    WebRequest = MBinding.Item.Link,
+                    WebRequestId = MBinding.Item.Id
+                });
+
+                ListViewCollection.Refresh();
+
+            }, Dispatcher, -1, "WebRequestItem.MBinding_WebRequest.Add", GeneralLogic.UserControl_Uid);
         }
 
         private void WindowActions()
