@@ -8,9 +8,7 @@ namespace Compo_Shared_Data.WPF.Models
     public class ModelChatMessage
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public string Patronymic { get; set; }
+        public string FullName { get; set; } 
         public string Email { get; set; }
         public string Message { get; set; }
         public DateTime Date { get; set; }

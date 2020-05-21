@@ -54,6 +54,7 @@ namespace Compo_Request.Windows.Editor
             this.Button_Back.Click += Button_Back_Click;
             this.Button_WebRequestConstructor.Click += Button_WebRequestConstructor_Click;
             this.Button_HistoryWebResponse.Click += Button_HistoryWebResponse_Click;
+            this.Button_ProjectChat.Click += Button_ProjectChat_Click;
         }
 
         private void Button_HistoryWebResponse_Click(object sender, RoutedEventArgs e)

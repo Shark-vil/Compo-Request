@@ -22,25 +22,36 @@
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="1" Grid.RowSpan="1" Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="300*"/>
+                <RowDefinition Height="400*"/>
                 <RowDefinition Height="30*"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <ListView>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="360*"/>
+                    <RowDefinition Height="10*"/>
+                </Grid.RowDefinitions>
+                <ListView x:Name="ListView_Chat" Grid.RowSpan="1">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Focusable" Value="false"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
-                        <DataTemplate x:Name="TripleLineDataTemplate" x:DataType="local:Recording">
-                            <StackPanel Height="84" Padding="20" AutomationProperties.Name="{x:Bind CompositionName}">
-                                <TextBlock Text="{x:Bind CompositionName}"  Style="{ThemeResource BaseTextBlockStyle}" Margin="0,4,0,0"/>
-                                <TextBlock Text="{x:Bind ArtistName}" Style="{ThemeResource CaptionTextBlockStyle}" Opacity=".8" Margin="0,4,0,0"/>
-                                <TextBlock Text="{x:Bind ReleaseDateTime}" Style="{ThemeResource CaptionTextBlockStyle}" Opacity=".6" Margin="0,4,0,0"/>
+                        <DataTemplate x:Name="ListView_Chat_Template">
+                            <StackPanel Height="84" AutomationProperties.Name="{Binding Path=FullName}">
+                                <TextBlock Text="{Binding Path=FullName}" Margin="0,4,0,0"/>
+                                <TextBlock Text="{Binding Path=Message}" Opacity=".8" Margin="0,4,0,0"/>
+                                <TextBlock Text="{Binding Path=Date}" Opacity=".6" Margin="0,4,0,0"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
             </Grid>
             <Grid Grid.Row="1">
-                <TextBox HorizontalAlignment="Left" Width="500"/>
-                <Button Content="Отправить" HorizontalAlignment="Right" Width="100"/>
+                <TextBox x:Name="TextBox_Message" Focusable="True"
+                    HorizontalAlignment="Stretch" Width="auto" Margin="0, 0, 110, 0"/>
+                <Button x:Name="Button_Send"
+                    Content="Отправить" HorizontalAlignment="Right" Width="100"/>
             </Grid>
         </Grid>
     </Grid>

@@ -5,6 +5,7 @@ using System.Threading;
 using Compo_Request_Server.Network;
 using Compo_Request_Server.Network.Database;
 using Compo_Request_Server.Network.Events.Auth;
+using Compo_Request_Server.Network.Events.Chats;
 using Compo_Request_Server.Network.Events.Projects;
 using Compo_Request_Server.Network.Events.Register;
 using Compo_Request_Server.Network.Events.Team;
@@ -53,6 +54,7 @@ namespace Compo_Request_Server
             var EventWebRequestDir = new EWebRequestDir();
             var EventWebRequestParamsItem = new EWebRequestParamsItem();
             var EventWebRequestHistory = new EWebRequestHistory();
+            var EventChat = new EChat();
         }
     }
 }

@@ -95,7 +95,7 @@
                             <TextBlock Text="История запросов" VerticalAlignment="Center" Margin="20, 0"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="Button_ProjectChat_Click"
+                    <Button x:Name="Button_ProjectChat"
                         Height="40" Background="{x:Null}" BorderBrush="{x:Null}"
                         HorizontalAlignment="Left">
                         <StackPanel Margin="-8" Orientation="Horizontal">
