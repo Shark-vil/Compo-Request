@@ -17,6 +17,21 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
         public EWebRequestDir()
         {
             NetworkDelegates.Add(WebRequestDirSaver, "WebRequestDir.Save", 1337);
+            NetworkDelegates.Add(WebRequestDirDelete, "WebRequestDir.Delete");
+        }
+
+        private void WebRequestDirDelete(MResponse ClientResponse, MNetworkClient NetworkClient)
+        {
+            var WebRequestId = Package.Unpacking<int>(ClientResponse.DataBytes);
+
+            using (var db = new DatabaseContext())
+            {
+                var RequestItem = db.WebRequestItems.FirstOrDefault(x => x.Id == WebRequestId);
+                db.WebRequestItems.Remove(RequestItem);
+                db.SaveChanges();
+
+                Sender.Broadcast("WebRequestDir.Delete.Confirm", RequestItem, ClientResponse.WindowUid);
+            }
         }
 
         private void WebRequestDirSaver(MResponse ClientResponse, MNetworkClient NetworkClient)

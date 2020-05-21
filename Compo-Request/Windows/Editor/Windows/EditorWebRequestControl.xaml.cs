@@ -167,7 +167,26 @@ namespace Compo_Request.Windows.Editor.Windows
 
                 ListViewCollection.Refresh();
 
-            }, Dispatcher, -1, "WebRequestItem.MBinding_WebRequest.Add", GeneralLogic.UserControl_Uid);
+            }, Dispatcher, -1, "WebRequestItem.MBinding_WebRequest.Add", GeneralLogic.UserControl_Uid, true);
+
+            NetworkDelegates.Add(delegate (MResponse ServerResponse)
+            {
+                var RequestItem = Package.Unpacking<WebRequestItem>(ServerResponse.DataBytes);
+
+                var DirItem = Array.Find(VirtualRequestDirs.ToArray(), x => x.WebRequestId == RequestItem.Id);
+
+                Debug.Log("Удаление каталога: " + DirItem.RequestTitle);
+
+                VirtualRequestDirs.Remove(DirItem);
+                ListViewCollection.Refresh();
+
+                if (RequestDirectory != null && RequestDirectory.WebRequestId == RequestItem.Id)
+                {
+                    Debug.Log("Удаление Tab вкладки");
+                    ProjectData.TabCollecton.Items.Remove(TabItemView);
+                }
+
+            }, Dispatcher, -1, "WebRequestDir.Delete.Confirm", GeneralLogic.UserControl_Uid, true);
         }
 
         private void WindowActions()
@@ -434,7 +453,12 @@ namespace Compo_Request.Windows.Editor.Windows
 
         private void ButtonClick_DeleteWebRequest(object sender, RoutedEventArgs e)
         {
-            //
+            var RowRequestDirectory = (sender as Button).DataContext as ModelRequestDirectory;
+
+            if (!Sender.SendToServer("WebRequestDir.Delete", RowRequestDirectory.WebRequestId))
+            {
+                new AlertWindow("Ошибка", AlertWindow.AlertCode.SendToServer);
+            }
         }
     }
 }
