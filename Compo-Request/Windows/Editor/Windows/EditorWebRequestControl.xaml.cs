@@ -187,6 +187,29 @@ namespace Compo_Request.Windows.Editor.Windows
                 }
 
             }, Dispatcher, -1, "WebRequestDir.Delete.Confirm", GeneralLogic.UserControl_Uid, true);
+
+            NetworkDelegates.Add(delegate (MResponse ServerResponse)
+            {
+                if (RequestDirectory == null)
+                    return;
+
+                var MRDir = Package.Unpacking<ModelRequestDirectory>(ServerResponse.DataBytes);
+                
+                for(int i = 0; i < VirtualRequestDirs.Count; i++)
+                {
+                    if (VirtualRequestDirs[i].Id == MRDir.Id)
+                    {
+                        VirtualRequestDirs[i].Title = MRDir.Title;
+                        VirtualRequestDirs[i].RequestTitle = MRDir.RequestTitle;
+                        break;
+                    }
+                }
+                ListViewCollection.Refresh();
+
+                GeneralLogic.HeaderName = MRDir.RequestTitle;
+                GeneralLogic.SetHeaderName(TabItemView);
+
+            }, Dispatcher, -1, "WebRequestDir.RequestDirectory.Update.Confirm", GeneralLogic.UserControl_Uid, true);
         }
 
         private void WindowActions()
@@ -198,9 +221,17 @@ namespace Compo_Request.Windows.Editor.Windows
             Button_SendRequest.Click += Button_SendRequest_Click;
             Button_SaveRequest.Click += Button_SaveRequest_Click;
             Button_RequestList.Click += Button_RequestList_Click;
+            Button_RenameRequest.Click += Button_RenameRequest_Click;
             EditorRequestData.PropertyChanged += EditorRequestData_PropertyChanged;
             TextBox_RequestLink.TextChanged += TextBox_RequestLink_TextChanged;
             HtmlViewer.Navigated += HtmlViewer_Navigated;
+        }
+
+        private void Button_RenameRequest_Click(object sender, RoutedEventArgs e)
+        {
+            RemoveEmptyCollectionValues();
+
+            LEditorNetwork.ReanmeRequest(GeneralLogic.RequestLink, GeneralLogic.RequestMethod, RequestDirectory);
         }
 
         private void HtmlViewer_Navigated(object sender, NavigationEventArgs e)
