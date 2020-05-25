@@ -1,0 +1,436 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access" MembersFormat="NameAndType">
+  <Class Name="Compo_Request.Network.Client.ClientBase" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAEAAAAAAAAgAAAACAAAAAAAAAAAAAAKAAAAA=</HashCode>
+      <FileName>Network\Client\ClientBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.Network.Client.NetworkDelegates" Collapsed="true">
+    <Position X="7" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAABAAAAAAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Network\Client\NetworkDelegates.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.Network.Client.UserInfo" Collapsed="true">
+    <Position X="17.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Network\Client\UserInfo.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.Network.Models.MNetworkAction" Collapsed="true">
+    <Position X="5.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAQEAACAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Network\Models\MNetworkAction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.Network.Utilities.Validators.StringValid" Collapsed="true">
+    <Position X="7" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>Network\Utilities\Validators\StringValid.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.Network.Utilities.ConnectService" Collapsed="true">
+    <Position X="15.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAIACAAAAAAAgAAAAAAAAAAAAAAIBEAAAAAAAA=</HashCode>
+      <FileName>Network\Utilities\ConnectService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.Network.Utilities.CustomTimer" Collapsed="true">
+    <Position X="17.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Network\Utilities\CustomTimer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.Network.Utilities.Sender" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Network\Utilities\Sender.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.Network.NetworkBase" Collapsed="true">
+    <Position X="1.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAQACAAAAAAAAEAAAAAACAAACAAAAAAAABAAAAA=</HashCode>
+      <FileName>Network\NetworkBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.WindowsLogic.EditorLogic.LEditorGeneral" Collapsed="true">
+    <Position X="5.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQwAAAAIEAIAEAAAABAAAAAAAQAAQBAAgoACEEBAEI=</HashCode>
+      <FileName>WindowsLogic\EditorLogic\LEditorGeneral.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.WindowsLogic.EditorLogic.LEditorNetwork" Collapsed="true">
+    <Position X="7" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAABAAAAA=</HashCode>
+      <FileName>WindowsLogic\EditorLogic\LEditorNetwork.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.WindowsLogic.EditorLogic.LEditorNetworkActions" Collapsed="true">
+    <Position X="8.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAAIAAABAABACAAAAAAAABAJAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>WindowsLogic\EditorLogic\LEditorNetworkActions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.WindowsLogic.UserRegister.LRegister" Collapsed="true">
+    <Position X="14" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAABAAAAAAAAAAAAAAiAAQAAAAAAAAgAAIAAA=</HashCode>
+      <FileName>WindowsLogic\UserRegister\LRegister.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.WindowsLogic.LMain" Collapsed="true">
+    <Position X="10.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABBUAAAAAAAAAAAQAAAAAAAAAQAAAAAIAAgAAIAAA=</HashCode>
+      <FileName>WindowsLogic\LMain.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.WindowsLogic.LMainMenu" Collapsed="true">
+    <Position X="12.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAAAAAABAAAAAAAAIAA=</HashCode>
+      <FileName>WindowsLogic\LMainMenu.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.Utilities.WebResponseTemplate" Collapsed="true">
+    <Position X="7" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>Utilities\CustomWebRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.Utilities.CustomWebRequest" Collapsed="true">
+    <Position X="5.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Utilities\CustomWebRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.Utilities.GetLinkRequestToCollection" Collapsed="true">
+    <Position X="14" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAgEQEAAAAA=</HashCode>
+      <FileName>Utilities\GetLinkRequestToCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.Utilities.ToolWebRequest" Collapsed="true">
+    <Position X="15.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAgAAAABAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Utilities\ToolWebRequest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.Windows.Editor.Pages.EditorProjectChatPage" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAgAAAAAgAQAAAAAAAEACAAAAwAAAAQ=</HashCode>
+      <FileName>Windows\Editor\Pages\EditorProjectChatPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Windows.Editor.Pages.EditorWebRequestPage" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAAABAACAAAAgAAAAA=</HashCode>
+      <FileName>Windows\Editor\Pages\EditorWebRequestPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Windows.Editor.Windows.EditorHistoryRequestsControl" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAACABCAAAAAAAAQAAAgAAACAAAAgAAAAA=</HashCode>
+      <FileName>Windows\Editor\Windows\EditorHistoryRequestsControl.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Windows.Editor.Windows.EditorRequestRenameWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAABAAAAAAAQABAAAAAAAIgABAAAQAEUEABAA=</HashCode>
+      <FileName>Windows\Editor\Windows\EditorRequestRenameWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Windows.Editor.Windows.EditorRequestSaverWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAABAAAAAAAQABAAAAAAAIgARAAAQAEUAABAA=</HashCode>
+      <FileName>Windows\Editor\Windows\EditorRequestSaverWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Windows.Editor.Windows.EditorWebRequestControl" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IIAMAAIAgCAAwAEqAAgACBAFAACwkBABAAAAgQEQAAQ=</HashCode>
+      <FileName>Windows\Editor\Windows\EditorWebRequestControl.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Windows.Editor.BoundModel" Collapsed="true">
+    <Position X="10.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAACAAAAAAAAAAAABAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Windows\Editor\BoundModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.Windows.Editor.BoundNewItem" Collapsed="true">
+    <Position X="12.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEAIAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Windows\Editor\BoundNewItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.Windows.Editor.EditorMainMenuWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAQAAAAAAAEgAEAgAAAAECQAAAAAAAAAAgJAA=</HashCode>
+      <FileName>Windows\Editor\EditorMainMenuWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Windows.Projects.ProjectAddPage" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAKAAABAAAAgAAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>Windows\Projects\ProjectAddPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Windows.Projects.ProjectEditPage" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAKAAABAAAAiAAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>Windows\Projects\ProjectEditPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Windows.Projects.ProjectsMainPage" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQhACAABAAACAAAAAAAAAAAAAAAAAQCCAgAAAABJRA=</HashCode>
+      <FileName>Windows\Projects\ProjectsMainPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Windows.Projects.ProjectTeamAddPage" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAKAAAQAAAACAAAAAABAAAKAAAACAABAA=</HashCode>
+      <FileName>Windows\Projects\ProjectTeamAddPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Windows.Teams.TeamAddPage" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAAACAAAAAAAAgQAAAAQAAAACAAAAAAABAA=</HashCode>
+      <FileName>Windows\Teams\TeamAddPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Windows.Teams.TeamEditPage" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAACAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAACBAA=</HashCode>
+      <FileName>Windows\Teams\TeamEditPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Windows.Teams.TeamMainPage" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQgAAAAAAAACCAAAAAABwAAAAQAAAAADEgIAAABJAA=</HashCode>
+      <FileName>Windows\Teams\TeamMainPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Windows.Teams.TeamUserAddPage" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAKAICAAAAACAABEAAAAAAAAAAAAAAACAAAAAAEAAA=</HashCode>
+      <FileName>Windows\Teams\TeamUserAddPage.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Windows.UserRegister.RegisterConfirmWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Windows\UserRegister\RegisterConfirmWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Windows.UserRegister.RegisterWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAIQQAAAAAAAAAAAAAhQAAAAAAAAEQAAEAQAABAA=</HashCode>
+      <FileName>Windows\UserRegister\RegisterWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Windows.AlertWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="Compo_Request.Windows.AlertWindow.CloseEventDelegate" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Windows\AlertWindow.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Enum Name="Compo_Request.Windows.AlertWindow.AlertCode" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Windows\AlertWindow.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAEgAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Windows\AlertWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Windows.ConfirmWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgEAAAAAAAAAAAAAAAAAAgAAAEAAAAABAAAAAAAAgEA=</HashCode>
+      <FileName>Windows\ConfirmWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Windows.MainMenuWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAJAAQAQAAAIAAAAAAAAoAAAAEAAAAAAAAAAIAIBAA=</HashCode>
+      <FileName>Windows\MainMenuWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="JsonViewerDemo.JsonViewer.JsonViewer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAiAAAAAAiAAAAAAAAAAAAAAAAAAAAAgAAAEAIgAA=</HashCode>
+      <FileName>JsonViewer\JsonViewer.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.XMLViewer.Viewer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAABAAAAAAAAAAAAAAAAAABBAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>XMLViewer\Viewer.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Models.Windows.DynamicEditorRequestSaver" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAIAgAAAAAgAAAAAAAAgAAEAAAAAA=</HashCode>
+      <FileName>Models\Windows\DynamicEditorRequestSaver.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Models.DynamicModelChat" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="8.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAACAAAIAAICAAAAgAhAAAAAABAAAAIAAAAAA=</HashCode>
+      <FileName>Models\DynamicModelChat.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Models.DynamicModelEditorRequest" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAIAAAAAAAgAAAAEBAAAAAQAAAAAA=</HashCode>
+      <FileName>Models\DynamicModelEditorRequest.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Models.DynamicModelRequestDirectory" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEAIAABAEACgIACAAAAAAAAAGAAAAA=</HashCode>
+      <FileName>Models\DynamicModelRequestDirectory.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Models.DynamicWebRequestItem" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAACAAACAAAgABQAIAAAAAAAgAAAAAAEgAAgQAAEAAA=</HashCode>
+      <FileName>Models\DynamicWebRequestItem.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request.Models.ProjectData" Collapsed="true">
+    <Position X="10.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGAAAA=</HashCode>
+      <FileName>Models\ProjectData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.Data.Windows.AutomaticAuthorizate" Collapsed="true">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAQAAIAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Data\Windows\AutomaticAuthorizate.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.Data.JsonData" Collapsed="true">
+    <Position X="15.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAACAAAAAAAAAAAAAgAAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Data\JsonData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.App" Collapsed="true">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request.MainWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAgQAAAAAgKAAAAAAQAAAAAEAAAIIAA=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Interface Name="Compo_Request.Network.Interfaces.ICustomPage" Collapsed="true">
+    <Position X="5.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>Network\Interfaces\ICustomPage.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Compo_Request.Network.Interfaces.INetworkWindow" Collapsed="true">
+    <Position X="7" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAAAAgAAAAAAAAAAAAAAAABAAAA=</HashCode>
+      <FileName>Network\Interfaces\INetworkWindow.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Delegate Name="Compo_Request.Network.Models.NetworkDelegateTemplate" Collapsed="true">
+    <Position X="5.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Network\Models\MNetworkAction.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Compo_Request_Server.Network.Client.ClientBase" Collapsed="true">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACQAAAAAAAAAAAAAgAAAACAAAAAAAAAAAAAAICAAAA=</HashCode>
+      <FileName>Network\Client\ClientBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Database.DatabaseContext" Collapsed="true">
+    <Position X="4.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACJACQAAABABEAAAAAIBEAQABAAAAQAABABAARA=</HashCode>
+      <FileName>Network\Database\DatabaseContext.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Events.Auth.EAuth" Collapsed="true">
+    <Position X="8.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Network\Events\Auth\EAuth.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Events.Chats.EChat" Collapsed="true">
+    <Position X="10" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAACIAAAA=</HashCode>
+      <FileName>Network\Events\Chats\EChat.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Events.Projects.EProject" Collapsed="true">
+    <Position X="3" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAIAAAJAAA=</HashCode>
+      <FileName>Network\Events\Projects\EProject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Events.Projects.ETeamProject" Collapsed="true">
+    <Position X="8.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Network\Events\Projects\ETeamProject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Events.Register.ERegister" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Network\Events\Register\ERegister.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Events.Team.ETeam" Collapsed="true">
+    <Position X="6.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAACAAACAAAAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Network\Events\Team\ETeam.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Events.Team.ETeamUser" Collapsed="true">
+    <Position X="10" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>Network\Events\Team\ETeamUser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Events.WebRequestActions.EWebRequestDir" Collapsed="true">
+    <Position X="3" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAIAAAAAIA=</HashCode>
+      <FileName>Network\Events\WebRequestActions\EWebRequestDir.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Events.WebRequestActions.EWebRequestHistory" Collapsed="true">
+    <Position X="4.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Network\Events\WebRequestActions\EWebRequestHistory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Events.WebRequestActions.EWebRequestItem" Collapsed="true">
+    <Position X="6.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAAAAAAACAAAAAAAAgAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Network\Events\WebRequestActions\EWebRequestItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Events.WebRequestActions.EWebRequestParamsItem" Collapsed="true">
+    <Position X="8.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAABAQAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Network\Events\WebRequestActions\EWebRequestParamsItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Models.MNetworkAction" Collapsed="true">
+    <Position X="10" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAQAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Network\Models\MNetworkAction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Models.MNetworkClient" Collapsed="true">
+    <Position X="3" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAEAAAAAACAAAAAAAAAAAABAAIAA=</HashCode>
+      <FileName>Network\Models\MNetworkClient.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Server.NetworkDelegates" Collapsed="true">
+    <Position X="4.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Network\Server\NetworkDelegates.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Server.ServerBase" Collapsed="true">
+    <Position X="8.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAIAAAAAAAAEAAAAAAAAAAAAAAAgAAAAAAAAABAAA=</HashCode>
+      <FileName>Network\Server\ServerBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Server.Users" Collapsed="true">
+    <Position X="10" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAIAAAAIgAAAAAABAAAAABAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Network\Server\Users.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Utilities.DbConvertToWpf" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAwAAAAAAAAAAgAAAAAgBA=</HashCode>
+      <FileName>Network\Utilities\DbConvertToWpf.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Utilities.Sender" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAACAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Network\Utilities\Sender.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.Utilities.WpfConvertToBd" Collapsed="true">
+    <Position X="3" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>Network\Utilities\WpfConvertToBd.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Network.NetworkBase" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAACAAAAACAABAAABAAAAA=</HashCode>
+      <FileName>Network\NetworkBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Compo_Request_Server.Program" Collapsed="true">
+    <Position X="6.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAQAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Compo_Request_Server.Network.Interfaces.Events.IEvent" Collapsed="true">
+    <Position X="3" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Network\Interfaces\Events\IEvent.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Delegate Name="Compo_Request_Server.Network.Models.NetworkDelegateTemplate" Collapsed="true">
+    <Position X="3" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Network\Models\MNetworkAction.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
