@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Threading;
 using Compo_Request_Server.Network;
 using Compo_Request_Server.Network.Database;
+using Compo_Request_Server.Network.Events.Access;
 using Compo_Request_Server.Network.Events.Auth;
 using Compo_Request_Server.Network.Events.Chats;
 using Compo_Request_Server.Network.Events.Projects;
@@ -55,6 +56,7 @@ namespace Compo_Request_Server
             var EventWebRequestParamsItem = new EWebRequestParamsItem();
             var EventWebRequestHistory = new EWebRequestHistory();
             var EventChat = new EChat();
+            var EventUserAccess = new EUserAccess();
         }
     }
 }
