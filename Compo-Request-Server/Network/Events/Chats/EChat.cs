@@ -2,12 +2,14 @@
 using Compo_Request_Server.Network.Models;
 using Compo_Request_Server.Network.Server;
 using Compo_Request_Server.Network.Utilities;
+using Compo_Shared_Data.Debugging;
 using Compo_Shared_Data.Models;
 using Compo_Shared_Data.Network;
 using Compo_Shared_Data.Network.Models;
 using Compo_Shared_Data.WPF.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 
@@ -23,39 +25,57 @@ namespace Compo_Request_Server.Network.Events.Chats
 
         private void ChatMessagesNew(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
-            var PreMessage = Package.Unpacking<Chat>(ClientResponse.DataBytes);
-
-            using (var db = new DatabaseContext())
+            try
             {
-                PreMessage.UserId = Users.GetUserById(NetworkClient.Id).Id;
-                PreMessage.Date = DateTime.Now;
+                var PreMessage = Package.Unpacking<Chat>(ClientResponse.DataBytes);
 
-                db.Chats.Add(PreMessage);
-                db.SaveChanges();
+                using (var db = new DatabaseContext())
+                {
+                    PreMessage.UserId = Users.GetUserById(NetworkClient.Id).Id;
+                    PreMessage.Date = DateTime.Now;
 
-                Sender.Broadcast("Chat.Messages.New.Confirm", GetModelMessage(db, PreMessage));
+                    db.Chats.Add(PreMessage);
+                    db.SaveChanges();
+
+                    Sender.Broadcast("Chat.Messages.New.Confirm", GetModelMessage(db, PreMessage));
+                }
+            }
+            catch(DbException ex)
+            {
+                Debug.LogError("Возникло исключение при добавлении нового сообщения. Код ошибки:\n" + ex);
+
+                Sender.Send(NetworkClient, "Chat.Messages.New.Error");
             }
         }
 
         private void ChatMessagesGetAll(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
-            int ProjectId = Package.Unpacking<int>(ClientResponse.DataBytes);
-
-            using (var db = new DatabaseContext())
+            try
             {
-                Chat[] ChatMessages = db.Chats.Where(x => x.ProjectId == ProjectId).ToArray();
+                int ProjectId = Package.Unpacking<int>(ClientResponse.DataBytes);
 
-                if (ChatMessages.Length != 0)
+                using (var db = new DatabaseContext())
                 {
-                    List<ModelChatMessage> mChatMessages = new List<ModelChatMessage>();
+                    Chat[] ChatMessages = db.Chats.Where(x => x.ProjectId == ProjectId).ToArray();
 
-                    foreach(var Message in ChatMessages)
+                    if (ChatMessages.Length != 0)
                     {
-                        mChatMessages.Add(GetModelMessage(db, Message));
-                    }
+                        List<ModelChatMessage> mChatMessages = new List<ModelChatMessage>();
 
-                    Sender.Send(NetworkClient, "Chat.Messages.GetAll.Confirm", mChatMessages.ToArray());
+                        foreach (var Message in ChatMessages)
+                        {
+                            mChatMessages.Add(GetModelMessage(db, Message));
+                        }
+
+                        Sender.Send(NetworkClient, "Chat.Messages.GetAll.Confirm", mChatMessages.ToArray());
+                    }
                 }
+            }
+            catch(DbException ex)
+            {
+                Debug.LogError("Возникло исключение при получении списка сообщений. Код ошибки:\n" + ex);
+
+                Sender.Send(NetworkClient, "Chat.Messages.GetAll.Error");
             }
         }
 
