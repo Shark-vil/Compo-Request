@@ -10,7 +10,7 @@ using System.Data.Common;
 using System.Linq;
 using System.Text;
 
-namespace Compo_Request_Server.Network.Events.User
+namespace Compo_Request_Server.Network.Events.UserEvents
 {
     public class EUsers
     {
@@ -28,7 +28,8 @@ namespace Compo_Request_Server.Network.Events.User
                     var DbUsers = db.Users.ToArray();
                     var WUsers = DbConvertToWpf.ConvertUser(DbUsers);
 
-                    Sender.Send(NetworkClient, "Users.GetAll.Confirm", WUsers);
+                    if (AccessController.IsPrivilege(NetworkClient, "users"))
+                        Sender.Send(NetworkClient, "Users.GetAll.Confirm", WUsers);
                 }
             }
             catch(DbException ex)

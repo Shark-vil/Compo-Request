@@ -10,7 +10,7 @@ using Compo_Request_Server.Network.Events.Chats;
 using Compo_Request_Server.Network.Events.Projects;
 using Compo_Request_Server.Network.Events.Register;
 using Compo_Request_Server.Network.Events.Team;
-using Compo_Request_Server.Network.Events.User;
+using Compo_Request_Server.Network.Events.UserEvents;
 using Compo_Request_Server.Network.Events.WebRequestActions;
 using Compo_Request_Server.Network.Models;
 using Compo_Request_Server.Network.Server;

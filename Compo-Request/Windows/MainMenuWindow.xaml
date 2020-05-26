@@ -77,6 +77,15 @@
                     </Button>
                 </Grid>
                 <StackPanel ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <Button x:Name="Button_Users"
+                        Height="40" Background="{x:Null}" BorderBrush="{x:Null}"
+                        HorizontalAlignment="Left">
+                        <StackPanel Margin="-8" Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Users" Foreground="White" Margin="2"
+                                                    Height="30" Width="30" VerticalAlignment="Center"/>
+                            <TextBlock Text="Пользователи" VerticalAlignment="Center" Margin="20, 0"/>
+                        </StackPanel>
+                    </Button>
                     <Button x:Name="Button_Teams"
                         Height="40" Background="{x:Null}" BorderBrush="{x:Null}"
                         HorizontalAlignment="Left">
