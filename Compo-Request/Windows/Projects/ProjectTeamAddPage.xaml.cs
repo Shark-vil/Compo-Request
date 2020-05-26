@@ -62,7 +62,6 @@ namespace Compo_Request.Windows.Projects
             foreach (var TeamGroup in OnTeamGroup)
                 if (TeamGroup.IsSelected)
                 {
-                    TeamGroup.ProjectId = MProject.Id;
                     NotTeamGroup.Add(TeamGroup);
                     RemoveTeams.Add(TeamGroup);
                 }
@@ -78,7 +77,6 @@ namespace Compo_Request.Windows.Projects
             foreach (var TeamGroup in NotTeamGroup)
                 if (TeamGroup.IsSelected)
                 {
-                    TeamGroup.ProjectId = MProject.Id;
                     OnTeamGroup.Add(TeamGroup);
                     RemoveTeams.Add(TeamGroup);
                 }

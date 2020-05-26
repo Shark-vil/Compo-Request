@@ -40,7 +40,7 @@ namespace Compo_Request_Server.Network.Events.Projects
                     {
                         TeamProject DbTeamProject = new TeamProject
                         {
-                            ProjectId = TeamGroup.ProjectId,
+                            ProjectId = TeamGroupProjectId.ProjectId,
                             TeamGroupId = TeamGroup.Id
                         };
 

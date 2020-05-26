@@ -138,7 +138,10 @@ namespace Compo_Request.Windows.Teams
 
             NetworkDelegates.Add(delegate (MResponse ServerResponse)
             {
-                DataGrid_Access.IsEnabled = true;
+                new AlertWindow("Оповещение", AlertWindow.AlertCode.UpdateConfirm, () =>
+                {
+                    DataGrid_Access.IsEnabled = true;
+                });
 
             }, Dispatcher, -1, "Team.Access.Update.Confirm", "TeamEditAccessPage");
         }

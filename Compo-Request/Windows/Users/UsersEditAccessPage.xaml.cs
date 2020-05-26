@@ -154,7 +154,10 @@ namespace Compo_Request.Windows.Users
 
             NetworkDelegates.Add(delegate (MResponse ServerResponse)
             {
-                DataGrid_Access.IsEnabled = true;
+                new AlertWindow("Оповещение", AlertWindow.AlertCode.UpdateConfirm, () =>
+                {
+                    DataGrid_Access.IsEnabled = true;
+                });
 
             }, Dispatcher, -1, "User.Access.Update.Confirm", "UsersEditAccessPage");
         }
