@@ -63,10 +63,11 @@ namespace Compo_Request_Server.Network.Events.Access
 
             try
             {
+                int UserId = Package.Unpacking<int>(ClientResponse.DataBytes);
+
                 using (var db = new DatabaseContext())
                 {
-                    var User = Users.GetUserById(NetworkClient.Id);
-                    var DbUserPrivileges = db.UserPrivileges.Where(x => x.UserId == User.Id).ToArray();
+                    var DbUserPrivileges = db.UserPrivileges.Where(x => x.UserId == UserId).ToArray();
 
                     Debug.Log($"Получен список прав доступа в количестве {DbUserPrivileges.Length} записей.", ConsoleColor.Magenta);
 
@@ -90,23 +91,18 @@ namespace Compo_Request_Server.Network.Events.Access
             {
                 using (var db = new DatabaseContext())
                 {
-                    var ReadUserPrivileges = Package.Unpacking<UserPrivilege[]>(ClientResponse.DataBytes);
+                    var ReadUserPrivileges = Package.Unpacking<MUserPrivilegeTransport>(ClientResponse.DataBytes);
+                    var DbUserPrivileges = db.UserPrivileges.Where(x => x.UserId == ReadUserPrivileges.UserId).ToArray();
+                    var User = db.Users.FirstOrDefault(x => x.Id == ReadUserPrivileges.UserId);
 
-                    var User = Users.GetUserById(NetworkClient.Id);
-                    var DbUserPrivileges = db.UserPrivileges.Where(x => x.UserId == User.Id).ToArray();
-
-                    if (ReadUserPrivileges.Length != 0)
-                        for (int i = 0; i < ReadUserPrivileges.Length; i++)
-                            ReadUserPrivileges[i].UserId = User.Id;
-
-                    Debug.Log($"Обновление прав доступа пользователя.", ConsoleColor.Magenta);
+                    Debug.Log($"Обновление прав доступа пользователя [{User.Id}] - {User.Login}", ConsoleColor.Magenta);
 
                     List<UserPrivilege> DataRemoves = new List<UserPrivilege>();
                     List<string> DataExists = new List<string>();
 
                     Debug.Log($"\nСписок прав на удаление:", ConsoleColor.Magenta);
                     foreach (var UserPrivilege in DbUserPrivileges)
-                        if (!Array.Exists(ReadUserPrivileges, x => x.Privilege == UserPrivilege.Privilege))
+                        if (!Array.Exists(ReadUserPrivileges.Privileges, x => x.Privilege == UserPrivilege.Privilege))
                         {
                             DataRemoves.Add(UserPrivilege);
                             Debug.Log($"> Privilege - {UserPrivilege.Privilege}", ConsoleColor.Magenta);
@@ -118,7 +114,7 @@ namespace Compo_Request_Server.Network.Events.Access
                         db.UserPrivileges.Remove(UserPrivilege);
 
                     Debug.Log($"\nСписок прав на добавление:", ConsoleColor.Magenta);
-                    foreach (var UserPrivilege in ReadUserPrivileges)
+                    foreach (var UserPrivilege in ReadUserPrivileges.Privileges)
                     {
                         if (!DataExists.Exists(x => x == UserPrivilege.Privilege))
                         {
@@ -132,7 +128,7 @@ namespace Compo_Request_Server.Network.Events.Access
 
                     Debug.Log($"\nПрава пользователя [{User.Id}] - {User.Login} обновлены!\n", ConsoleColor.Magenta);
 
-                    DbUserPrivileges = db.UserPrivileges.Where(x => x.UserId == User.Id).ToArray();
+                    DbUserPrivileges = db.UserPrivileges.Where(x => x.UserId == ReadUserPrivileges.UserId).ToArray();
 
                     Sender.Broadcast("User.Access.Update.Confirm", 
                         DbUserPrivileges, ClientResponse.WindowUid);

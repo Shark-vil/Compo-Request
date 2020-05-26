@@ -32,24 +32,31 @@ namespace Compo_Request.Windows.Users
         internal UsersMainPage _UsersMainPage;
         internal WUser DataUser;
         internal ObservableCollection<WAccess> AccessCollecton = new ObservableCollection<WAccess>();
-        private bool AccessCollectonIsLoad = false;
 
         public UsersEditAccessPage(UsersMainPage _UsersMainPage, WUser DataUser)
         {
             InitializeComponent();
+            LoadParentWindows(_UsersMainPage);
+            EventsInitialize();
             NetworkEvents();
 
-            this._UsersMainPage = _UsersMainPage;
             this.DataUser = DataUser;
 
             DataGrid_Access.ItemsSource = AccessCollecton;
             DataGrid_Access.IsEnabled = false;
 
-            Button_SaveAccess.Click += Button_SaveAccess_Click;
-
             Sender.SendToServer("Access.GetAll");
+        }
 
+        private void LoadParentWindows(UsersMainPage _UsersMainPage)
+        {
+            this._UsersMainPage = _UsersMainPage;
             _UsersMainPage._MainMenuWindow.WindowLogic.SetPage(this);
+        }
+
+        private void EventsInitialize()
+        {
+            Button_SaveAccess.Click += Button_SaveAccess_Click;
         }
 
         private void Button_SaveAccess_Click(object sender, RoutedEventArgs e)
@@ -68,13 +75,20 @@ namespace Compo_Request.Windows.Users
 
                 UserPrivileges.Add(new UserPrivilege
                 {
-                    Privilege = Access.Key
+                    Privilege = Access.Key,
+                    UserId = DataUser.Id
                 });
 
                 Debug.Log("Access - " + Access.Key + " : " + Access.IsSelected);
             }
 
-            if (!Sender.SendToServer("User.Access.Update", UserPrivileges.ToArray()))
+            var MUserPrivileges = new MUserPrivilegeTransport
+            {
+                UserId = DataUser.Id,
+                Privileges = UserPrivileges.ToArray()
+            };
+
+            if (!Sender.SendToServer("User.Access.Update", MUserPrivileges))
             {
                 new AlertWindow("Ошибка", AlertWindow.AlertCode.SendToServer, () =>
                 {
@@ -99,7 +113,7 @@ namespace Compo_Request.Windows.Users
                     });
                 }
 
-                Sender.SendToServer("User.Access.GetAll");
+                Sender.SendToServer("User.Access.GetAll", DataUser.Id);
 
             }, Dispatcher, -1, "Access.GetAll.Confirm", "UsersEditAccessPage");
 
@@ -107,7 +121,7 @@ namespace Compo_Request.Windows.Users
             {
                 var Privileges = Package.Unpacking<UserPrivilege[]>(ServerResponse.DataBytes);
 
-                if (UserInfo.NetworkSelf.Id == 1)
+                if (DataUser.Id == 1)
                 {
                     for (int i = 0; i < AccessCollecton.Count; i++)
                     {
