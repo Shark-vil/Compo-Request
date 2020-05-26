@@ -59,6 +59,7 @@ namespace Compo_Request_Server
             var EventChat = new EChat();
             var EventUserAccess = new EUserAccess();
             var EventUsers = new EUsers();
+            var EventTramAccess = new ETeamAccess();
         }
     }
 }

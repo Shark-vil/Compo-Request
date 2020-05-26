@@ -40,15 +40,18 @@ namespace Compo_Request_Server.Network.Events.Team
                         TeamUser DbTeamUser = new TeamUser
                         {
                             UserId = User.Id,
-                            TeamGroupId = User.TeamGroupId
+                            TeamGroupId = TeamUserTeamId.TeamGroupId
                         };
 
-                        if (db.TeamUsers.Where(tu =>
-                            tu.TeamGroupId == DbTeamUser.TeamGroupId && tu.UserId == DbTeamUser.UserId)
-                            .FirstOrDefault() != null)
+                        if (db.TeamUsers.FirstOrDefault(tu =>
+                            tu.TeamGroupId == DbTeamUser.TeamGroupId && tu.UserId == DbTeamUser.UserId) != null)
                         {
                             continue;
                         }
+
+                        Debug.Log("DbTeamUser:\n" +
+                            "UserId - " + DbTeamUser.UserId + "\n" +
+                            "TemGroupId - " + DbTeamUser.TeamGroupId);
 
                         db.TeamUsers.Attach(DbTeamUser);
                         db.SaveChanges();

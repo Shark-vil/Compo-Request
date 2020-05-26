@@ -24,6 +24,7 @@ namespace Compo_Request.Windows.Teams
         internal TeamAddPage _TeamAddPage;
         internal TeamUserAddPage _TeamUserAddPage;
         internal TeamEditPage _TeamEditPage;
+        internal TeamEditAccessPage _TeamEditAccessPage;
 
         internal ObservableCollection<TeamGroup> TeamGroups = new ObservableCollection<TeamGroup>();
         internal TeamGroup[] DbTeamGroups;
@@ -153,6 +154,15 @@ namespace Compo_Request.Windows.Teams
 
             _TeamEditPage = new TeamEditPage(this, TGroup);
             _MainMenuWindow.Frame_Main.Content = _TeamEditPage;
+        }
+
+        private void ButtonClick_AccessEdit(object sender, RoutedEventArgs e)
+        {
+            TeamGroup TGroup = (sender as Button).DataContext as TeamGroup;
+
+            _TeamEditAccessPage?.ClosePage();
+            _TeamEditAccessPage = new TeamEditAccessPage(this, TGroup);
+            _TeamEditAccessPage.OpenPage();
         }
 
         private void ButtonClick_DeleteTeamGroup(object sender, RoutedEventArgs e)
