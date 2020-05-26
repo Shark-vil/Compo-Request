@@ -27,6 +27,7 @@ namespace Compo_Request.Windows
         internal UsersMainPage _UsersMainPage;
         // Профиль пользователя
         internal ProfileView _ProfileView;
+        internal UserEditPage _UserEditPage;
 
         /// <summary>
         /// Конструктор главного окна меню
@@ -66,6 +67,15 @@ namespace Compo_Request.Windows
             this.Button_Users.Click += Button_Users_Click;
             this.Button_Exit.Click += Button_Exit_Click;
             this.Button_Profile.Click += Button_Profile_Click;
+            this.Button_Settings.Click += Button_Settings_Click;
+        }
+
+        private void Button_Settings_Click(object sender, RoutedEventArgs e)
+        {
+            _UserEditPage?.ClosePage();
+            _UserEditPage = new UserEditPage(this, UserInfo.MUserToWUser(UserInfo.NetworkSelf));
+
+            WindowLogic.SetPage(_UserEditPage);
         }
 
         private void Button_Profile_Click(object sender, RoutedEventArgs e)

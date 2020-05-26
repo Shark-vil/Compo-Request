@@ -66,80 +66,25 @@ namespace Compo_Request.Windows.UserRegister
             UserEntity.Surname = TextBox_Surname.Text;
             UserEntity.Patronymic = TextBox_Patronymic.Text;
 
-            if (UserEntity.Email.Length == 0 || !StringValid.IsValidEmail(UserEntity.Email))
-            {
-                new AlertWindow("Ошибка", "Не верно задан формат почты!\r\nПример: MyMail@mail.com",
-                    RegisterElements_Unblock);
+            if (!UserValid.Email(UserEntity.Email, RegisterElements_Unblock))
                 return;
-            }
 
-            if (UserEntity.Login.Length >= 3)
-            {
-                if (!new Regex("^[a-z|A-Z|0-9|._-]+$").IsMatch(UserEntity.Login))
-                {
-                    new AlertWindow("Ошибка", "Поле логина не может содержать любые " +
-                        "символы кроме чисел и латинских букв!",
-                        RegisterElements_Unblock);
-                    return;
-                }
-            }
+            if (!UserValid.Login(UserEntity.Login, RegisterElements_Unblock))
+                return;
+
+            if (!UserValid.Password(PasswordBox_Password.Password, PasswordBox_PasswordConfim.Password, RegisterElements_Unblock))
+                return;
             else
-            {
-                new AlertWindow("Ошибка", "Логин должен содержать минимум 3 символа!",
-                    RegisterElements_Unblock);
-                return;
-            }
+                UserEntity.Password = PasswordBox_Password.Password;
 
-            if (PasswordBox_Password.Password.Length >= 6)
-            {
-                if (PasswordBox_Password.Password == PasswordBox_PasswordConfim.Password)
-                    UserEntity.Password = PasswordBox_Password.Password;
-                else
-                {
-                    new AlertWindow("Ошибка", "Пароли не совпадают!",
-                        RegisterElements_Unblock);
-                    return;
-                }
-            }
-            else
-            {
-                new AlertWindow("Ошибка", "Пароль должен содержать минимум 6 символов!",
-                    RegisterElements_Unblock);
+            if (!UserValid.Name(UserEntity.Name, RegisterElements_Unblock))
                 return;
-            }
 
-            if (UserEntity.Name.Length == 0)
-            {
-                new AlertWindow("Ошибка", "Поле имени не может быть пустым!",
-                    RegisterElements_Unblock);
+            if (!UserValid.Surname(UserEntity.Surname, RegisterElements_Unblock))
                 return;
-            }
-            else if (new Regex("^[0-9]+$").IsMatch(UserEntity.Name))
-            {
-                new AlertWindow("Ошибка", "Поле имени не может содержать в себе цифры!",
-                    RegisterElements_Unblock);
-                return;
-            }
 
-            if (UserEntity.Surname.Length == 0)
-            {
-                new AlertWindow("Ошибка", "Поле отчества не может быть пустым!",
-                    RegisterElements_Unblock);
+            if (!UserValid.Patronymic(UserEntity.Patronymic, RegisterElements_Unblock))
                 return;
-            }
-            else if (new Regex("^[0-9]+$").IsMatch(UserEntity.Surname))
-            {
-                new AlertWindow("Ошибка", "Поле фамилии не может содержать в себе цифры!",
-                    RegisterElements_Unblock);
-                return;
-            }
-
-            if (new Regex("^[0-9]+$").IsMatch(UserEntity.Patronymic))
-            {
-                new AlertWindow("Ошибка", "Поле отчества не может содержать в себе цифры!",
-                    RegisterElements_Unblock);
-                return;
-            }
 
             WindowLogic.RegisterAccount(UserEntity);
         }
