@@ -5,6 +5,7 @@ using Compo_Request.Windows.Teams;
 using Compo_Request.Windows.Users;
 using Compo_Request.WindowsLogic;
 using Compo_Shared_Data.Debugging;
+using Compo_Shared_Data.Network.Models;
 using System.Windows;
 
 namespace Compo_Request.Windows
@@ -61,6 +62,12 @@ namespace Compo_Request.Windows
             this.Button_Teams.Click += Button_Teams_Click;          // Событие при нажатии на кнопку пункта меню "Команды"
             this.Button_Projects.Click += Button_Projects_Click;    // Событие при нажатии на кнопку пункта меню "Проекты"
             this.Button_Users.Click += Button_Users_Click;
+            this.Button_Exit.Click += Button_Exit_Click;
+        }
+
+        private void Button_Exit_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
 
         private void Button_Users_Click(object sender, RoutedEventArgs e)
@@ -127,7 +134,6 @@ namespace Compo_Request.Windows
         private void MainMenuWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Sender.SendToServer("User.Disconnected");
-
             _MainWindow.Show();
         }
     }

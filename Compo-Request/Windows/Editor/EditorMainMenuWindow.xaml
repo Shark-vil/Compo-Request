@@ -57,7 +57,8 @@
                         <Button Content="Настройки"/>
                         <Button Content="Помощь"/>
                         <Separator/>
-                        <Button Content="Выход из аккаунта"/>
+                        <Button x:Name="Button_Exit"
+                            Content="Выход из аккаунта"/>
                     </StackPanel>
                 </materialDesign:PopupBox>
             </StackPanel>
