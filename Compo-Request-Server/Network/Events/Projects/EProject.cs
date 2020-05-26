@@ -27,6 +27,9 @@ namespace Compo_Request_Server.Network.Events.Projects
 
         private void DeleteProject(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "projects.delete"))
+                return;
+
             try
             {
                 using (var db = new DatabaseContext())
@@ -57,6 +60,9 @@ namespace Compo_Request_Server.Network.Events.Projects
 
         private void UpdateProject(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "projects.edit"))
+                return;
+
             try
             {
                 using (var db = new DatabaseContext())
@@ -98,6 +104,9 @@ namespace Compo_Request_Server.Network.Events.Projects
 
         private void GetAllProjects(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "projects"))
+                return;
+
             try
             {
                 using (var db = new DatabaseContext())
@@ -120,6 +129,9 @@ namespace Compo_Request_Server.Network.Events.Projects
 
         private void AddProject(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "projects.add"))
+                return;
+
             try
             {
                 using (var db = new DatabaseContext())

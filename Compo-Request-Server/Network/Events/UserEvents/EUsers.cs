@@ -21,6 +21,9 @@ namespace Compo_Request_Server.Network.Events.UserEvents
 
         private void UsersGetAll(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "users"))
+                return;
+
             try
             {
                 using(var db = new DatabaseContext())

@@ -25,6 +25,9 @@ namespace Compo_Request_Server.Network.Events.Chats
 
         private void ChatMessagesNew(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "projects.chat"))
+                return;
+
             try
             {
                 var PreMessage = Package.Unpacking<Chat>(ClientResponse.DataBytes);
@@ -50,6 +53,9 @@ namespace Compo_Request_Server.Network.Events.Chats
 
         private void ChatMessagesGetAll(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "projects.chat"))
+                return;
+
             try
             {
                 int ProjectId = Package.Unpacking<int>(ClientResponse.DataBytes);

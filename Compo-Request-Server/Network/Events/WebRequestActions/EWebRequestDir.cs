@@ -53,6 +53,9 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
 
         private void WebRequestDirUpdate(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "requests.edit"))
+                return;
+
             var RequestDirectory = Package.Unpacking<ModelRequestDirectory>(ClientResponse.DataBytes);
 
             using (var db = new DatabaseContext())
@@ -72,6 +75,9 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
 
         private void WebRequestDirDelete(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "requests.delete"))
+                return;
+
             var WebRequestId = Package.Unpacking<int>(ClientResponse.DataBytes);
 
             using (var db = new DatabaseContext())
@@ -86,6 +92,9 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
 
         private void WebRequestDirSaver(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "requests.add"))
+                return;
+
             var WebRequestDirItem = Package.Unpacking<WebRequestDir>(ClientResponse.DataBytes);
 
             using (var db = new DatabaseContext())

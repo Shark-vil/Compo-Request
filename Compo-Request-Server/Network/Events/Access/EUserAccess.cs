@@ -25,14 +25,14 @@ namespace Compo_Request_Server.Network.Events.Access
 
         private void GetAccessList(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
-            List<MAccess> Access = new List<MAccess>()
+            List <MAccess> Access = new List<MAccess>()
             {
                 new MAccess { Key = "admin", Description = "Полный доступ" },
 
                 new MAccess { Key = "users", Description = "Доступ к списку пользователей" },
-                new MAccess { Key = "users.add", Description = "Добавление пользователей" },
                 new MAccess { Key = "users.edit", Description = "Редактирование пользователей" },
                 new MAccess { Key = "users.delete", Description = "Удаление пользователей" },
+                new MAccess { Key = "users.access", Description = "Управление правами пользователей" },
 
                 new MAccess { Key = "teams", Description = "Доступ к списку команд" },
                 new MAccess { Key = "teams.add", Description = "Добавление команд" },
@@ -50,6 +50,7 @@ namespace Compo_Request_Server.Network.Events.Access
                 new MAccess { Key = "requests.edit", Description = "Редактирование WEB-запросов" },
                 new MAccess { Key = "requests.delete", Description = "Удаление WEB-запросов" },
                 new MAccess { Key = "requests.history", Description = "Доступ к истории WEB-запросов" },
+                new MAccess { Key = "requests.history.add", Description = "Добавление записей в историю WEB-запросов" },
             };
 
             Sender.Send(NetworkClient, "Access.GetAll.Confirm", Access.ToArray());
@@ -57,6 +58,9 @@ namespace Compo_Request_Server.Network.Events.Access
 
         private void AccessGetAll(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "users.access"))
+                return;
+
             try
             {
                 using (var db = new DatabaseContext())
@@ -79,6 +83,9 @@ namespace Compo_Request_Server.Network.Events.Access
 
         private void AccessUpdate(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "users.access"))
+                return;
+
             try
             {
                 using (var db = new DatabaseContext())

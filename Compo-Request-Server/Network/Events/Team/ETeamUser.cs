@@ -26,6 +26,9 @@ namespace Compo_Request_Server.Network.Events.Team
 
         private void SaveTeamUser(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "teams.edit"))
+                return;
+
             try
             {
                 using (var db = new DatabaseContext())
@@ -101,6 +104,9 @@ namespace Compo_Request_Server.Network.Events.Team
 
         private void GetTeamUsers(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "teams"))
+                return;
+
             try
             {
                 using (var db = new DatabaseContext())
