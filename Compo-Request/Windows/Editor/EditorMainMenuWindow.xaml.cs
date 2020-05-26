@@ -1,7 +1,10 @@
 ﻿using Compo_Request.Models;
+using Compo_Request.Network.Client;
 using Compo_Request.Windows.Editor.Pages;
 using Compo_Request.Windows.Editor.Windows;
+using Compo_Request.Windows.Users;
 using Compo_Shared_Data.Models;
+using Compo_Shared_Data.Network.Models;
 using Dragablz;
 using System;
 using System.Collections.Generic;
@@ -27,12 +30,19 @@ namespace Compo_Request.Windows.Editor
         internal EditorWebRequestPage _EditorWebRequestPage;
         internal EditorHistoryRequestsControl _EditorHistoryRequestsControl;
         internal EditorProjectChatPage _EditorProjectChatPage;
+        internal ProfileView _ProfileView;
 
         public EditorMainMenuWindow(MainMenuWindow _MainMenuWindow, Project MProject)
         {
             InitializeComponent();
             LoadWindowParent(_MainMenuWindow, MProject);
             EventsInitialize();
+
+            NetworkDelegates.Add(delegate (MResponse ServerResponse)
+            {
+                this?.Close();
+
+            }, Dispatcher, -1, "User.Disconnected.Confirm", "EditorMainMenuWindow");
         }
 
         private void LoadWindowParent(MainMenuWindow _MainMenuWindow, Project MProject)
@@ -119,11 +129,10 @@ namespace Compo_Request.Windows.Editor
 
         private void EditorMainMenuWindow_Closing(object sender, EventArgs e)
         {
-            if (_EditorWebRequestPage != null)
-                _EditorWebRequestPage.ClosePage();
-
-            if (_MainMenuWindow != null)
-                _MainMenuWindow.Show();
+            _EditorWebRequestPage?.ClosePage();
+            _EditorHistoryRequestsControl?.ClosePage();
+            _EditorProjectChatPage?.ClosePage();
+            _MainMenuWindow?.Show();
         }
     }
 }

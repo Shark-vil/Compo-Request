@@ -28,6 +28,8 @@ namespace Compo_Request.Windows.Users
     {
         internal MainMenuWindow _MainMenuWindow;
         internal UsersEditAccessPage _UsersEditAccessPage;
+        internal UserEditPage _UserEditPage;
+
         internal ObservableCollection<WUser> WUsers = new ObservableCollection<WUser>();
 
         public UsersMainPage(MainMenuWindow _MainMenuWindow)
@@ -78,6 +80,12 @@ namespace Compo_Request.Windows.Users
         private void ButtonClick_UserEdit(object sender, RoutedEventArgs e)
         {
             WUser DataUser = (sender as Button).DataContext as WUser;
+
+            _UserEditPage?.ClosePage();
+            _UserEditPage = new UserEditPage(_MainMenuWindow, DataUser);
+            _UserEditPage.OpenPage();
+
+            _MainMenuWindow.WindowLogic.SetPage(_UserEditPage);
         }
 
         private void ButtonClick_UserDelete(object sender, RoutedEventArgs e)
