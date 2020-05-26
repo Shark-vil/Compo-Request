@@ -79,7 +79,6 @@ namespace Compo_Request.Windows.Teams
             foreach (var User in UsersNotTeam)
                 if (User.IsSelected)
                 {
-                    User.TeamGroupId = TGroup.Id;
                     UsersOnTeam.Add(User);
                     RemoveUsers.Add(User);
                 }

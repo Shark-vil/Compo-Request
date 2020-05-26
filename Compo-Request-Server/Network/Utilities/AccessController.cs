@@ -43,6 +43,9 @@ namespace Compo_Request_Server.Network.Utilities
             if (IsOwner(NetworkClient))
                 return true;
 
+            if (IsPrivilegeTeam(NetworkClient, PrivilegeKey))
+                return true;
+
             try
             {
                 using (var db = new DatabaseContext())
@@ -100,6 +103,46 @@ namespace Compo_Request_Server.Network.Utilities
             catch { }
 
             Debug.LogWarning($"Ошибка доступа! Пользователь не имеет необходимых привилегий!");
+
+            return false;
+        }
+
+        public static bool IsPrivilegeTeam(MNetworkClient NetworkClient, string PrivilegeKey)
+        {
+            if (IsOwner(NetworkClient))
+                return true;
+
+            try
+            {
+                using (var db = new DatabaseContext())
+                {
+                    var User = Users.GetUserById(NetworkClient.Id);
+
+                    Debug.Log($"Проверка прав доступа пользователя [{User.Id}] - {User.Login} в командах", ConsoleColor.Gray);
+
+                    var DbUserPrivileges = db.TeamPrivileges.ToArray();
+
+                    foreach (var DbUserPrivilege in DbUserPrivileges)
+                        if (DbUserPrivilege.Privilege == PrivilegeKey || DbUserPrivilege.Privilege == "admin")
+                        {
+                            Debug.Log($"Привелигия {PrivilegeKey} найдена! Проверка на наличие пользователя в команде...");
+
+                            var DbTeamGroup = db.TeamUsers.FirstOrDefault(x => x.TeamGroupId == DbUserPrivilege.TeamGroupId
+                                && x.UserId == User.Id);
+
+                            if (DbTeamGroup != null)
+                            {
+                                Debug.Log($"> Привилегия [{PrivilegeKey}] доступна", ConsoleColor.Gray);
+                                return true;
+                            }
+                        }
+
+                    Debug.LogWarning($"> Привилегия [{PrivilegeKey}] не доступна в командах");
+                }
+            }
+            catch { }
+
+            Debug.LogWarning($"Ошибка доступа! Пользователь не состоит в команде с необходимыми привилегиями!");
 
             return false;
         }

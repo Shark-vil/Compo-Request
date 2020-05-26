@@ -38,6 +38,7 @@ namespace Compo_Request_Server.Network.Events.Access
                 new MAccess { Key = "teams.add", Description = "Добавление команд" },
                 new MAccess { Key = "teams.edit", Description = "Редактирование команд" },
                 new MAccess { Key = "teams.delete", Description = "Удаление команд" },
+                new MAccess { Key = "teams.access", Description = "Управление правами команд" },
 
                 new MAccess { Key = "projects", Description = "Доступ к списку проектов" },
                 new MAccess { Key = "projects.add", Description = "Добавление проектов" },
