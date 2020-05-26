@@ -40,6 +40,9 @@ namespace Compo_Request_Server.Network.Utilities
 
         public static bool IsPrivilege(MNetworkClient NetworkClient, string PrivilegeKey)
         {
+            if (IsOwner(NetworkClient))
+                return true;
+
             try
             {
                 using (var db = new DatabaseContext())
@@ -69,6 +72,9 @@ namespace Compo_Request_Server.Network.Utilities
 
         public static bool IsPrivilege(MNetworkClient NetworkClient, string[] PrivilegeKeys)
         {
+            if (IsOwner(NetworkClient))
+                return true;
+
             try
             {
                 using (var db = new DatabaseContext())

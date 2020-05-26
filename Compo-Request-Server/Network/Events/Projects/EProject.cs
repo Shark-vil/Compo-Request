@@ -43,7 +43,8 @@ namespace Compo_Request_Server.Network.Events.Projects
                             $"Title - {MProject.Title}\n" +
                             $"UserId - {MProject.UserId}", ConsoleColor.Magenta);
 
-                    Sender.Broadcast("Project.Delete.Confirm", MProject, ClientResponse.WindowUid);
+                    if (AccessController.IsPrivilege(NetworkClient, "edit_project"))
+                        Sender.Broadcast("Project.Delete.Confirm", MProject, ClientResponse.WindowUid);
                 }
             }
             catch (DbUpdateException ex)
@@ -83,7 +84,8 @@ namespace Compo_Request_Server.Network.Events.Projects
                             $"Title - {DbProjectCache.Title} > {MProject.Title}\n" +
                             $"UserId - {DbProjectCache.UserId} > {MProject.UserId}", ConsoleColor.Magenta);
 
-                    Sender.Broadcast("Project.Update.Confirm", DbProject, ClientResponse.WindowUid);
+                    if (AccessController.IsPrivilege(NetworkClient, "edit_project"))
+                        Sender.Broadcast("Project.Update.Confirm", DbProject, ClientResponse.WindowUid);
                 }
             }
             catch (DbUpdateException ex)
@@ -104,7 +106,8 @@ namespace Compo_Request_Server.Network.Events.Projects
 
                     Debug.Log($"Получен список команд из базы данных в количестве {DbProjects.Length} записей.", ConsoleColor.Magenta);
 
-                    Sender.Send(NetworkClient, "Project.GetAll", DbProjects, ClientResponse.WindowUid);
+                    if (AccessController.IsPrivilege(NetworkClient, "projects"))
+                        Sender.Send(NetworkClient, "Project.GetAll", DbProjects, ClientResponse.WindowUid);
                 }
             }
             catch (Exception ex)
@@ -127,7 +130,8 @@ namespace Compo_Request_Server.Network.Events.Projects
                     db.Projects.Attach(MPorject);
                     db.SaveChanges();
 
-                    Sender.Broadcast("Project.Add.Confirm", MPorject);
+                    if (AccessController.IsPrivilege(NetworkClient, "edit_project"))
+                        Sender.Broadcast("Project.Add.Confirm", MPorject);
                 }
             }
             catch(DbException ex)
