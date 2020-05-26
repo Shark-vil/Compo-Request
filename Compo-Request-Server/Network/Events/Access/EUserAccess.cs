@@ -52,7 +52,7 @@ namespace Compo_Request_Server.Network.Events.Access
                 new MAccess { Key = "requests.history", Description = "Доступ к истории WEB-запросов" },
             };
 
-            Sender.Send(NetworkClient, "Access.GetAll", Access.ToArray());
+            Sender.Send(NetworkClient, "Access.GetAll.Confirm", Access.ToArray());
         }
 
         private void AccessGetAll(MResponse ClientResponse, MNetworkClient NetworkClient)
@@ -88,31 +88,42 @@ namespace Compo_Request_Server.Network.Events.Access
                     var User = Users.GetUserById(NetworkClient.Id);
                     var DbUserPrivileges = db.UserPrivileges.Where(x => x.UserId == User.Id).ToArray();
 
-                    Debug.Log($"Обновление прав доступа пользователя.\n", ConsoleColor.Magenta);
+                    if (ReadUserPrivileges.Length != 0)
+                        for (int i = 0; i < ReadUserPrivileges.Length; i++)
+                            ReadUserPrivileges[i].UserId = User.Id;
 
-                    List <UserPrivilege> DataRemoves = new List<UserPrivilege>();
+                    Debug.Log($"Обновление прав доступа пользователя.", ConsoleColor.Magenta);
 
-                    Debug.Log($"Список прав на удаление:\n", ConsoleColor.Magenta);
+                    List<UserPrivilege> DataRemoves = new List<UserPrivilege>();
+                    List<string> DataExists = new List<string>();
+
+                    Debug.Log($"\nСписок прав на удаление:", ConsoleColor.Magenta);
                     foreach (var UserPrivilege in DbUserPrivileges)
                         if (!Array.Exists(ReadUserPrivileges, x => x.Privilege == UserPrivilege.Privilege))
                         {
                             DataRemoves.Add(UserPrivilege);
-                            Debug.Log($"> Privilege - {UserPrivilege.Privilege}\n", ConsoleColor.Magenta);
+                            Debug.Log($"> Privilege - {UserPrivilege.Privilege}", ConsoleColor.Magenta);
                         }
-
-                    Debug.Log($"Список прав на добавление:\n", ConsoleColor.Magenta);
-                    foreach (var UserPrivilege in ReadUserPrivileges)
-                    {
-                        db.UserPrivileges.Add(UserPrivilege);
-                        Debug.Log($"> Privilege - {UserPrivilege.Privilege}\n", ConsoleColor.Magenta);
-                    }
+                        else
+                            DataExists.Add(UserPrivilege.Privilege);
 
                     foreach (var UserPrivilege in DataRemoves)
                         db.UserPrivileges.Remove(UserPrivilege);
 
+                    Debug.Log($"\nСписок прав на добавление:", ConsoleColor.Magenta);
+                    foreach (var UserPrivilege in ReadUserPrivileges)
+                    {
+                        if (!DataExists.Exists(x => x == UserPrivilege.Privilege))
+                        {
+                            db.UserPrivileges.Add(UserPrivilege);
+                            Debug.Log($"> Privilege - {UserPrivilege.Privilege} : UserId - {UserPrivilege.UserId}",
+                                ConsoleColor.Magenta);
+                        }
+                    }
+
                     db.SaveChanges();
 
-                    Debug.Log($"Права пользователя [{User.Id}] - {User.Login} обновлены!\n", ConsoleColor.Magenta);
+                    Debug.Log($"\nПрава пользователя [{User.Id}] - {User.Login} обновлены!\n", ConsoleColor.Magenta);
 
                     DbUserPrivileges = db.UserPrivileges.Where(x => x.UserId == User.Id).ToArray();
 

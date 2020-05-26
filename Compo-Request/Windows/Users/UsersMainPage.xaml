@@ -16,7 +16,7 @@
         
         <Grid Grid.Column="1">
             <DataGrid x:Name="DataGrid_Users"
-                    Margin="15" AutoGenerateColumns="False" 
+                    AutoGenerateColumns="False" 
                     HorizontalGridLinesBrush="DarkGray" RowBackground="LightGray" AlternatingRowBackground="White"
                     IsReadOnly="True">
                 <DataGrid.Columns>

@@ -27,6 +27,7 @@ namespace Compo_Request.Windows.Users
     public partial class UsersMainPage : Page, ICustomPage
     {
         internal MainMenuWindow _MainMenuWindow;
+        internal UsersEditAccessPage _UsersEditAccessPage;
         internal ObservableCollection<WUser> WUsers = new ObservableCollection<WUser>();
 
         public UsersMainPage(MainMenuWindow _MainMenuWindow)
@@ -68,6 +69,10 @@ namespace Compo_Request.Windows.Users
         private void ButtonClick_AccessEdit(object sender, RoutedEventArgs e)
         {
             WUser DataUser = (sender as Button).DataContext as WUser;
+
+            _UsersEditAccessPage?.ClosePage();
+            _UsersEditAccessPage = new UsersEditAccessPage(this, DataUser);
+            _UsersEditAccessPage.OpenPage();
         }
 
         private void ButtonClick_UserEdit(object sender, RoutedEventArgs e)
