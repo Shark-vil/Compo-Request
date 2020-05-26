@@ -18,8 +18,41 @@ namespace Compo_Request_Server.Network.Events.Access
     {
         public EUserAccess()
         {
+            NetworkDelegates.Add(GetAccessList, "Access.GetAll");
             NetworkDelegates.Add(AccessGetAll, "User.Access.GetAll");
             NetworkDelegates.Add(AccessUpdate, "User.Access.Update");
+        }
+
+        private void GetAccessList(MResponse ClientResponse, MNetworkClient NetworkClient)
+        {
+            List<MAccess> Access = new List<MAccess>()
+            {
+                new MAccess { Key = "admin", Description = "Полный доступ" },
+
+                new MAccess { Key = "users", Description = "Доступ к списку пользователей" },
+                new MAccess { Key = "users.add", Description = "Добавление пользователей" },
+                new MAccess { Key = "users.edit", Description = "Редактирование пользователей" },
+                new MAccess { Key = "users.delete", Description = "Удаление пользователей" },
+
+                new MAccess { Key = "teams", Description = "Доступ к списку команд" },
+                new MAccess { Key = "teams.add", Description = "Добавление команд" },
+                new MAccess { Key = "teams.edit", Description = "Редактирование команд" },
+                new MAccess { Key = "teams.delete", Description = "Удаление команд" },
+
+                new MAccess { Key = "projects", Description = "Доступ к списку проектов" },
+                new MAccess { Key = "projects.add", Description = "Добавление проектов" },
+                new MAccess { Key = "projects.edit", Description = "Редактирование проектов" },
+                new MAccess { Key = "projects.delete", Description = "Удаление проектов" },
+                new MAccess { Key = "projects.chat", Description = "Доступ к чату проекта" },
+
+                new MAccess { Key = "requests", Description = "Доступ к списку WEB-запросов" },
+                new MAccess { Key = "requests.add", Description = "Добавление WEB-запросов" },
+                new MAccess { Key = "requests.edit", Description = "Редактирование WEB-запросов" },
+                new MAccess { Key = "requests.delete", Description = "Удаление WEB-запросов" },
+                new MAccess { Key = "requests.history", Description = "Доступ к истории WEB-запросов" },
+            };
+
+            Sender.Send(NetworkClient, "Access.GetAll", Access.ToArray());
         }
 
         private void AccessGetAll(MResponse ClientResponse, MNetworkClient NetworkClient)

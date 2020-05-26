@@ -27,7 +27,7 @@ namespace Compo_Request_Server.Network.Utilities
                     var DbUserPrivileges = db.UserPrivileges.Where(x => x.UserId == User.Id).ToArray();
 
                     foreach(var DbUserPrivilege in DbUserPrivileges)
-                        if (DbUserPrivilege.Privilege == "owner")
+                        if (DbUserPrivilege.Privilege == "admin")
                             return true;
                 }
             }
