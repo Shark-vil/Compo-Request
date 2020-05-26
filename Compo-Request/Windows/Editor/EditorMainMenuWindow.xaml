@@ -19,8 +19,8 @@
 
             <ThicknessAnimationUsingKeyFrames  Storyboard.TargetProperty="(FrameworkElement.Margin)" 
                     Storyboard.TargetName="Grid_Frame">
-                <SplineThicknessKeyFrame KeyTime="0" Value="50, 50, 0, 0"/>
-                <SplineThicknessKeyFrame KeyTime="0:0:0.5" Value="250, 50, 0, 0"/>
+                <SplineThicknessKeyFrame KeyTime="0" Value="50, 0, 0, 0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:0.5" Value="250, 0, 0, 0"/>
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="CloseMenu">
@@ -32,8 +32,8 @@
 
             <ThicknessAnimationUsingKeyFrames  Storyboard.TargetProperty="(FrameworkElement.Margin)" 
                     Storyboard.TargetName="Grid_Frame">
-                <SplineThicknessKeyFrame KeyTime="0" Value="250, 50, 0, 0"/>
-                <SplineThicknessKeyFrame KeyTime="0:0:0.5" Value="50, 50, 0, 0"/>
+                <SplineThicknessKeyFrame KeyTime="0" Value="250, 0, 0, 0"/>
+                <SplineThicknessKeyFrame KeyTime="0:0:0.5" Value="50, 0, 0, 0"/>
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
     </Window.Resources>
@@ -48,21 +48,6 @@
     </Window.Triggers>
 
     <Grid>
-        <Grid Height="50" VerticalAlignment="Top" Background="#FF87B5CB">
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Right" Orientation="Horizontal">
-                <TextBlock FontSize="14" VerticalAlignment="Center" Text="Меню" Foreground="White"/>
-                <materialDesign:PopupBox Margin="10" Foreground="White" StaysOpen="False">
-                    <StackPanel HorizontalAlignment="Left" Width="180">
-                        <Button Content="Профиль"/>
-                        <Button Content="Настройки"/>
-                        <Button Content="Помощь"/>
-                        <Separator/>
-                        <Button x:Name="Button_Exit"
-                            Content="Выход из аккаунта"/>
-                    </StackPanel>
-                </materialDesign:PopupBox>
-            </StackPanel>
-        </Grid>
         <Grid x:Name="Grid_Menu" Width="50" HorizontalAlignment="Left" Background="#FF365B87">
             <StackPanel>
                 <Grid Height="50" Background="#FF4B78AE">
@@ -117,7 +102,7 @@
                 </StackPanel>
             </StackPanel>
         </Grid>
-        <Grid x:Name="Grid_Frame" Margin="50, 50, 0, 0">
+        <Grid x:Name="Grid_Frame" Margin="50, 0, 0, 0">
             <Frame x:Name="Frame_Main"
                    Width="auto"
                    Height="auto"

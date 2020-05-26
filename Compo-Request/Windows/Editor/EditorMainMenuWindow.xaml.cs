@@ -2,6 +2,7 @@
 using Compo_Request.Network.Client;
 using Compo_Request.Windows.Editor.Pages;
 using Compo_Request.Windows.Editor.Windows;
+using Compo_Request.Windows.Users;
 using Compo_Shared_Data.Models;
 using Compo_Shared_Data.Network.Models;
 using Dragablz;
@@ -29,6 +30,7 @@ namespace Compo_Request.Windows.Editor
         internal EditorWebRequestPage _EditorWebRequestPage;
         internal EditorHistoryRequestsControl _EditorHistoryRequestsControl;
         internal EditorProjectChatPage _EditorProjectChatPage;
+        internal ProfileView _ProfileView;
 
         public EditorMainMenuWindow(MainMenuWindow _MainMenuWindow, Project MProject)
         {
@@ -63,13 +65,6 @@ namespace Compo_Request.Windows.Editor
             this.Button_WebRequestConstructor.Click += Button_WebRequestConstructor_Click;
             this.Button_HistoryWebResponse.Click += Button_HistoryWebResponse_Click;
             this.Button_ProjectChat.Click += Button_ProjectChat_Click;
-            this.Button_Exit.Click += Button_Exit_Click;
-        }
-
-        private void Button_Exit_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-            _MainMenuWindow.Close();
         }
 
         private void Button_HistoryWebResponse_Click(object sender, RoutedEventArgs e)
