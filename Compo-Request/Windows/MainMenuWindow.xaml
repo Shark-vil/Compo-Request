@@ -53,7 +53,8 @@
                 <TextBlock FontSize="14" VerticalAlignment="Center" Text="Меню" Foreground="White"/>
                 <materialDesign:PopupBox Margin="10" Foreground="White" StaysOpen="False">
                     <StackPanel HorizontalAlignment="Left" Width="180">
-                        <Button Content="Профиль"/>
+                        <Button x:Name="Button_Profile"
+                            Content="Профиль"/>
                         <Button Content="Настройки"/>
                         <Button Content="Помощь"/>
                         <Separator/>

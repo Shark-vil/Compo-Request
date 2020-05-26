@@ -25,6 +25,8 @@ namespace Compo_Request.Windows
         internal ProjectsMainPage _ProjectsMainPage;
         // Окно пользователей
         internal UsersMainPage _UsersMainPage;
+        // Профиль пользователя
+        internal ProfileView _ProfileView;
 
         /// <summary>
         /// Конструктор главного окна меню
@@ -63,6 +65,15 @@ namespace Compo_Request.Windows
             this.Button_Projects.Click += Button_Projects_Click;    // Событие при нажатии на кнопку пункта меню "Проекты"
             this.Button_Users.Click += Button_Users_Click;
             this.Button_Exit.Click += Button_Exit_Click;
+            this.Button_Profile.Click += Button_Profile_Click;
+        }
+
+        private void Button_Profile_Click(object sender, RoutedEventArgs e)
+        {
+            _ProfileView?.ClosePage();
+            _ProfileView = new ProfileView(this);
+
+            WindowLogic.SetPage(_ProfileView);
         }
 
         private void Button_Exit_Click(object sender, RoutedEventArgs e)
