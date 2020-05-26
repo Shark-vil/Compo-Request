@@ -24,6 +24,9 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
 
         private void WebRequestMethodUpdate(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "requests.edit"))
+                return;
+
             using (var db = new DatabaseContext())
             {
                 var RequestItem = Package.Unpacking<WebRequestItem>(ClientResponse.DataBytes);
@@ -38,6 +41,9 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
 
         private void WebRequestLinkUpdate(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "requests.edit"))
+                return;
+
             using (var db = new DatabaseContext())
             {
                 var RequestItem = Package.Unpacking<WebRequestItem>(ClientResponse.DataBytes);
@@ -52,6 +58,9 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
 
         private void WebRequestBindingGet(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "requests"))
+                return;
+
             int ProjectId = Package.Unpacking<int>(ClientResponse.DataBytes);
 
             using (var db = new DatabaseContext())
@@ -78,6 +87,9 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
 
         private void WebRequestSaver(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "requests.add"))
+                return;
+
             var WebRequestBinding = Package.Unpacking<MBinding_WebRequestSaver>(ClientResponse.DataBytes);
 
             using (var db = new DatabaseContext())

@@ -54,6 +54,18 @@ namespace Compo_Request_Server.Network.Utilities
             };
         }
 
+        public static WUser[] ConvertUser(User[] DbUsers)
+        {
+            var Users = new WUser[DbUsers.Length];
+
+            for (int i = 0; i < DbUsers.Length; i++)
+            {
+                Users[i] = ConvertUser(DbUsers[i]);
+            }
+
+            return Users;
+        }
+
         public static WTeamUser ConvertTeamUser(TeamUser DbTeamUser)
         {
             return new WTeamUser

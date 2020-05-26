@@ -25,6 +25,9 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
 
         private void WebRequestParamsDeleteAll(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "requests.edit"))
+                return;
+
             var WebRequestId = Package.Unpacking<int>(ClientResponse.DataBytes);
 
             using (var db = new DatabaseContext())
@@ -43,6 +46,9 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
 
         private void WebRequestParamsDelete(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "requests.edit"))
+                return;
+
             var WebParamsId = Package.Unpacking<int>(ClientResponse.DataBytes);
 
             using (var db = new DatabaseContext())
@@ -61,6 +67,9 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
 
         private void WebRequestParamsUpdate(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "requests.edit"))
+                return;
+
             try
             {
                 var RequestParamsItems = Package.Unpacking<MBinding_WebRequestSaver>(ClientResponse.DataBytes);
@@ -114,6 +123,9 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
 
         private void WebRequestParamsGet(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "requests"))
+                return;
+
             int ItemId = Package.Unpacking<int>(ClientResponse.DataBytes);
 
             using (var db = new DatabaseContext())

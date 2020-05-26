@@ -24,6 +24,9 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
 
         private void AddHistoryItem(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "requests.history.add"))
+                return;
+
             try
             {
                 var WebRequestHistoryItem = Package.Unpacking<WebRequestHistory>(ClientResponse.DataBytes);
@@ -47,6 +50,9 @@ namespace Compo_Request_Server.Network.Events.WebRequestActions
 
         private void HistoryGetAll(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "requests.history"))
+                return;
+
             try
             {
                 var ProjectId = Package.Unpacking<int>(ClientResponse.DataBytes);

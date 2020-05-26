@@ -27,6 +27,9 @@ namespace Compo_Request_Server.Network.Events.Team
 
         private void AddTeamGroup(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "teams.add"))
+                return;
+
             try
             {
                 using (var db = new DatabaseContext())
@@ -67,6 +70,9 @@ namespace Compo_Request_Server.Network.Events.Team
 
         private void UpdateTeamGroup(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "teams.edit"))
+                return;
+
             try
             {
                 using (var db = new DatabaseContext())
@@ -107,6 +113,9 @@ namespace Compo_Request_Server.Network.Events.Team
 
         private void DeleteTeamGroup(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "teams.delete"))
+                return;
+
             try
             {
                 using (var db = new DatabaseContext())
@@ -139,6 +148,9 @@ namespace Compo_Request_Server.Network.Events.Team
 
         private void GetAllTeamGroups(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "teams"))
+                return;
+
             try
             {
                 using (var db = new DatabaseContext())

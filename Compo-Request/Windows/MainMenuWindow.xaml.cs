@@ -2,6 +2,7 @@
 using Compo_Request.Network.Utilities;
 using Compo_Request.Windows.Projects;
 using Compo_Request.Windows.Teams;
+using Compo_Request.Windows.Users;
 using Compo_Request.WindowsLogic;
 using Compo_Shared_Data.Debugging;
 using System.Windows;
@@ -21,6 +22,8 @@ namespace Compo_Request.Windows
         internal TeamMainPage _TeamMainPage;
         // Главное окно проектов
         internal ProjectsMainPage _ProjectsMainPage;
+        // Окно пользователей
+        internal UsersMainPage _UsersMainPage;
 
         /// <summary>
         /// Конструктор главного окна меню
@@ -43,8 +46,8 @@ namespace Compo_Request.Windows
         {
             this._MainWindow = mainWindow;
 
-            _TeamMainPage = new TeamMainPage(this);
-            _ProjectsMainPage = new ProjectsMainPage(this);
+            //_TeamMainPage = new TeamMainPage(this);
+            //_ProjectsMainPage = new ProjectsMainPage(this);
         }
 
         /// <summary>
@@ -57,6 +60,15 @@ namespace Compo_Request.Windows
             this.Button_CloseMenu.Click += Button_CloseMenu_Click;  // Событие при сворачивании бокового меню
             this.Button_Teams.Click += Button_Teams_Click;          // Событие при нажатии на кнопку пункта меню "Команды"
             this.Button_Projects.Click += Button_Projects_Click;    // Событие при нажатии на кнопку пункта меню "Проекты"
+            this.Button_Users.Click += Button_Users_Click;
+        }
+
+        private void Button_Users_Click(object sender, RoutedEventArgs e)
+        {
+            _UsersMainPage?.ClosePage();
+            _UsersMainPage = new UsersMainPage(this);
+
+            WindowLogic.SetPage(_UsersMainPage);
         }
 
         /// <summary>
@@ -66,6 +78,9 @@ namespace Compo_Request.Windows
         /// <param name="e"></param>
         private void Button_Projects_Click(object sender, RoutedEventArgs e)
         {
+            _ProjectsMainPage?.ClosePage();
+            _ProjectsMainPage = new ProjectsMainPage(this);
+
             WindowLogic.SetPage(_ProjectsMainPage);
         }
 
@@ -76,6 +91,9 @@ namespace Compo_Request.Windows
         /// <param name="e"></param>
         private void Button_Teams_Click(object sender, RoutedEventArgs e)
         {
+            _TeamMainPage?.ClosePage();
+            _TeamMainPage = new TeamMainPage(this);
+
             WindowLogic.SetPage(_TeamMainPage);
         }
 

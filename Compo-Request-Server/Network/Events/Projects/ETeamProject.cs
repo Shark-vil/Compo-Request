@@ -27,6 +27,9 @@ namespace Compo_Request_Server.Network.Events.Projects
 
         private void SaveTeamProjects(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "projects.edit"))
+                return;
+
             try
             {
                 using (var db = new DatabaseContext())
@@ -96,6 +99,9 @@ namespace Compo_Request_Server.Network.Events.Projects
 
         private void GetTeamProjects(MResponse ClientResponse, MNetworkClient NetworkClient)
         {
+            if (!AccessController.IsPrivilege(NetworkClient, "projects"))
+                return;
+
             try
             {
                 using (var db = new DatabaseContext())
