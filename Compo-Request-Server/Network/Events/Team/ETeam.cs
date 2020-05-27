@@ -155,11 +155,26 @@ namespace Compo_Request_Server.Network.Events.Team
             {
                 using (var db = new DatabaseContext())
                 {
-                    var TeamGroupsDb = db.TeamGroups.ToArray();
+                    List<TeamGroup> TeamGroupsDb;
 
-                    Debug.Log($"Получен список команд из базы данных в количестве {TeamGroupsDb.Length} записей.", ConsoleColor.Magenta);
+                    if (AccessController.IsOwner(NetworkClient))
+                        TeamGroupsDb = db.TeamGroups.ToList();
+                    else
+                    {
+                        int UserId = Users.GetUserById(NetworkClient.Id).Id;
 
-                    Sender.Send(NetworkClient, "TeamGroup.GetAll", TeamGroupsDb, ClientResponse.WindowUid);
+                        TeamGroupsDb = db.TeamGroups.Where(x => x.UserId == UserId).ToList();
+                        TeamUser[] TeamUsersDb = db.TeamUsers.Where(x => x.UserId == UserId).ToArray();
+
+                        foreach (var TeamUserDb in TeamUsersDb)
+                            if (!TeamGroupsDb.Exists(x => x.Id == TeamUserDb.TeamGroupId))
+                                TeamGroupsDb.Add(db.TeamGroups.FirstOrDefault(x => x.Id == TeamUserDb.TeamGroupId));
+                    }
+
+
+                    Debug.Log($"Получен список команд из базы данных в количестве {TeamGroupsDb.Count} записей.", ConsoleColor.Magenta);
+
+                    Sender.Send(NetworkClient, "TeamGroup.GetAll", TeamGroupsDb.ToArray(), ClientResponse.WindowUid);
                 }
             }
             catch(Exception ex)

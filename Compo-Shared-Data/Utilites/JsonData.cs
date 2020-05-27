@@ -4,18 +4,27 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Compo_Request.Data
+namespace Compo_Shared_Data.Utilites
 {
     public class JsonData
     {
         public static string MainDataDirectory = @"Data/";
 
+        public static string GetAppDir()
+        {
+            string AppDir = Directory.GetCurrentDirectory();
+
+            return AppDir.Replace('\\', '/') + '/' + MainDataDirectory;
+        }
+
         public static bool Exists(string FileName, string DataPath)
         {
-            if (!Directory.Exists(MainDataDirectory))
+            string MainDir = GetAppDir();
+
+            if (!Directory.Exists(MainDir))
                 return false;
 
-            string JsonPath = MainDataDirectory + DataPath;
+            string JsonPath = MainDir + DataPath;
 
             if (!Directory.Exists(JsonPath))
                 return false;
@@ -30,11 +39,13 @@ namespace Compo_Request.Data
 
         public static void Save(object DataObject, string FileName, string DataPath)
         {
-            if (!Directory.Exists(MainDataDirectory))
-                Directory.CreateDirectory(MainDataDirectory);
+            string MainDir = GetAppDir();
+
+            if (!Directory.Exists(MainDir))
+                Directory.CreateDirectory(MainDir);
 
             string JsonString = JsonConvert.SerializeObject(DataObject);
-            string JsonPath = MainDataDirectory + DataPath;
+            string JsonPath = MainDir + DataPath;
 
             if (!Directory.Exists(JsonPath))
                 Directory.CreateDirectory(JsonPath);
@@ -50,7 +61,9 @@ namespace Compo_Request.Data
 
         public static T Read<T>(string FileName, string DataPath)
         {
-            string JsonPath = MainDataDirectory + DataPath;
+            string MainDir = GetAppDir();
+
+            string JsonPath = MainDir + DataPath;
 
             if (Directory.Exists(JsonPath))
             {
@@ -72,7 +85,7 @@ namespace Compo_Request.Data
         private static string NormalizeFullPath(string JsonPath, string FileName)
         {
             if (JsonPath[JsonPath.Length - 1] == '\\' || JsonPath[JsonPath.Length - 1] == '/')
-                return JsonPath + "\\" + FileName;
+                return JsonPath + "/" + FileName;
             else
                 return JsonPath + FileName;
         }

@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using Compo_Request_Server.Data.Network;
 using Compo_Request_Server.Network.Client;
 using Compo_Request_Server.Network.Models;
 using Compo_Request_Server.Network.Utilities;
@@ -18,7 +19,9 @@ namespace Compo_Request_Server.Network.Server
     {
         public ServerBase()
         {
-            NetworkBase.Setup("37.230.113.224", 8888);
+            string[] ServerInfo = ServerData.Read();
+
+            NetworkBase.Setup(ServerInfo[0], Convert.ToInt32(ServerInfo[1]));
         }
 
         protected internal void AddConnection(MNetworkClient NetworkClient)

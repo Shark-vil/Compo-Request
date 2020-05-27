@@ -1,4 +1,5 @@
-﻿using Compo_Request.Network.Client;
+﻿using Compo_Request.Data.Network;
+using Compo_Request.Network.Client;
 using Compo_Shared_Data.Debugging;
 using System;
 using System.Threading;
@@ -67,7 +68,10 @@ namespace Compo_Request.Network.Utilities
         {
             if (NetworkBase.ClientNetwork == null || !NetworkBase.ClientNetwork.Connected)
             {
-                if (NetworkBase.Setup("37.230.113.224", 8888))
+
+                string[] ServerInfo = ServerData.Read();
+
+                if (NetworkBase.Setup(ServerInfo[0], Convert.ToInt32(ServerInfo[1])))
                 {
                     Debug.Log("Попытка соединиться с сервером", ConsoleColor.Cyan);
                     ConnectToServer();
