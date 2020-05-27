@@ -4,6 +4,7 @@ using Compo_Request.Windows.Editor.Pages;
 using Compo_Request.Windows.Editor.Windows;
 using Compo_Request.Windows.Users;
 using Compo_Shared_Data.Models;
+using Compo_Shared_Data.Network;
 using Compo_Shared_Data.Network.Models;
 using Dragablz;
 using System;
@@ -43,6 +44,22 @@ namespace Compo_Request.Windows.Editor
                 this?.Close();
 
             }, Dispatcher, -1, "User.Disconnected.Confirm", "EditorMainMenuWindow");
+
+            NetworkDelegates.Add(delegate (MResponse ServerResponse)
+            {
+                var NetworkId = Package.Unpacking<string>(ServerResponse.DataBytes);
+
+                MUserNetwork UserNetwork = UserInfo.NetworkUsers.Find(x => x.NetworkId == NetworkId);
+
+                if (UserNetwork != null)
+                {
+                    if (UserNetwork.NetworkId == UserInfo.NetworkSelf.NetworkId)
+                    {
+                        this?.Close();
+                    }
+                }
+
+            }, Dispatcher, -1, "Users.Remove", "EditorMainMenuWindow");
         }
 
         private void LoadWindowParent(MainMenuWindow _MainMenuWindow, Project MProject)
@@ -129,6 +146,8 @@ namespace Compo_Request.Windows.Editor
 
         private void EditorMainMenuWindow_Closing(object sender, EventArgs e)
         {
+            NetworkDelegates.RemoveByUniqueName("EditorMainMenuWindow");
+
             _EditorWebRequestPage?.ClosePage();
             _EditorHistoryRequestsControl?.ClosePage();
             _EditorProjectChatPage?.ClosePage();

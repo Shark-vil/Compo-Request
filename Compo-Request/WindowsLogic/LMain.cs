@@ -125,6 +125,7 @@ namespace Compo_Request.WindowsLogic
                     {
                         UserInfo.NetworkSelf = null;
                         Debug.Log("Собственный компонент пользователя был удалён.");
+                        _MainWindow._MainMenuWindow?.Close();
                     }
 
                     UserInfo.NetworkUsers.Remove(UserNetwork);
