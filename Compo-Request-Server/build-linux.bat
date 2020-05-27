@@ -1,1 +1,3 @@
-dotnet build --configuration Debug --runtime linux-x64
+dotnet build --configuration Release --runtime linux-x64
+
+pause

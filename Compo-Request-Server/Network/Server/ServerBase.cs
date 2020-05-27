@@ -18,7 +18,7 @@ namespace Compo_Request_Server.Network.Server
     {
         public ServerBase()
         {
-            NetworkBase.Setup(8888);
+            NetworkBase.Setup("37.230.113.224", 8888);
         }
 
         protected internal void AddConnection(MNetworkClient NetworkClient)

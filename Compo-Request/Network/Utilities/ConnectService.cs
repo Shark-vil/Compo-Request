@@ -24,6 +24,8 @@ namespace Compo_Request.Network.Utilities
                 ServiceThread.Start();
 
                 Debug.Log("Служба поддержки соединения с сервером запущена", ConsoleColor.Green);
+
+                SetupConnection();
             }
         }
 
@@ -50,14 +52,7 @@ namespace Compo_Request.Network.Utilities
             {
                 try
                 {
-                    if (NetworkBase.ClientNetwork == null || !NetworkBase.ClientNetwork.Connected)
-                    {
-                        if (NetworkBase.Setup("127.0.0.1", 8888))
-                        {
-                            Debug.Log("Попытка соединиться с сервером", ConsoleColor.Cyan);
-                            ConnectToServer();
-                        }
-                    }
+                    SetupConnection();
                 }
                 catch
                 {
@@ -65,6 +60,22 @@ namespace Compo_Request.Network.Utilities
                 }
 
                 Thread.Sleep(2000);
+            }
+        }
+
+        private static void SetupConnection()
+        {
+            if (NetworkBase.ClientNetwork == null || !NetworkBase.ClientNetwork.Connected)
+            {
+                if (NetworkBase.Setup("37.230.113.224", 8888))
+                {
+                    Debug.Log("Попытка соединиться с сервером", ConsoleColor.Cyan);
+                    ConnectToServer();
+                }
+                else
+                {
+                    Debug.LogError("Не удаётся установить соединение с сервером!");
+                }
             }
         }
 
