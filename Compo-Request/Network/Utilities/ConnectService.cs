@@ -3,6 +3,7 @@ using Compo_Request.Network.Client;
 using Compo_Shared_Data.Debugging;
 using System;
 using System.Threading;
+using System.Windows.Threading;
 
 namespace Compo_Request.Network.Utilities
 {
@@ -14,10 +15,16 @@ namespace Compo_Request.Network.Utilities
         public delegate void ConnectBrokenDelegate();
         public static ConnectBrokenDelegate ConnectBrokenEvents;
 
-        public static void Start()
+        internal static MainWindow _MainWindow;
+        internal static Dispatcher _MainWindowDispatcher;
+
+        public static void Start(MainWindow _MainWindow)
         {
             if (ServiceThread == null)
             {
+                ConnectService._MainWindow = _MainWindow;
+                ConnectService._MainWindowDispatcher = _MainWindow.Dispatcher;
+
                 Debug.Log("Подготовка службы поддержки соединения с сервером", ConsoleColor.Cyan);
 
                 ServiceThread = new Thread(new ThreadStart(Process));
@@ -91,6 +98,11 @@ namespace Compo_Request.Network.Utilities
                 ClientBase.SelfThread = ClientThread;
 
                 Debug.Log("Подключение к серверу установлено", ConsoleColor.Green);
+
+                _MainWindowDispatcher.Invoke(() =>
+                {
+                    _MainWindow.WindowLogic.AutomaticAuthorizate();
+                });
             }
         }
     }

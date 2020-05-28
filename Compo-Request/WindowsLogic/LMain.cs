@@ -29,6 +29,8 @@ namespace Compo_Request.WindowsLogic
         /// </summary>
         internal string[] UserData;
 
+        private bool IsFirstAuth = true;
+
         /// <summary>
         /// Конструктор сщуности логики главного окна.
         /// </summary>
@@ -45,7 +47,7 @@ namespace Compo_Request.WindowsLogic
         /// </summary>
         internal void AutomaticAuthorizate()
         {
-            if (Data.Windows.AutomaticAuthorizate.Exists())
+            if (IsFirstAuth && Data.Windows.AutomaticAuthorizate.Exists())
             {
                 _MainWindow.CheckBox_AutoAuth.IsChecked = true;
 
@@ -54,6 +56,8 @@ namespace Compo_Request.WindowsLogic
                 _MainWindow.PasswordBox_Password.Password = UserData[1];
 
                 UserAuthorization(UserData);
+
+                IsFirstAuth = false;
             }
         }
 
