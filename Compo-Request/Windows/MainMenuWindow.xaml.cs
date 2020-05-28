@@ -68,6 +68,12 @@ namespace Compo_Request.Windows
             this.Button_Exit.Click += Button_Exit_Click;
             this.Button_Profile.Click += Button_Profile_Click;
             this.Button_Settings.Click += Button_Settings_Click;
+            this.Button_Help.Click += Button_Help_Click;
+        }
+
+        private void Button_Help_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://drive.google.com/file/d/1y5JzNAgMV4m-zHCce_RcZEkkbMENx3qP/view?usp=sharing");
         }
 
         private void Button_Settings_Click(object sender, RoutedEventArgs e)
