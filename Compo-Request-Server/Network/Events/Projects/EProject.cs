@@ -111,12 +111,42 @@ namespace Compo_Request_Server.Network.Events.Projects
             {
                 using (var db = new DatabaseContext())
                 {
-                    var DbProjects = db.Projects.ToArray();
+                    List<Project> DbProjectsResult = new List<Project>();
 
-                    Debug.Log($"Получен список команд из базы данных в количестве {DbProjects.Length} записей.", ConsoleColor.Magenta);
+                    if (AccessController.IsOwner(NetworkClient))
+                        DbProjectsResult = db.Projects.ToList();
+                    else
+                    {
+                        int UserId = Users.GetUserById(NetworkClient.Id).Id;
 
-                    if (AccessController.IsPrivilege(NetworkClient, "projects"))
-                        Sender.Send(NetworkClient, "Project.GetAll", DbProjects, ClientResponse.WindowUid);
+                        List<Project> DbProjects = db.Projects.ToList();
+
+                        foreach (var DbProject in DbProjects)
+                        {
+                            if (DbProject.UserId == UserId)
+                                DbProjectsResult.Add(DbProject);
+                            else
+                            {
+                                TeamProject[] TProjects = db.TeamProjects.Where(x => x.ProjectId == DbProject.Id).ToArray();
+
+                                foreach (var TProject in TProjects)
+                                {
+                                    if (!DbProjectsResult.Exists(x => x.Id == DbProject.Id))
+                                    {
+                                        TeamUser TeamUserDb = db.TeamUsers.FirstOrDefault(x => x.UserId == UserId
+                                            && x.TeamGroupId == TProject.TeamGroupId);
+
+                                        if (TeamUserDb != null)
+                                            DbProjectsResult.Add(DbProject);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Debug.Log($"Получен список команд из базы данных в количестве {DbProjectsResult.Count} записей.", ConsoleColor.Magenta);
+
+                    Sender.Send(NetworkClient, "Project.GetAll", DbProjectsResult.ToArray(), ClientResponse.WindowUid);
                 }
             }
             catch (Exception ex)

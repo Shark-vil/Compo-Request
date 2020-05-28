@@ -2,12 +2,14 @@
 using Compo_Request.Network.Interfaces;
 using Compo_Request.Network.Utilities;
 using Compo_Shared_Data.Debugging;
+using Compo_Shared_Data.Models;
 using Compo_Shared_Data.Network;
 using Compo_Shared_Data.Network.Models;
 using Compo_Shared_Data.WPF.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,6 +20,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Compo_Request.Windows.Users
 {
@@ -31,6 +34,7 @@ namespace Compo_Request.Windows.Users
         internal UserEditPage _UserEditPage;
 
         internal ObservableCollection<WUser> WUsers = new ObservableCollection<WUser>();
+        internal DispatcherTimer ServerResponseDelay;
 
         public UsersMainPage(MainMenuWindow _MainMenuWindow)
         {
@@ -61,6 +65,25 @@ namespace Compo_Request.Windows.Users
                 }
 
             }, Dispatcher, -1, "Users.GetAll.Confirm", "UsersMainPage");
+
+            NetworkDelegates.Add(delegate (MResponse ServerResponse)
+            {
+                var UserId = Package.Unpacking<int>(ServerResponse.DataBytes);
+
+                WUsers.Remove(WUsers.SingleOrDefault(t => t.Id == UserId));
+
+                DataGrid_Users.IsEnabled = true;
+
+                if (ServerResponseDelay != null)
+                {
+                    ServerResponseDelay.Stop();
+                    ServerResponseDelay = null;
+                }
+
+                if (_MainMenuWindow.IsActive)
+                    new AlertWindow("Оповещение", AlertWindow.AlertCode.DeleteConfirm);
+
+            }, Dispatcher, -1, "Users.Delete.Confirm", "UsersMainPage");
         }
 
         private void LoadWindowParent(MainMenuWindow _MainMenuWindow)
@@ -90,7 +113,28 @@ namespace Compo_Request.Windows.Users
 
         private void ButtonClick_UserDelete(object sender, RoutedEventArgs e)
         {
-            WUser DataUser = (sender as Button).DataContext as WUser;
+            new ConfirmWindow("Предупреждение", "Вы уверены что хотите удалить элемент?", delegate ()
+            {
+                WUser DataUser = (sender as Button).DataContext as WUser;
+
+                if (Sender.SendToServer("Users.Delete", DataUser.Id))
+                {
+                    DataGrid_Users.IsEnabled = false;
+
+                    ServerResponseDelay = CustomTimer.Create(delegate (object sender, EventArgs e)
+                    {
+                        ServerResponseDelay = null;
+
+                        new AlertWindow("Ошибка", "Время ожидания ответа от сервера истекло.",
+                            () => DataGrid_Users.IsEnabled = true);
+
+                    }, new TimeSpan(0, 0, 5), true);
+                }
+                else
+                {
+                    new AlertWindow("Ошибка", AlertWindow.AlertCode.SendToServer);
+                }
+            });
         }
 
         public void ClosePage()

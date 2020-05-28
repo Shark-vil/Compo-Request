@@ -21,6 +21,44 @@ namespace Compo_Request_Server.Network.Events.UserEvents
         {
             NetworkDelegates.Add(UsersGetAll, "Users.GetAll");
             NetworkDelegates.Add(UsersUpdate, "Users.Update");
+            NetworkDelegates.Add(UsersDelete, "Users.Delete");
+        }
+
+        private void UsersDelete(MResponse ClientResponse, MNetworkClient NetworkClient)
+        {
+            try
+            {
+                var UserId = Package.Unpacking<int>(ClientResponse.DataBytes);
+
+                if (UserId == 1)
+                    return;
+
+                using (var db = new DatabaseContext())
+                {
+                    MUserNetwork NetUser = Users.GetUserById(NetworkClient.Id);
+
+                    if (!AccessController.IsPrivilege(NetworkClient, "users.delete"))
+                        return;
+
+                    var DbUser = db.Users.FirstOrDefault(x => x.Id == UserId);
+
+                    db.Users.Remove(DbUser);
+                    db.SaveChanges();
+
+                    if (UserId == NetUser.Id)
+                    {
+                        Users.Remove(NetworkClient);
+                        Debug.LogWarning($"Пользователь {NetUser.Login} удалил сам себя!");
+                    }
+                    else
+                        Sender.Send(NetworkClient, "Users.Delete.Confirm", UserId);
+                }
+            }
+            catch(DbException ex)
+            {
+                Debug.LogError("Возникло исключение при попытке удалить пользователя. Код ошибки:\n" + ex);
+                Sender.Send(NetworkClient, "Users.Delete.Error");
+            }
         }
 
         private void UsersUpdate(MResponse ClientResponse, MNetworkClient NetworkClient)
@@ -35,6 +73,9 @@ namespace Compo_Request_Server.Network.Events.UserEvents
 
                     if (NetUser.Id != User.Id)
                     {
+                        if (User.Id == 1 && NetUser.Id != 1)
+                            return;
+
                         if (!AccessController.IsPrivilege(NetworkClient, "users.edit"))
                             return;
                     }

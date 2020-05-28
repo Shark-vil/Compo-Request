@@ -65,9 +65,6 @@ namespace Compo_Request.Windows.Teams
 
                 TeamGroups.Add(TGroup);
 
-                if (_MainMenuWindow.IsActive)
-                    new AlertWindow("Оповещение", AlertWindow.AlertCode.AddConfirm);
-
             }, Dispatcher, -1, "TeamGroup.Add.Confirm", "TeamMainPage");
 
             /**

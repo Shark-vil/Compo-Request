@@ -72,9 +72,6 @@ namespace Compo_Request.Windows.Projects
 
                 Projects.Add(DbProject);
 
-                if (_MainMenuWindow.IsActive)
-                    new AlertWindow("Оповещение", AlertWindow.AlertCode.AddConfirm);
-
             }, Dispatcher, -1, "Project.Add.Confirm", "ProjectsMainPage");
 
             /**

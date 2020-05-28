@@ -28,20 +28,25 @@ namespace Compo_Request.Network
             Host = ServerHost;
             Port = ServerPort;
 
+            /*
             NetHost = Dns.GetHostEntry(Host);
             NetAddress = NetHost.AddressList[0];
 
             NetPoint = new IPEndPoint(NetAddress, ServerPort);
+            */
+
+            NetPoint = new IPEndPoint(IPAddress.Parse(ServerHost), ServerPort);
 
             try
             {
-                ClientNetwork = new Socket(NetAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                ClientNetwork.Connect(Host, Port);
+                ClientNetwork = new Socket(NetPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                ClientNetwork.Connect(NetPoint);
 
                 return true;
             }
             catch(Exception ex)
             {
+                Debug.LogError("Connection Setup:\n" + ex);
                 return false;
             }
         }

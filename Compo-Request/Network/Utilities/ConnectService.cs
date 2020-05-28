@@ -1,4 +1,5 @@
-﻿using Compo_Request.Network.Client;
+﻿using Compo_Request.Data.Network;
+using Compo_Request.Network.Client;
 using Compo_Shared_Data.Debugging;
 using System;
 using System.Threading;
@@ -50,14 +51,7 @@ namespace Compo_Request.Network.Utilities
             {
                 try
                 {
-                    if (NetworkBase.ClientNetwork == null || !NetworkBase.ClientNetwork.Connected)
-                    {
-                        if (NetworkBase.Setup("127.0.0.1", 8888))
-                        {
-                            Debug.Log("Попытка соединиться с сервером", ConsoleColor.Cyan);
-                            ConnectToServer();
-                        }
-                    }
+                    SetupConnection();
                 }
                 catch
                 {
@@ -65,6 +59,25 @@ namespace Compo_Request.Network.Utilities
                 }
 
                 Thread.Sleep(2000);
+            }
+        }
+
+        private static void SetupConnection()
+        {
+            if (NetworkBase.ClientNetwork == null || !NetworkBase.ClientNetwork.Connected)
+            {
+
+                string[] ServerInfo = ServerData.Read();
+
+                if (NetworkBase.Setup(ServerInfo[0], Convert.ToInt32(ServerInfo[1])))
+                {
+                    Debug.Log("Попытка соединиться с сервером", ConsoleColor.Cyan);
+                    ConnectToServer();
+                }
+                else
+                {
+                    Debug.LogError("Не удаётся установить соединение с сервером!");
+                }
             }
         }
 
