@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -16,6 +17,8 @@ using Compo_Request_Server.Network.Models;
 using Compo_Request_Server.Network.Server;
 using Compo_Shared_Data.Debugging;
 using Compo_Shared_Data.Models;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Compo_Request_Server
 {
@@ -25,8 +28,25 @@ namespace Compo_Request_Server
         {
             Debug.Log("Подготовка сервера...", ConsoleColor.Cyan);
 
+            string[] SqlInfo = Data.Network.SqlData.Read();
+
             Debug.Log("Настройка базы данных");
-            DatabaseContext.Setup("localhost", "compo-request", "HYOuv8pBtMdMgVlp", "compo-request");
+            DatabaseContext.Setup(SqlInfo[0], SqlInfo[1], SqlInfo[2], SqlInfo[3]);
+
+            try
+            {
+                Debug.Log("[DB] Проверка подключения к базе данных...", ConsoleColor.Magenta);
+                using (var db = new DatabaseContext())
+                {
+                    Debug.Log($"[DB] Статус - " +
+                        $"{(db.Database.GetService<IDatabaseCreator>() as RelationalDatabaseCreator).Exists()}",
+                        ConsoleColor.Magenta);
+                }
+            }
+            catch (DbException ex)
+            {
+                Debug.LogError("Ошибка подключения к базе данных. Код ошибки:\n" + ex);
+            }
 
             var Server = new ServerBase();
 

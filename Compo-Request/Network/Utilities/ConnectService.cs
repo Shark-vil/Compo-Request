@@ -25,8 +25,6 @@ namespace Compo_Request.Network.Utilities
                 ServiceThread.Start();
 
                 Debug.Log("Служба поддержки соединения с сервером запущена", ConsoleColor.Green);
-
-                SetupConnection();
             }
         }
 

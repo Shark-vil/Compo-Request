@@ -68,7 +68,13 @@ namespace Compo_Request_Server.Network.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder DbBuilder)
         {
-            DbBuilder.UseMySql($"server={DbHost};UserId={DbUser};Password={DbPassword};database={DbDatabase};");
+            DbBuilder.UseMySql($"Server={DbHost};Database={DbDatabase};Uid={DbUser};Pwd={DbPassword};",
+                builder =>
+                {
+                    builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(5), null);
+                });
+
+            base.OnConfiguring(DbBuilder);
         }
     }
 }
