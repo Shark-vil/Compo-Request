@@ -17,7 +17,7 @@ namespace Compo_Request
     public partial class MainWindow : Window
     {
         // Основная логика текущего окна
-        private LMain WindowLogic;
+        internal LMain WindowLogic;
         // Окно регистрации
         internal RegisterWindow _RegisterWindow;
         // Главное меню после входа
@@ -39,12 +39,11 @@ namespace Compo_Request
             InitializeComponent();
             EventsInitialize();
 
-            ConnectService.Start();
+            ConnectService.Start(this);
 
             // Создание сущности логики главного окна.
             WindowLogic = new LMain(this);
             WindowLogic.NetworkEventsLoad();
-            WindowLogic.AutomaticAuthorizate();
 
             ConnectService.ConnectBrokenEvents += 
             () => {

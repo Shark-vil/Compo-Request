@@ -29,6 +29,8 @@ namespace Compo_Request.WindowsLogic
         /// </summary>
         internal string[] UserData;
 
+        private bool IsFirstAuth = true;
+
         /// <summary>
         /// Конструктор сщуности логики главного окна.
         /// </summary>
@@ -43,9 +45,9 @@ namespace Compo_Request.WindowsLogic
         /// <summary>
         /// Осуществляет вход в систему при наличии файла авторизации.
         /// </summary>
-        internal void AutomaticAuthorizate()
+        internal void AutomaticAuthorizate(bool NoAuth = false)
         {
-            if (Data.Windows.AutomaticAuthorizate.Exists())
+            if (IsFirstAuth && Data.Windows.AutomaticAuthorizate.Exists())
             {
                 _MainWindow.CheckBox_AutoAuth.IsChecked = true;
 
@@ -53,7 +55,10 @@ namespace Compo_Request.WindowsLogic
                 _MainWindow.TextBox_LoginOrEmail.Text = UserData[0];
                 _MainWindow.PasswordBox_Password.Password = UserData[1];
 
-                UserAuthorization(UserData);
+                if (!NoAuth)
+                    UserAuthorization(UserData);
+
+                IsFirstAuth = false;
             }
         }
 

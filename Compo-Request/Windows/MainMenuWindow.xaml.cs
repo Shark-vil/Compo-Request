@@ -1,11 +1,13 @@
 ﻿using Compo_Request.Network.Client;
 using Compo_Request.Network.Utilities;
+using Compo_Request.Properties;
 using Compo_Request.Windows.Projects;
 using Compo_Request.Windows.Teams;
 using Compo_Request.Windows.Users;
 using Compo_Request.WindowsLogic;
 using Compo_Shared_Data.Debugging;
 using Compo_Shared_Data.Network.Models;
+using System.IO;
 using System.Windows;
 
 namespace Compo_Request.Windows
@@ -73,7 +75,18 @@ namespace Compo_Request.Windows
 
         private void Button_Help_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://drive.google.com/file/d/1y5JzNAgMV4m-zHCce_RcZEkkbMENx3qP/view?usp=sharing");
+            string FilePath = Directory.GetCurrentDirectory() + "/manual.pdf";
+
+            if (!File.Exists(FilePath))
+                using (FileStream fs = File.Create(FilePath))
+                    fs.Write(Properties.Resources.manual, 0, Properties.Resources.manual.Length);  
+
+            var p = new System.Diagnostics.Process();
+            p.StartInfo = new System.Diagnostics.ProcessStartInfo(FilePath)
+            {
+                UseShellExecute = true
+            };
+            p.Start();
         }
 
         private void Button_Settings_Click(object sender, RoutedEventArgs e)
