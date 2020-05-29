@@ -17,6 +17,9 @@ namespace Compo_Request.Network.Utilities
 
         internal static MainWindow _MainWindow;
         internal static Dispatcher _MainWindowDispatcher;
+        internal static DispatcherTimer _MainWindowTimer;
+
+        private static bool IsFirstLoad = true;
 
         public static void Start(MainWindow _MainWindow)
         {
@@ -24,6 +27,24 @@ namespace Compo_Request.Network.Utilities
             {
                 ConnectService._MainWindow = _MainWindow;
                 ConnectService._MainWindowDispatcher = _MainWindow.Dispatcher;
+
+                if (IsFirstLoad)
+                {
+                    _MainWindow.TextBox_LoginOrEmail.IsEnabled = false;
+                    _MainWindow.PasswordBox_Password.IsEnabled = false;
+                }
+
+                _MainWindowTimer = CustomTimer.Create(delegate (object sender, EventArgs e)
+                {
+                    if (IsFirstLoad)
+                    {
+                        _MainWindow.TextBox_LoginOrEmail.IsEnabled = true;
+                        _MainWindow.PasswordBox_Password.IsEnabled = true;
+                        IsFirstLoad = false;
+
+                        _MainWindow.WindowLogic.AutomaticAuthorizate(true);
+                    }
+                }, new TimeSpan(0, 0, 5));
 
                 Debug.Log("Подготовка службы поддержки соединения с сервером", ConsoleColor.Cyan);
 
@@ -99,10 +120,19 @@ namespace Compo_Request.Network.Utilities
 
                 Debug.Log("Подключение к серверу установлено", ConsoleColor.Green);
 
-                _MainWindowDispatcher.Invoke(() =>
-                {
-                    _MainWindow.WindowLogic.AutomaticAuthorizate();
-                });
+                if (IsFirstLoad)
+                    _MainWindowDispatcher.Invoke(() =>
+                    {
+                        IsFirstLoad = false;
+
+                        if (_MainWindowTimer != null && _MainWindowTimer.IsEnabled)
+                        {
+                            _MainWindowTimer.Stop();
+                            _MainWindowTimer = null;
+                        }
+
+                        _MainWindow.WindowLogic.AutomaticAuthorizate();
+                    });
             }
         }
     }
