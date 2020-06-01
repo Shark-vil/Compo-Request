@@ -28,23 +28,28 @@ namespace Compo_Request.Network.Utilities
                 ConnectService._MainWindow = _MainWindow;
                 ConnectService._MainWindowDispatcher = _MainWindow.Dispatcher;
 
-                if (IsFirstLoad)
-                {
-                    _MainWindow.TextBox_LoginOrEmail.IsEnabled = false;
-                    _MainWindow.PasswordBox_Password.IsEnabled = false;
-                }
-
-                _MainWindowTimer = CustomTimer.Create(delegate (object sender, EventArgs e)
+                if (Data.Windows.AutomaticAuthorizate.Exists())
                 {
                     if (IsFirstLoad)
                     {
-                        _MainWindow.TextBox_LoginOrEmail.IsEnabled = true;
-                        _MainWindow.PasswordBox_Password.IsEnabled = true;
-                        IsFirstLoad = false;
-
-                        _MainWindow.WindowLogic.AutomaticAuthorizate(true);
+                        _MainWindow.TextBox_LoginOrEmail.IsEnabled = false;
+                        _MainWindow.PasswordBox_Password.IsEnabled = false;
                     }
-                }, new TimeSpan(0, 0, 5));
+
+                    _MainWindowTimer = CustomTimer.Create(delegate (object sender, EventArgs e)
+                    {
+                        if (IsFirstLoad)
+                        {
+                            _MainWindow.TextBox_LoginOrEmail.IsEnabled = true;
+                            _MainWindow.PasswordBox_Password.IsEnabled = true;
+                            IsFirstLoad = false;
+
+                            _MainWindow.WindowLogic.AutomaticAuthorizate(true);
+                        }
+                    }, new TimeSpan(0, 0, 5));
+                }
+                else
+                    IsFirstLoad = false;
 
                 Debug.Log("Подготовка службы поддержки соединения с сервером", ConsoleColor.Cyan);
 
