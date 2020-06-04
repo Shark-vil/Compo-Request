@@ -49,14 +49,22 @@ namespace Compo_Request.WindowsLogic
         {
             if (IsFirstAuth && Data.Windows.AutomaticAuthorizate.Exists())
             {
-                _MainWindow.CheckBox_AutoAuth.IsChecked = true;
+                bool IsAuth = false;
+
+                if (Data.Windows.CheckAutomaticAuthorizate.Exists())
+                {
+                    IsAuth = Data.Windows.CheckAutomaticAuthorizate.Read();
+                    _MainWindow.CheckBox_AutoAuth.IsChecked = IsAuth;
+                }
 
                 UserData = Data.Windows.AutomaticAuthorizate.Read();
                 _MainWindow.TextBox_LoginOrEmail.Text = UserData[0];
                 _MainWindow.PasswordBox_Password.Password = UserData[1];
 
-                if (!NoAuth)
+                if (!NoAuth && IsAuth)
                     UserAuthorization(UserData);
+                else
+                    _MainWindow.AuthElements_Unblock();
 
                 IsFirstAuth = false;
             }
