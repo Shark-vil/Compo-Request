@@ -76,6 +76,18 @@ namespace Compo_Request
         {
             Button_Register.Click += Button_Register_Click;     // Вызывается при нажатии на кнопку регистрации
             Button_Login.Click += Button_Login_Click;           // Вызывается при нажатии на кнопку авторизации
+            CheckBox_AutoAuth.Checked += CheckBox_AutoAuth_Checked;
+            CheckBox_AutoAuth.Unchecked += CheckBox_AutoAuth_Unchecked;
+        }
+
+        private void CheckBox_AutoAuth_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Data.Windows.CheckAutomaticAuthorizate.Save(false);
+        }
+
+        private void CheckBox_AutoAuth_Checked(object sender, RoutedEventArgs e)
+        {
+            Data.Windows.CheckAutomaticAuthorizate.Save(true);
         }
 
         /// <summary>
